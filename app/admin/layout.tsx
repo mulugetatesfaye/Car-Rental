@@ -32,7 +32,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans flex flex-col md:flex-row">
+    <div className="h-screen overflow-hidden bg-black text-white font-sans flex flex-col md:flex-row">
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 bg-neutral-900 border-b md:border-b-0 md:border-r border-neutral-800 flex flex-col flex-shrink-0">
         

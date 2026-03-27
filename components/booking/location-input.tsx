@@ -1,0 +1,149 @@
+"use client";
+
+import * as React from "react";
+import { MapPin, X, Loader2 } from "lucide-react";
+import { searchPlaces, type SearchResult } from "@/lib/tomtom/search";
+import { cn } from "@/lib/utils";
+import { debounce } from "@/lib/utils";
+
+interface LocationInputProps {
+  placeholder: string;
+  value: SearchResult | null;
+  onChange: (location: SearchResult | null) => void;
+  disabled?: boolean;
+  iconPosition?: "start" | "end";
+}
+
+export function LocationInput({
+  placeholder,
+  value,
+  onChange,
+  disabled,
+}: LocationInputProps) {
+  const [inputValue, setInputValue] = React.useState("");
+  const [results, setResults] = React.useState<SearchResult[]>([]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (query.length < 2) {
+          setResults([]);
+          setIsLoading(false);
+          return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+          const searchResults = await searchPlaces(query);
+          setResults(searchResults);
+          if (searchResults.length > 0) {
+            setIsOpen(true);
+          }
+        } catch (err) {
+          setError("Failed to search locations");
+          setResults([]);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 300),
+    []
+  );
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    debouncedSearch(newValue);
+  };
+
+  const handleSelect = (result: SearchResult) => {
+    setInputValue(result.address.freeformAddress);
+    onChange(result);
+    setIsOpen(false);
+    setResults([]);
+  };
+
+  const handleClear = () => {
+    setInputValue("");
+    onChange(null);
+    setResults([]);
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative w-full">
+      <div className="relative">
+        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gold" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={value ? value.address.freeformAddress : inputValue}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={cn(
+            "flex h-14 w-full rounded-xl border border-border bg-surface px-12 py-2 text-sm text-foreground placeholder:text-foreground-muted",
+            "focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold",
+            "disabled:cursor-not-allowed disabled:opacity-50",
+            "transition-colors duration-200"
+          )}
+        />
+        {isLoading && (
+          <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground-muted animate-spin" />
+        )}
+        {value && !isLoading && (
+          <button
+            onClick={handleClear}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
+      </div>
+
+      {isOpen && results.length > 0 && (
+        <div className="absolute z-50 w-full mt-2 bg-surface border border-border rounded-xl shadow-lg overflow-hidden">
+          {results.map((result) => (
+            <button
+              key={result.id}
+              onClick={() => handleSelect(result)}
+              className="flex items-start gap-3 w-full p-4 text-left hover:bg-surface-elevated transition-colors border-b border-border last:border-b-0"
+            >
+              <MapPin className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-foreground">{result.address.freeformAddress}</p>
+                {result.address.municipality && (
+                  <p className="text-xs text-foreground-muted mt-0.5">
+                    {result.address.municipality}
+                    {result.address.country && `, ${result.address.country}`}
+                  </p>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <p className="mt-1 text-xs text-error">{error}</p>
+      )}
+    </div>
+  );
+}

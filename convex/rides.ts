@@ -1,0 +1,92 @@
+import { query, mutation } from "./_generated/server";
+import { v } from "convex/values";
+
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("rides").order("desc").collect();
+  },
+});
+
+export const getRecent = query({
+  args: { limit: v.number() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("rides")
+      .order("desc")
+      .take(args.limit);
+  },
+});
+
+export const getById = query({
+  args: { id: v.id("rides") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
+export const create = mutation({
+  args: {
+    userId: v.optional(v.string()),
+    pickupAddress: v.string(),
+    destinationAddress: v.string(),
+    pickupLat: v.number(),
+    pickupLng: v.number(),
+    destLat: v.number(),
+    destLng: v.number(),
+    distance: v.number(),
+    duration: v.number(),
+    carTypeName: v.string(),
+    carTypeMultiplier: v.number(),
+    price: v.number(),
+    passengers: v.number(),
+    luggage: v.number(),
+    accessible: v.boolean(),
+    pickupDate: v.string(),
+    pickupTime: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const ride = {
+      userId: args.userId,
+      pickupAddress: args.pickupAddress,
+      destinationAddress: args.destinationAddress,
+      pickupLat: args.pickupLat,
+      pickupLng: args.pickupLng,
+      destLat: args.destLat,
+      destLng: args.destLng,
+      distance: args.distance,
+      duration: args.duration,
+      carTypeName: args.carTypeName,
+      carTypeMultiplier: args.carTypeMultiplier,
+      price: args.price,
+      passengers: args.passengers,
+      luggage: args.luggage,
+      accessible: args.accessible,
+      pickupDate: args.pickupDate,
+      pickupTime: args.pickupTime,
+      status: "pending" as const,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    return await ctx.db.insert("rides", ride);
+  },
+});
+
+export const updateStatus = mutation({
+  args: {
+    id: v.id("rides"),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("in_progress"),
+      v.literal("completed"),
+      v.literal("cancelled")
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, {
+      status: args.status,
+      updatedAt: Date.now(),
+    });
+  },
+});

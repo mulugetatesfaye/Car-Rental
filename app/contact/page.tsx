@@ -1,0 +1,163 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Phone, Mail, MapPin, Send, MessageSquare, Clock, Globe, ShieldCheck } from "lucide-react";
+
+export default function ContactUsPage() {
+  return (
+    <div className="min-h-screen bg-black text-white font-sans">
+      <main>
+        {/* Contact Hero */}
+        <section className="relative py-32 px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
+          <div className="max-w-7xl mx-auto text-center relative z-20">
+            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">Private Concierge</h3>
+            <h2 className="font-serif text-4xl md:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tight">
+              Connect With <span className="text-gold">Luna</span>
+              <br className="hidden md:block" />
+              Elite Support
+            </h2>
+            <p className="text-sm md:text-lg text-neutral-400 mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
+              Our dedicated concierge team is available 24/7 to assist with your most complex travel requirements. Experience absolute discretion and precision.
+            </p>
+          </div>
+          
+          {/* Subtle Background Elements */}
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0 opacity-20">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-[120px]" />
+          </div>
+        </section>
+
+        {/* Contact Content */}
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-24 items-start">
+              {/* Form Column */}
+              <div className="space-y-12">
+                <div className="bg-neutral-900/50 border border-neutral-800 p-12 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gold" />
+                  <div className="mb-10">
+                    <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-4">Inquiry Form</h3>
+                    <h4 className="font-serif text-3xl font-black italic uppercase text-white">Send A Message</h4>
+                  </div>
+                  
+                  <form className="space-y-8">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
+                         <input type="text" placeholder="John Doe" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
+                      </div>
+                      <div className="space-y-3">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
+                         <input type="email" placeholder="john@example.com" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Subject Of Inquiry</label>
+                       <select className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all appearance-none cursor-pointer">
+                          <option>Corporate Account Request</option>
+                          <option>Event Logistics Quote</option>
+                          <option>General Reservation Support</option>
+                          <option>Fleet Inquiry</option>
+                       </select>
+                    </div>
+                    <div className="space-y-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Detailed Message</label>
+                       <textarea rows={6} placeholder="How can we assist you?" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all resize-none placeholder:text-neutral-700" />
+                    </div>
+                    <Button className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-[12px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark shadow-gold/20 shadow-2xl transition-all flex items-center justify-center gap-3">
+                      <Send className="h-5 w-5" />
+                      Transmit Message
+                    </Button>
+                  </form>
+                </div>
+              </div>
+
+              {/* Info Column */}
+              <div className="space-y-16 py-12">
+                 <div className="space-y-12">
+                    <div className="flex gap-8 items-start group">
+                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <Phone className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                      </div>
+                      <div className="space-y-3">
+                        <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Direct Line</h5>
+                        <p className="font-serif font-black italic uppercase text-2xl text-white">(206) 327-4411</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 max-w-xs">Available 24 hours a day, 7 days a week for immediate assistance.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-8 items-start group">
+                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <Mail className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                      </div>
+                      <div className="space-y-3">
+                        <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Concierge Email</h5>
+                        <p className="font-serif font-black italic uppercase text-2xl text-white">concierge@lunalimo.com</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 max-w-xs">For quotes, corporate accounts, and partnership inquiries.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-8 items-start group">
+                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <MapPin className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                      </div>
+                      <div className="space-y-3">
+                        <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Seattle Headquarters</h5>
+                        <p className="font-serif font-black italic uppercase text-2xl text-white">123 Luxury Lane</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Seattle, WA 98101</p>
+                      </div>
+                    </div>
+                 </div>
+
+                 <div className="pt-16 border-t border-neutral-900 grid grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                       <ShieldCheck className="h-6 w-6 text-gold" />
+                       <h6 className="font-serif text-lg font-black italic uppercase text-white">Absolute Privacy</h6>
+                       <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Your communication is fully encrypted and discreet.</p>
+                    </div>
+                    <div className="space-y-4">
+                       <Clock className="h-6 w-6 text-gold" />
+                       <h6 className="font-serif text-lg font-black italic uppercase text-white">Rapid Response</h6>
+                       <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Initial response guaranteed within 30 minutes of inquiry.</p>
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Map Section */}
+        <section className="h-[500px] w-full bg-neutral-900 relative overflow-hidden border-t-2 border-neutral-800">
+           <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d172139.4161662447!2d-122.48214739592477!3d47.61294318304958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490102c93e83355%3A0x10256546044d5916!2sSeattle%2C%20WA!5e0!3m2!1sen!2sus!4v1711200000000!5m2!1sen!2sus" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0, filter: 'invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%)' }} 
+            allowFullScreen 
+            loading="lazy" 
+          />
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-neutral-900 border-t border-neutral-800 py-16 px-6">
+        <div className="max-w-7xl mx-auto text-center space-y-8">
+          <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
+          <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">
+            <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+            <Link href="/services" className="hover:text-gold transition-colors">Services</Link>
+            <Link href="/fleet" className="hover:text-gold transition-colors">Our Fleet</Link>
+            <Link href="/reservations" className="hover:text-gold transition-colors">Reservations</Link>
+            <Link href="/contact" className="hover:text-gold transition-colors text-white">Support</Link>
+          </nav>
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-neutral-600">
+            © 2026 Luna Limo. Professional Excellence Dedicated To Your Journey.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}

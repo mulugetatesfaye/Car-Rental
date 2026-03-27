@@ -1,0 +1,50 @@
+export interface CarType {
+  _id?: string;
+  name: string;
+  description: string;
+  image: string;
+  baseFare: number;
+  perKmRate: number;
+  perMinuteRate: number;
+  multiplier: number;
+  capacity: number;
+  isActive: boolean;
+}
+
+export interface PricingResult {
+  baseFare: number;
+  distanceCharge: number;
+  timeCharge: number;
+  multiplier: number;
+  totalPrice: number;
+}
+
+export function calculatePrice(
+  carType: CarType,
+  distanceKm: number,
+  durationMinutes: number,
+  dynamicMultiplier: number = 1.0
+): PricingResult {
+  const baseFare = carType.baseFare;
+  const distanceCharge = distanceKm * carType.perKmRate * carType.multiplier;
+  const timeCharge = durationMinutes * carType.perMinuteRate * carType.multiplier;
+  const multiplier = carType.multiplier * dynamicMultiplier;
+
+  const subtotal = baseFare + distanceCharge + timeCharge;
+  const totalPrice = Math.round(subtotal * 100) / 100;
+
+  return {
+    baseFare,
+    distanceCharge: Math.round(distanceCharge * 100) / 100,
+    timeCharge: Math.round(timeCharge * 100) / 100,
+    multiplier,
+    totalPrice,
+  };
+}
+
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
+}

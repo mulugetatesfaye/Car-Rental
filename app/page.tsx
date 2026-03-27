@@ -69,8 +69,8 @@ export default function Home() {
         </section>
 
         {/* Testimonial Snapshot */}
-        <section className="bg-neutral-900 py-12 px-6">
-          <div className="max-w-lg mx-auto bg-black p-8 border border-neutral-800 shadow-xl relative animate-fade-in shadow-gold/5">
+        <section className="bg-neutral-900 py-8 sm:py-12 px-4 sm:px-6">
+          <div className="max-w-lg mx-auto bg-black p-6 sm:p-8 border border-neutral-800 shadow-xl relative animate-fade-in shadow-gold/5">
             <div className="flex items-center gap-4 mb-4">
               <Star className="h-10 w-10 text-gold fill-gold" />
               <div>
@@ -98,16 +98,16 @@ export default function Home() {
         </section>
 
         {/* Elite Services Grid */}
-        <section className="py-24 px-6 bg-black relative overflow-hidden">
+        <section className="py-16 sm:py-24 px-4 sm:px-6 bg-black relative overflow-hidden">
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.4em] mb-4">Our Expertise</h3>
-              <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
                 Elite Travel Solutions
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {[
                 {
                   title: "Airport Transfers",
@@ -130,7 +130,7 @@ export default function Home() {
                   icon: <Compass className="h-8 w-8 text-gold" />
                 }
               ].map((service, i) => (
-                <div key={i} className="group p-8 bg-neutral-900 border border-neutral-800 hover:border-gold/50 transition-all duration-500 relative">
+                <div key={i} className="group p-6 sm:p-8 bg-neutral-900 border border-neutral-800 hover:border-gold/50 transition-all duration-500 relative">
                   <div className="mb-6 transform group-hover:scale-110 transition-transform duration-500">{service.icon}</div>
                   <h4 className="font-serif font-black italic uppercase text-xl text-white mb-4">{service.title}</h4>
                   <p className="text-xs text-neutral-400 font-bold uppercase tracking-widest leading-relaxed">
@@ -144,7 +144,7 @@ export default function Home() {
         </section>
 
         {/* Feature Section with Background */}
-        <section className="relative py-24 px-6 bg-black overflow-hidden border-t border-neutral-900">
+        <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-black overflow-hidden border-t border-neutral-900">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             <div className="flex-1 w-full max-w-[500px] lg:max-w-none">
               <Image
@@ -179,11 +179,11 @@ export default function Home() {
         </section>
 
         {/* FAQs Section */}
-        <section className="py-24 px-6 bg-neutral-900 relative overflow-hidden">
+        <section className="py-16 sm:py-24 px-4 sm:px-6 bg-neutral-900 relative overflow-hidden">
           <div className="max-w-4xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.4em] mb-4">Common Inquiries</h3>
-              <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white">
                 Frequently Asked
               </h2>
             </div>
@@ -222,7 +222,7 @@ export default function Home() {
         </section>
 
         {/* Black Section / CTA */}
-        <section className="bg-neutral-900 py-32 px-6 relative overflow-hidden">
+        <section className="bg-neutral-900 py-20 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gold" />
           <div className="max-w-4xl mx-auto text-center space-y-12">
             <div className="flex justify-center">
@@ -236,7 +236,7 @@ export default function Home() {
               </div>
             </div>
 
-            <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
               Our Chauffeur Driven Services
             </h2>
 
@@ -246,12 +246,12 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
               <Link href="tel:+12063274411" className="w-full sm:w-auto">
-                <Button size="lg" className="bg-white hover:bg-neutral-100 text-black rounded-none px-12 py-8 text-xs font-black uppercase tracking-[0.2em] w-full">
+                <Button size="lg" className="bg-white hover:bg-neutral-100 text-black rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full">
                   Call: (206) 327-4411
                 </Button>
               </Link>
               <Link href="/booking" className="w-full sm:w-auto">
-                <Button size="lg" className="bg-gold hover:bg-gold-dark text-white rounded-none px-12 py-8 text-xs font-black uppercase tracking-[0.2em] w-full">
+                <Button size="lg" className="bg-gold hover:bg-gold-dark text-white rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full">
                   Book Your Ride Now
                 </Button>
               </Link>
@@ -260,7 +260,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-neutral-900 border-t border-neutral-800 pt-16 pb-8 px-6 text-white">
+      <footer className="bg-neutral-900 border-t border-neutral-800 pt-12 sm:pt-16 pb-8 px-4 sm:px-6 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="flex flex-col items-center md:items-start">

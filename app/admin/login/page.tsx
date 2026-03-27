@@ -24,16 +24,22 @@ export default function AdminLoginPage() {
     setError("");
     setIsLoading(true);
     
+    // We get the submitter button name to determine the flow
+    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+    const requestedFlow = submitter?.name === "signUp" ? "signUp" : "signIn";
+    
     const formData = new FormData(event.currentTarget);
     const password = formData.get("password") as string;
     const email = formData.get("email") as string;
     
     try {
-      await signIn("password", { email, password, flow });
-      router.push("/admin");
+      await signIn("password", { email, password, flow: requestedFlow });
+      // Use window.location.href to guarantee a full page reload so Next.js proxy.ts sees the newly set cookie.
+      window.location.href = "/admin";
     } catch (err: any) {
       console.error("Auth error:", err);
-      setError("Invalid credentials. Please try again.");
+      // Display the actual error message to easily debug signup validation errors
+      setError(err instanceof Error ? err.message : "Authentication failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +57,6 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <input name="flow" value={flow} type="hidden" />
           
            {error && (
              <div className="bg-red-950/50 border border-red-900 text-red-500 text-xs font-bold p-4 text-center">
@@ -81,23 +86,27 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          <Button 
-            type="submit" 
-            disabled={isLoading}
-            className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-6 text-[11px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-          >
-            {isLoading ? "Authenticating..." : (flow === "signIn" ? "Authorize Access" : "Initialize Admin")}
-          </Button>
+          <div className="space-y-3 pt-4">
+            <Button 
+              type="submit" 
+              name="signIn"
+              disabled={isLoading}
+              className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-6 text-[11px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+            >
+              {isLoading ? "Authenticating..." : "Authorize Access"}
+            </Button>
+            
+            <Button 
+              type="submit" 
+              name="signUp"
+              variant="outline"
+              disabled={isLoading}
+              className="w-full bg-transparent border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-none py-6 text-[9px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+            >
+               Create Commander Account
+            </Button>
+          </div>
         </form>
-
-        <div className="mt-8 text-center">
-             <button 
-               onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
-               className="text-[10px] font-bold text-neutral-500 hover:text-gold uppercase tracking-widest transition-colors"
-             >
-               {flow === "signIn" ? "Initialize new commander" : "Return to authorization"}
-             </button>
-        </div>
       </div>
     </div>
   );

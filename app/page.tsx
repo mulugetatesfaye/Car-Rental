@@ -57,12 +57,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="-mt-8 md:-mt-24 relative mx-auto max-w-6xl h-[250px] sm:h-[400px] md:h-[650px] -mb-16 sm:-mb-24 md:-mb-40 z-0">
+          <div className="-mt-4 md:-mt-24 relative mx-auto max-w-6xl h-[180px] sm:h-[350px] md:h-[650px] -mb-12 sm:-mb-24 md:-mb-40 z-0">
             <Image
               src="/fleet_black_bg.png"
               alt="Luna Limo Fleet"
               fill
-              className="object-contain transition-transform hover:scale-105 duration-1000"
+              className="object-contain transition-transform hover:scale-105 duration-1000 drop-shadow-[0_20px_50px_rgba(212,175,55,0.1)]"
               priority
             />
           </div>
@@ -83,15 +83,15 @@ export default function Home() {
             <p className="text-sm text-neutral-300 italic leading-relaxed">
               "First time using Luna Limo. Everything was seamless. I booked a car as a gift... The entire process... was so easy. My guests..." <span className="text-gold font-bold">Read more</span>
             </p>
-            <div className="mt-6 pt-4 border-t border-neutral-800 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-bold text-neutral-500">
+            <div className="mt-6 pt-4 border-t border-neutral-800 flex flex-wrap items-center justify-between gap-y-4">
+              <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-xs font-bold text-neutral-500">
                 <span className="text-blue-400">G</span>
                 <span className="text-red-400">o</span>
                 <span className="text-yellow-400">o</span>
                 <span className="text-blue-400">g</span>
                 <span className="text-green-400">l</span>
                 <span className="text-red-400">e</span>
-                <span> rating 5.0 of 5, based on 302 reviews</span>
+                <span className="whitespace-normal"> rating 5.0 of 5, based on 302 reviews</span>
               </div>
             </div>
           </div>
@@ -145,31 +145,31 @@ export default function Home() {
 
         {/* Feature Section with Background */}
         <section className="relative py-24 px-6 bg-black overflow-hidden border-t border-neutral-900">
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-            <div className="flex-1">
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+            <div className="flex-1 w-full max-w-[500px] lg:max-w-none">
               <Image
                 src="/fleet_black_bg.png"
                 alt="Luxury Car and Seattle Skyline"
                 width={600}
                 height={400}
-                className="object-contain grayscale hover:grayscale-0 transition-all duration-1000"
+                className="w-full h-auto object-contain grayscale hover:grayscale-0 transition-all duration-1000"
               />
             </div>
-            <div className="flex-1 space-y-6">
-              <h2 className="font-serif text-3xl md:text-4xl font-black italic uppercase text-white leading-tight">
+            <div className="flex-1 space-y-6 text-center lg:text-left">
+              <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-black italic uppercase text-white leading-tight">
                 Seattle Luxury Transportation | Your Premier Choice For Reliability.
               </h2>
-              <p className="text-neutral-400 text-sm leading-relaxed font-medium">
+              <p className="text-neutral-400 text-xs md:text-sm leading-relaxed font-medium">
                 Luxury is more than a car—it's the peace of mind that your driver is already there. At Luna Limo, we know that your time is your most valuable asset. We are an elite transportation provider, dedicated to delivering precision and comfort for every mile.
               </p>
-              <div className="flex gap-4 pt-4">
-                <Link href="tel:+12063274411">
-                  <Button className="bg-black hover:bg-neutral-800 text-white rounded-none px-8 text-[11px] font-black uppercase tracking-widest border-b-2 border-neutral-700">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
+                <Link href="tel:+12063274411" className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto bg-black hover:bg-neutral-800 text-white rounded-none px-8 py-6 text-[11px] font-black uppercase tracking-widest border-b-2 border-neutral-700">
                     Call: (206) 327-4411
                   </Button>
                 </Link>
-                <Link href="/booking">
-                  <Button className="bg-gold hover:bg-gold-dark text-white rounded-none px-8 text-[11px] font-black uppercase tracking-widest border-b-2 border-gold-dark">
+                <Link href="/booking" className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-8 py-6 text-[11px] font-black uppercase tracking-widest border-b-4 border-gold-dark">
                     Book Your Ride Now
                   </Button>
                 </Link>
@@ -240,8 +240,8 @@ export default function Home() {
               Our Chauffeur Driven Services
             </h2>
 
-            <p className="text-neutral-400 text-sm md:text-base leading-relaxed font-bold tracking-tight px-4 uppercase">
-              RELIABLE AIRPORT TRANSFERS FOR CORPORATE BLACK CAR SERVICE. LOCAL SPECIAL LOCATIONS FOR CORPORATE BLACK CAR SERVICE. SPECIAL EVENT TRANSPORTATION. FOR ROAD TRANSPORTATION, AND SPECIAL EVENT TRANSPORTATION TRANSPORTATION.
+            <p className="text-neutral-400 text-xs md:text-sm leading-relaxed font-bold tracking-widest px-4 uppercase max-w-2xl mx-auto">
+              Reliable airport transfers, executive corporate services, and bespoke special event transportation across the Seattle region.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
@@ -263,14 +263,14 @@ export default function Home() {
       <footer className="bg-neutral-900 border-t border-neutral-800 pt-16 pb-8 px-6 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="col-span-1 md:col-span-1">
+            <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-3 mb-6">
                 <span className="font-cinzel text-2xl font-black italic uppercase text-gold leading-tight tracking-tighter">
                   Luna Limo
                 </span>
               </div>
-              <p className="text-xs text-neutral-500 font-bold uppercase tracking-wider leading-relaxed">
-                Premium Chauffeur Service in Seattle and Washington Area.
+              <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest leading-relaxed text-center md:text-left">
+                Premium Chauffeur Service in Seattle and Washington Area. Dedicated to your journey.
               </p>
             </div>
 

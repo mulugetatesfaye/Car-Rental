@@ -10,6 +10,11 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
 
+  // Do not render the public header on admin routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   // Navigation Items
   const navItems = [
     { name: "Home", href: "/" },

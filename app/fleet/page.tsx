@@ -59,18 +59,18 @@ export default function FleetPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Fleet Hero */}
-        <section className="relative py-32 px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
+        <section className="relative py-16 sm:py-32 px-4 sm:px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
           <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">The Luna Collection</h3>
-            <h2 className="font-serif text-4xl md:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tight">
+            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-4 sm:mb-6 animate-fade-in">The Luna Collection</h3>
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-7xl font-black italic uppercase text-white leading-tight tracking-tight">
               Elite <span className="text-gold">Fleet</span>
               <br className="hidden md:block" />
-              Concierge Quality
+              <span className="block sm:inline sm:ml-2">Concierge Quality</span>
             </h2>
-            <p className="text-sm md:text-lg text-neutral-400 mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-lg text-neutral-400 mt-6 sm:mt-8 max-w-2xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
               Every vehicle in the Luna fleet is meticulously maintained and sanitised daily to meet the highest standards of luxury and safety. Experience excellence in every mile.
             </p>
           </div>
@@ -82,8 +82,8 @@ export default function FleetPage() {
         </section>
 
         {/* Fleet Grid */}
-        <section className="py-24 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
+        <section className="py-16 sm:py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
               {fleet.map((vehicle, index) => (
                 <div key={index} className="group">
@@ -100,8 +100,8 @@ export default function FleetPage() {
                   </div>
                   
                   <div className="space-y-6">
-                    <div className="flex justify-between items-end">
-                      <h3 className="font-serif text-2xl md:text-3xl font-black italic uppercase text-white">{vehicle.name}</h3>
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                      <h3 className="font-serif text-xl sm:text-3xl font-black italic uppercase text-white">{vehicle.name}</h3>
                       <div className="flex gap-4 text-neutral-400">
                          <div className="flex items-center gap-1">
                             <Users2 className="h-4 w-4 text-gold/60" />
@@ -129,7 +129,7 @@ export default function FleetPage() {
 
                     <div className="pt-6">
                       <Link href="/booking">
-                        <Button className="w-full bg-transparent hover:bg-gold text-white border border-neutral-800 hover:border-gold rounded-none py-6 text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2">
+                        <Button className="w-full bg-transparent hover:bg-gold text-white border border-neutral-800 hover:border-gold rounded-none py-5 sm:py-6 text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2">
                           <Calendar className="h-4 w-4" />
                           Reserve This Vehicle
                         </Button>
@@ -143,12 +143,12 @@ export default function FleetPage() {
         </section>
 
         {/* Fleet Standards */}
-        <section className="py-32 bg-neutral-900 border-t border-neutral-800">
-          <div className="max-w-7xl mx-auto px-6">
+        <section className="py-16 sm:py-32 bg-neutral-900 border-t border-neutral-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
                <div className="space-y-8">
                   <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Luna Standards</h3>
-                  <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
+                  <h2 className="font-serif text-2xl sm:text-5xl font-black italic uppercase text-white leading-tight">
                     Beyond Simple <span className="text-gold">Maintenance</span>
                   </h2>
                   <p className="text-neutral-400 text-sm md:text-base leading-relaxed font-medium uppercase tracking-[0.05em]">
@@ -187,20 +187,20 @@ export default function FleetPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-32 bg-black relative flex items-center justify-center overflow-hidden">
-          <div className="max-w-4xl mx-auto text-center relative z-10 px-6">
-            <h2 className="font-serif text-3xl md:text-6xl font-black italic uppercase text-white mb-12 leading-tight">
+        <section className="py-16 sm:py-32 bg-black relative flex items-center justify-center overflow-hidden">
+          <div className="max-w-4xl mx-auto text-center relative z-10 px-4 sm:px-6">
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl font-black italic uppercase text-white mb-8 sm:mb-12 leading-tight">
               Elegance In <span className="text-gold">Motion</span>
             </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
               <Link href="/booking" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-12 py-8 text-[12px] font-black uppercase tracking-widest border-b-4 border-gold-dark shadow-gold/20 shadow-2xl flex items-center justify-center gap-3">
+                <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-[12px] font-black uppercase tracking-widest border-b-4 border-gold-dark shadow-gold/20 shadow-2xl flex items-center justify-center gap-3">
                   <Calendar className="h-5 w-5" />
                   Book Reservation
                 </Button>
               </Link>
               <Link href="/contact" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-black rounded-none px-12 py-8 text-[12px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3">
+                <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-black rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-[12px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3">
                   <ArrowRight className="h-5 w-5" />
                   Contact Concierge
                 </Button>
@@ -211,7 +211,7 @@ export default function FleetPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 border-t border-neutral-800 py-16 px-6">
+      <footer className="bg-neutral-900 border-t border-neutral-800 py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center space-y-8">
           <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
           <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">

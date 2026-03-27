@@ -8,18 +8,18 @@ import { Phone, Mail, MapPin, Send, MessageSquare, Clock, Globe, ShieldCheck } f
 
 export default function ContactUsPage() {
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Contact Hero */}
-        <section className="relative py-32 px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
+        <section className="relative py-16 sm:py-32 px-4 sm:px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
           <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">Private Concierge</h3>
-            <h2 className="font-serif text-4xl md:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tight">
+            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-4 sm:mb-6 animate-fade-in">Private Concierge</h3>
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-7xl font-black italic uppercase text-white leading-tight tracking-tight">
               Connect With <span className="text-gold">Luna</span>
               <br className="hidden md:block" />
-              Elite Support
+              <span className="block sm:inline sm:ml-2">Elite Support</span>
             </h2>
-            <p className="text-sm md:text-lg text-neutral-400 mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-lg text-neutral-400 mt-6 sm:mt-8 max-w-2xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
               Our dedicated concierge team is available 24/7 to assist with your most complex travel requirements. Experience absolute discretion and precision.
             </p>
           </div>
@@ -31,16 +31,16 @@ export default function ContactUsPage() {
         </section>
 
         {/* Contact Content */}
-        <section className="py-24 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-24 items-start">
+        <section className="py-16 sm:py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
               {/* Form Column */}
               <div className="space-y-12">
-                <div className="bg-neutral-900/50 border border-neutral-800 p-12 relative overflow-hidden">
+                <div className="bg-neutral-900/50 border border-neutral-800 p-8 sm:p-12 relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gold" />
-                  <div className="mb-10">
-                    <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-4">Inquiry Form</h3>
-                    <h4 className="font-serif text-3xl font-black italic uppercase text-white">Send A Message</h4>
+                  <div className="mb-8 sm:mb-10">
+                    <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-4">Inquiry Form</h3>
+                    <h4 className="font-serif text-2xl sm:text-3xl font-black italic uppercase text-white">Send A Message</h4>
                   </div>
                   
                   <form className="space-y-8">
@@ -67,7 +67,7 @@ export default function ContactUsPage() {
                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Detailed Message</label>
                        <textarea rows={6} placeholder="How can we assist you?" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all resize-none placeholder:text-neutral-700" />
                     </div>
-                    <Button className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-[12px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark shadow-gold/20 shadow-2xl transition-all flex items-center justify-center gap-3">
+                    <Button className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-6 sm:py-8 text-[11px] sm:text-[12px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark shadow-gold/20 shadow-2xl transition-all flex items-center justify-center gap-3">
                       <Send className="h-5 w-5" />
                       Transmit Message
                     </Button>
@@ -78,35 +78,35 @@ export default function ContactUsPage() {
               {/* Info Column */}
               <div className="space-y-16 py-12">
                  <div className="space-y-12">
-                    <div className="flex gap-8 items-start group">
-                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
-                        <Phone className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                    <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start group">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <Phone className="h-6 sm:h-8 w-6 sm:w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
                       </div>
                       <div className="space-y-3">
                         <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Direct Line</h5>
-                        <p className="font-serif font-black italic uppercase text-2xl text-white">(206) 327-4411</p>
+                        <p className="font-serif font-black italic uppercase text-lg sm:text-2xl text-white">(206) 327-4411</p>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 max-w-xs">Available 24 hours a day, 7 days a week for immediate assistance.</p>
                       </div>
                     </div>
 
-                    <div className="flex gap-8 items-start group">
-                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
-                        <Mail className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                    <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start group">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <Mail className="h-6 sm:h-8 w-6 sm:w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
                       </div>
                       <div className="space-y-3">
                         <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Concierge Email</h5>
-                        <p className="font-serif font-black italic uppercase text-2xl text-white">concierge@lunalimo.com</p>
+                        <p className="font-serif font-black italic uppercase text-lg sm:text-2xl text-white">concierge@lunalimo.com</p>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 max-w-xs">For quotes, corporate accounts, and partnership inquiries.</p>
                       </div>
                     </div>
 
-                    <div className="flex gap-8 items-start group">
-                      <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
-                        <MapPin className="h-8 w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
+                    <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start group">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 border border-neutral-800 rotate-45 flex items-center justify-center flex-shrink-0 group-hover:bg-gold transition-all duration-500">
+                        <MapPin className="h-6 sm:h-8 w-6 sm:w-8 text-gold -rotate-45 group-hover:text-black transition-colors" />
                       </div>
                       <div className="space-y-3">
                         <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Seattle Headquarters</h5>
-                        <p className="font-serif font-black italic uppercase text-2xl text-white">123 Luxury Lane</p>
+                        <p className="font-serif font-black italic uppercase text-lg sm:text-2xl text-white">123 Luxury Lane</p>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Seattle, WA 98101</p>
                       </div>
                     </div>
@@ -143,7 +143,7 @@ export default function ContactUsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 border-t border-neutral-800 py-16 px-6">
+      <footer className="bg-neutral-900 border-t border-neutral-800 py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center space-y-8">
           <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
           <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">

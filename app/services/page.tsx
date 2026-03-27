@@ -51,18 +51,18 @@ export default function ServicesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Services Hero */}
-        <section className="relative py-32 px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
+        <section className="relative py-16 sm:py-32 px-4 sm:px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
           <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">Our Offerings</h3>
-            <h2 className="font-serif text-4xl md:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tight">
+            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-4 sm:mb-6 animate-fade-in">Our Offerings</h3>
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-7xl font-black italic uppercase text-white leading-tight tracking-tight">
               Bespoke <span className="text-gold">Transportation</span>
               <br className="hidden md:block" />
-              Tailored To Excellence
+              <span className="block sm:inline sm:ml-2">Tailored To Excellence</span>
             </h2>
-            <p className="text-sm md:text-lg text-neutral-400 mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-lg text-neutral-400 mt-6 sm:mt-8 max-w-2xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
               At Luna Limo, we believe that every journey should be as remarkable as the destination. Discover our suite of premium travel solutions designed for the discerning traveler.
             </p>
           </div>
@@ -74,8 +74,8 @@ export default function ServicesPage() {
         </section>
 
         {/* Services Detail List */}
-        <section className="py-24 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
+        <section className="py-16 sm:py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="space-y-32">
               {services.map((service, index) => (
                 <div key={index} className={`flex flex-col ${index % 2 !== 0 ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-16 lg:gap-24`}>
@@ -92,9 +92,9 @@ export default function ServicesPage() {
                         {service.description}
                       </p>
                     </div>
-                    <div className="pt-4 flex items-center gap-8">
-                      <Link href="/booking">
-                        <Button className="bg-white hover:bg-neutral-200 text-black rounded-none px-10 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all">
+                    <div className="pt-4 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+                      <Link href="/booking" className="w-full sm:w-auto">
+                        <Button className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black rounded-none px-10 py-6 sm:py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all">
                           Book This Service
                         </Button>
                       </Link>
@@ -122,11 +122,11 @@ export default function ServicesPage() {
         </section>
 
         {/* Why Choose Us Section */}
-        <section className="py-32 bg-neutral-900 border-t border-neutral-800">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-24">
+        <section className="py-16 sm:py-32 bg-neutral-900 border-t border-neutral-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-12 sm:mb-24">
               <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.4em] mb-4">The Luna Difference</h3>
-              <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
                 Why Select Our Service?
               </h2>
             </div>
@@ -166,20 +166,20 @@ export default function ServicesPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-32 bg-black relative flex items-center justify-center overflow-hidden">
-          <div className="max-w-4xl mx-auto text-center relative z-10 px-6">
-            <h2 className="font-serif text-3xl md:text-6xl font-black italic uppercase text-white mb-12 leading-tight">
+        <section className="py-16 sm:py-32 bg-black relative flex items-center justify-center overflow-hidden">
+          <div className="max-w-4xl mx-auto text-center relative z-10 px-4 sm:px-6">
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl font-black italic uppercase text-white mb-8 sm:mb-12 leading-tight">
               Ready To Experience <span className="text-gold">Next Level</span> Luxury?
             </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
               <Link href="/booking" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-12 py-8 text-[12px] font-black uppercase tracking-widest border-b-4 border-gold-dark shadow-gold/20 shadow-2xl flex items-center justify-center gap-3">
+                <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-[12px] font-black uppercase tracking-widest border-b-4 border-gold-dark shadow-gold/20 shadow-2xl flex items-center justify-center gap-3">
                   <Calendar className="h-5 w-5" />
                   Book Reservation In Seconds
                 </Button>
               </Link>
               <Link href="/contact" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-black rounded-none px-12 py-8 text-[12px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3">
+                <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-black rounded-none px-8 sm:px-12 py-6 sm:py-8 text-[10px] sm:text-[12px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3">
                   <ArrowRight className="h-5 w-5" />
                   Contact Concierge
                 </Button>
@@ -193,7 +193,7 @@ export default function ServicesPage() {
       </main>
 
       {/* Footer (Simplified) */}
-      <footer className="bg-neutral-900 border-t border-neutral-800 py-16 px-6">
+      <footer className="bg-neutral-900 border-t border-neutral-800 py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center space-y-8">
           <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
           <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">

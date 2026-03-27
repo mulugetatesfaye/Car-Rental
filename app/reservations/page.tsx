@@ -37,18 +37,18 @@ export default function ReservationsLandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Reservations Hero */}
-        <section className="relative py-32 px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
+        <section className="relative py-16 sm:py-32 px-4 sm:px-6 overflow-hidden bg-black text-white border-b border-neutral-900">
           <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">Concierge Access</h3>
-            <h2 className="font-serif text-4xl md:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tight">
+            <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-4 sm:mb-6 animate-fade-in">Concierge Access</h3>
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-7xl font-black italic uppercase text-white leading-tight tracking-tight">
               Bespoke <span className="text-gold">Reservations</span>
               <br className="hidden md:block" />
-              Tailored For You
+              <span className="block sm:inline sm:ml-2">Tailored For You</span>
             </h2>
-            <p className="text-sm md:text-lg text-neutral-400 mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-lg text-neutral-400 mt-6 sm:mt-8 max-w-2xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
               Luna Limo offers a seamless, high-tech reservation experience designed for the modern elite traveler. Secured, swift, and sophisticated.
             </p>
           </div>
@@ -60,15 +60,15 @@ export default function ReservationsLandingPage() {
         </section>
 
         {/* Booking Methods */}
-        <section className="py-24 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
+        <section className="py-16 sm:py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid lg:grid-cols-2 gap-12">
                {/* Method 1: Instant Online */}
-               <div className="bg-neutral-900 border border-neutral-800 p-12 space-y-8 relative group overflow-hidden">
+               <div className="bg-neutral-900 border border-neutral-800 p-8 sm:p-12 space-y-6 sm:space-y-8 relative group overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gold transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                   <div className="space-y-4">
-                     <Smartphone className="h-10 w-10 text-gold" />
-                     <h3 className="font-serif text-3xl font-black italic uppercase text-white">Instant Online Booking</h3>
+                     <Smartphone className="h-8 sm:h-10 w-8 sm:w-10 text-gold" />
+                     <h3 className="font-serif text-2xl sm:text-3xl font-black italic uppercase text-white">Instant Online Booking</h3>
                      <p className="text-neutral-400 text-sm font-medium uppercase tracking-widest leading-relaxed">
                         Secure your luxury transit in under 60 seconds with our real-time availability engine.
                      </p>
@@ -87,11 +87,11 @@ export default function ReservationsLandingPage() {
                </div>
 
                {/* Method 2: Concierge Line */}
-               <div className="bg-neutral-900 border border-neutral-800 p-12 space-y-8 relative group overflow-hidden">
+               <div className="bg-neutral-900 border border-neutral-800 p-8 sm:p-12 space-y-6 sm:space-y-8 relative group overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                   <div className="space-y-4">
-                     <Phone className="h-10 w-10 text-white" />
-                     <h3 className="font-serif text-3xl font-black italic uppercase text-white">Direct Concierge Line</h3>
+                     <Phone className="h-8 sm:h-10 w-8 sm:w-10 text-white" />
+                     <h3 className="font-serif text-2xl sm:text-3xl font-black italic uppercase text-white">Direct Concierge Line</h3>
                      <p className="text-neutral-400 text-sm font-medium uppercase tracking-widest leading-relaxed">
                         For complex itineraries, multi-vehicle logistics, or personalized requests, speak with our elite team.
                      </p>
@@ -113,11 +113,11 @@ export default function ReservationsLandingPage() {
         </section>
 
         {/* The Process */}
-        <section className="py-24 bg-neutral-900 border-t border-neutral-800">
-           <div className="max-w-7xl mx-auto px-6">
-              <div className="text-center mb-16">
+        <section className="py-16 sm:py-24 bg-neutral-900 border-t border-neutral-800">
+           <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="text-center mb-12 sm:mb-16">
                  <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.4em] mb-4">The Luna Protocol</h3>
-                 <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white">Booking Simplified</h2>
+                 <h2 className="font-serif text-2xl sm:text-5xl font-black italic uppercase text-white">Booking Simplified</h2>
               </div>
               <div className="grid md:grid-cols-3 gap-12">
                  {steps.map((step, i) => (
@@ -160,7 +160,7 @@ export default function ReservationsLandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 border-t border-neutral-800 py-16 px-6">
+      <footer className="bg-neutral-900 border-t border-neutral-800 py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center space-y-8">
           <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
           <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">

@@ -78,7 +78,11 @@ interface BookingOptions {
   customerPhone: string;
 }
 
+import { useSearchParams } from "next/navigation";
+import { geocodeAddress } from "@/lib/tomtom/search";
+
 export default function BookingClient() {
+  const searchParams = useSearchParams();
   const {
     pickup,
     destination,
@@ -109,12 +113,6 @@ export default function BookingClient() {
 
   const [bookingStep, setBookingStep] = React.useState<"trip" | "vehicle" | "payment">("trip");
 
-  React.useEffect(() => {
-    if (!selectedCar) {
-      setSelectedCar(DEFAULT_CAR_TYPES[0]);
-    }
-  }, []);
-
   const fetchRoute = async (pickupLoc: SearchResult, destLoc: SearchResult) => {
     setLoadingRoute(true);
     const routeResult = await calculateRouteBetween(
@@ -125,6 +123,45 @@ export default function BookingClient() {
     setLoadingRoute(false);
     return routeResult;
   };
+
+  // Handle deep links from Home Page
+  React.useEffect(() => {
+    const initFromParams = async () => {
+      const pParam = searchParams.get("p");
+      const dParam = searchParams.get("d");
+      const dateParam = searchParams.get("date");
+
+      if (dateParam) {
+        setOptions(prev => ({ ...prev, pickupDate: dateParam }));
+      }
+
+      let resolvedPickup = null;
+      let resolvedDestination = null;
+
+      if (pParam) {
+        resolvedPickup = await geocodeAddress(pParam);
+        if (resolvedPickup) setPickup(resolvedPickup);
+      }
+
+      if (dParam) {
+        resolvedDestination = await geocodeAddress(dParam);
+        if (resolvedDestination) setDestination(resolvedDestination);
+      }
+
+      // If both resolved, trigger route calculation
+      if (resolvedPickup && resolvedDestination) {
+        await fetchRoute(resolvedPickup, resolvedDestination);
+      }
+    };
+
+    initFromParams();
+  }, [searchParams]);
+
+  React.useEffect(() => {
+    if (!selectedCar) {
+      setSelectedCar(DEFAULT_CAR_TYPES[0]);
+    }
+  }, []);
 
   const handlePickupSelect = async (location: SearchResult | null) => {
     setPickup(location);

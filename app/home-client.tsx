@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Phone,
@@ -21,48 +22,127 @@ import {
   Zap,
   Car
 } from "lucide-react";
-import Image from "next/image";
+import NextImage from "next/image";
 
 export default function HomeClient() {
+  const router = useRouter();
+  const [searchData, setSearchData] = React.useState({
+    pickup: "",
+    destination: "",
+    date: new Date().toISOString().split("T")[0]
+  });
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchData.pickup) params.set("p", searchData.pickup);
+    if (searchData.destination) params.set("d", searchData.destination);
+    if (searchData.date) params.set("date", searchData.date);
+    router.push(`/booking?${params.toString()}`);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Hero Section */}
-        <section className="relative pt-12 sm:pt-20 pb-8 sm:pb-16 px-4 sm:px-6 overflow-hidden bg-black text-white">
-          <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight tracking-tight">
-              REFINING THE ART OF <span className="text-gold">LUXURY TRAVEL</span>
-              <br className="hidden md:block" />
-              <span className="block mt-2 sm:inline sm:mt-0"> ELITE TRANSPORTATION IN SEATTLE & BEYOND</span>
-            </h2>
+        <section className="relative pt-12 sm:pt-20 pb-8 sm:pb-32 px-4 sm:px-6 overflow-hidden bg-black text-white">
+          <div className="max-w-7xl mx-auto relative z-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+            {/* Left Column: Text */}
+            <div className="flex-1 text-center lg:text-left space-y-6 sm:space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 border border-gold/20 bg-gold/5 rounded-full mb-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+                <span className="text-gold text-[8px] font-black uppercase tracking-widest italic tracking-[0.3em]">Premier Seattle Chauffeur</span>
+              </div>
+              
+              <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tighter">
+                REFINING THE ART OF <br />
+                <span className="text-gold">LUXURY TRAVEL</span>
+              </h2>
 
-            <p className="text-xs sm:text-sm md:text-base text-neutral-400 mt-4 sm:mt-6 max-w-3xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
-              Luna Limo delivers a bespoke transportation experience tailored for those who demand excellence.
-              From executive airport transfers to refined event solutions, we provide the ultimate in <span className="text-gold">discretion, safety, and sophistication</span> for every journey.
-            </p>
+              <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed uppercase tracking-widest">
+                Luna Limo delivers a bespoke transportation experience tailored for those who demand excellence. 
+                The ultimate in <span className="text-gold">discretion, safety, and sophistication</span>.
+              </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 relative z-20 px-2 sm:px-0">
-              <Link href="tel:+12063274411" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto font-sans bg-gold hover:bg-gold-dark text-white rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-gold-dark flex items-center justify-center gap-2 sm:gap-3">
-                  <Phone className="h-4 w-4 flex-shrink-0" />
-                  Call Now +1 (206) 327-4411
-                </Button>
-              </Link>
-              <Link href="/booking" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto font-sans bg-black hover:bg-neutral-800 text-gold rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-neutral-700 flex items-center justify-center gap-2 sm:gap-3">
-                  <Calendar className="h-4 w-4 flex-shrink-0" />
-                  View Price & Book A Ride
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                <Link href="tel:+12063274411" className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-white rounded-none px-10 py-7 text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl border-b-4 border-gold-dark flex items-center justify-center gap-3 active:scale-95 transition-transform">
+                    <Phone className="h-4 w-4" />
+                    Call +1 (206) 327-4411
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Minimal Search Form */}
+            <div className="w-full lg:w-[450px] animate-in fade-in slide-in-from-right-8 duration-1000">
+              <div className="bg-neutral-900/40 backdrop-blur-xl border border-neutral-800 p-8 sm:p-10 shadow-3xl relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gold" />
+                <div className="absolute -right-20 -top-20 h-64 w-64 bg-gold/5 blur-[100px] rounded-full group-hover:bg-gold/10 transition-colors" />
+                
+                <h3 className="font-serif text-xl sm:text-2xl font-black italic uppercase text-white mb-8 border-b border-neutral-800 pb-4">
+                  Quick <span className="text-gold">Reservation</span>
+                </h3>
+
+                <form onSubmit={handleSearch} className="space-y-6 relative z-10">
+                  <div className="space-y-2">
+                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Pickup Location</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
+                      <input 
+                        type="text"
+                        placeholder="Airport, Hotel, or Office"
+                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all placeholder:text-neutral-700"
+                        value={searchData.pickup}
+                        onChange={(e) => setSearchData({...searchData, pickup: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Drop-off Destination</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
+                      <input 
+                        type="text"
+                        placeholder="Where are you heading?"
+                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all placeholder:text-neutral-700"
+                        value={searchData.destination}
+                        onChange={(e) => setSearchData({...searchData, destination: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Preferred Date</label>
+                    <div className="relative">
+                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
+                      <input 
+                        type="date"
+                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
+                        value={searchData.date}
+                        onChange={(e) => setSearchData({...searchData, date: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <Button 
+                    type="submit"
+                    className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] mt-4 border-b-4 border-gold-dark active:translate-y-1 transition-all"
+                  >
+                    Check Availability
+                  </Button>
+                </form>
+              </div>
             </div>
           </div>
 
-          <div className="-mt-2 sm:-mt-4 md:-mt-24 relative mx-auto max-w-6xl h-[150px] sm:h-[350px] md:h-[650px] -mb-6 sm:-mb-24 md:-mb-40 z-0">
-            <Image
+          <div className="relative mx-auto max-w-7xl h-[100px] sm:h-[200px] md:h-[400px] mt-12 sm:mt-20 lg:-mt-20 z-0">
+            <NextImage
               src="/fleet_black_bg.png"
               alt="Luna Limo Fleet"
               fill
-              className="object-contain transition-transform hover:scale-105 duration-1000 drop-shadow-[0_20px_50px_rgba(212,175,55,0.1)]"
+              className="object-contain opacity-40 lg:opacity-100 grayscale hover:grayscale-0 transition-all duration-1000"
               priority
             />
           </div>
@@ -147,7 +227,7 @@ export default function HomeClient() {
         <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-black overflow-hidden border-t border-neutral-900">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             <div className="flex-1 w-full max-w-[500px] lg:max-w-none">
-              <Image
+              <NextImage
                 src="/fleet_black_bg.png"
                 alt="Luxury Car and Seattle Skyline"
                 width={600}

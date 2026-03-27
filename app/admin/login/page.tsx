@@ -26,10 +26,10 @@ export default function AdminLoginPage() {
     
     const formData = new FormData(event.currentTarget);
     const password = formData.get("password") as string;
-    // We expect the user to enter their email, but it could also be a secret code
+    const email = formData.get("email") as string;
     
     try {
-      await signIn("password", formData);
+      await signIn("password", { email, password, flow });
       router.push("/admin");
     } catch (err: any) {
       console.error("Auth error:", err);

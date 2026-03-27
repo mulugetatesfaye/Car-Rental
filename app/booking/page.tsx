@@ -251,27 +251,26 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-black text-white font-montserrat">
 
-      {/* Progress Steps */}
-      <div className="bg-[#222222] py-4 shadow-inner">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center">
-          <div className="flex items-center gap-0 w-full md:w-3/4">
+      <div className="bg-[#111111] py-4 border-b border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between md:justify-center gap-2 md:gap-0">
             <Step 
               num="1" 
-              title="Trip Details" 
+              title="Trip" 
               active={bookingStep === "trip"} 
               complete={bookingStep === "vehicle" || bookingStep === "payment"} 
             />
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-white/5 md:mx-4" />
             <Step 
               num="2" 
-              title="Select Vehicle" 
+              title="Vehicle" 
               active={bookingStep === "vehicle"} 
               complete={bookingStep === "payment"} 
             />
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-white/5 md:mx-4" />
             <Step 
               num="3" 
-              title="Final Details & Payment" 
+              title="Payment" 
               active={bookingStep === "payment"} 
               complete={false} 
             />
@@ -279,15 +278,17 @@ export default function BookingPage() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto py-12 px-6">
-        <div className="grid lg:grid-cols-12 gap-12">
+      <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Form */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 order-first">
             <div className="space-y-12">
               <section>
-                <h2 className="text-3xl font-cinzel font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
-                  Trip Details
-                </h2>
+                <div className="flex items-center gap-4 mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-cinzel font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
+                    Trip Details
+                  </h2>
+                </div>
                 
                 <div className="space-y-6">
                   <div className="space-y-2">
@@ -308,7 +309,7 @@ export default function BookingPage() {
                     />
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Date</label>
                       <div className="relative">
@@ -323,18 +324,21 @@ export default function BookingPage() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Time</label>
-                      <input
-                        type="time"
-                        value={options.pickupTime}
-                        onChange={(e) => updateOption("pickupTime", e.target.value)}
-                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors"
-                      />
+                      <div className="relative">
+                        <input
+                          type="time"
+                          value={options.pickupTime}
+                          onChange={(e) => updateOption("pickupTime", e.target.value)}
+                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors"
+                        />
+                        <Clock className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 pointer-events-none" />
+                      </div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Service Type</label>
-                    <div className="flex flex-col sm:flex-row gap-8">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
                       <div className="flex items-center gap-3 group cursor-pointer" onClick={() => updateOption("accessible", false)}>
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${!options.accessible ? "border-gold bg-gold/10" : "border-neutral-800 bg-neutral-900"}`}>
                           {!options.accessible && <div className="w-2.5 h-2.5 rounded-full bg-gold" />}
@@ -349,7 +353,7 @@ export default function BookingPage() {
                         {options.accessible && (
                            <div className="flex items-center gap-2 ml-4">
                              <input type="number" defaultValue="1" className="w-12 bg-neutral-900 border border-neutral-800 text-center py-1 text-xs font-bold text-white focus:border-gold outline-none" />
-                             <span className="text-[10px] font-bold text-neutral-600">HOURS</span>
+                             <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest">HOURS</span>
                            </div>
                         )}
                       </div>
@@ -360,8 +364,8 @@ export default function BookingPage() {
 
               {pickup && destination && route && (
                 <section className="animate-fade-in">
-                   <h2 className="font-serif text-3xl font-black italic uppercase mb-8 pb-2 border-b-2 border-neutral-900 inline-block">
-                    2. Select Vehicle
+                   <h2 className="text-2xl sm:text-3xl font-cinzel font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
+                    Select Vehicle
                   </h2>
                   <div className="space-y-4">
                     {DEFAULT_CAR_TYPES.map((car) => (
@@ -372,30 +376,31 @@ export default function BookingPage() {
                           selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold" : "opacity-60"
                         }`}
                       >
-                         <div className="w-full sm:w-24 h-32 sm:h-16 bg-neutral-800 flex items-center justify-center flex-shrink-0 border border-neutral-700 relative overflow-hidden">
+                         <div className="w-full sm:w-32 h-24 sm:h-20 bg-neutral-800/50 flex items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
                            <Image 
                              src="/fleet_black_bg.png"
                              alt={car.name}
                              fill
-                             className="object-cover opacity-50"
+                             className="object-cover opacity-50 group-hover:scale-110 transition-transform duration-700"
                            />
-                           <Car className="h-8 w-8 text-white relative z-10" />
+                           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                           <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
                          </div>
                          <div className="flex-1 text-center sm:text-left">
-                            <h4 className="font-serif font-black italic uppercase text-lg text-white">{car.name}</h4>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500">{car.description}</p>
-                            <div className="flex items-center justify-center sm:justify-start gap-4 mt-2">
-                               <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                                 <Users className="h-3 w-3 text-gold" /> {car.capacity}
+                            <h4 className="font-serif font-black italic uppercase text-lg text-white mb-1">{car.name}</h4>
+                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-neutral-500">{car.description}</p>
+                            <div className="flex items-center justify-center sm:justify-start gap-6 mt-3">
+                               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                                 <Users className="h-3 w-3 text-gold" /> {car.capacity} Passengers
                                </div>
-                               <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                                 <Luggage className="h-3 w-3 text-gold" /> {car.capacity}
+                               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                                 <Luggage className="h-3 w-3 text-gold" /> {car.capacity} Bags
                                </div>
                             </div>
                          </div>
-                         <div className="text-center sm:text-right mt-2 sm:mt-0">
+                         <div className="text-center sm:text-right mt-2 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-neutral-800 w-full sm:w-auto">
                             <p className="hidden sm:block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1">From</p>
-                            <p className="font-serif font-black italic text-xl text-gold">${car.baseFare}</p>
+                            <p className="font-cinzel font-black italic text-2xl text-gold">{formatPrice(car.baseFare)}</p>
                          </div>
                       </button>
                     ))}
@@ -406,23 +411,28 @@ export default function BookingPage() {
           </div>
 
           {/* Right Column: Summary */}
-          <div className="lg:col-span-5 order-first lg:order-last">
+          <div className="lg:col-span-5 order-last lg:order-last">
             <div className="lg:sticky lg:top-28">
-              <Card className="rounded-none shadow-2xl border-none overflow-hidden bg-neutral-900">
+              <Card className="rounded-none shadow-2xl border border-neutral-800 overflow-hidden bg-neutral-900">
                 <div className="bg-black py-4 px-6 border-b border-neutral-800">
                   <h3 className="text-white font-black uppercase tracking-[0.3em] text-[12px] text-center">Trip Summary</h3>
                 </div>
                 
                 <div className="p-0">
-                  <div className="w-full h-[300px] border-b border-neutral-100 grayscale hover:grayscale-0 transition-all duration-700">
+                  <div className="w-full h-[200px] sm:h-[300px] border-b border-neutral-800 grayscale hover:grayscale-0 transition-all duration-700 relative">
                     <MapComponent
                       pickup={pickup ? { lat: pickup.position.lat, lng: pickup.position.lon } : null}
                       destination={destination ? { lat: destination.position.lat, lng: destination.position.lon } : null}
                       routeCoordinates={route?.coordinates}
                     />
+                    {!route && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Enter Locations to View Route</p>
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="p-8 space-y-8">
+                  <div className="p-6 sm:p-8 space-y-6 sm:space-y-8">
                     {route && (
                       <div className="flex justify-between items-center bg-black p-4 border-l-2 border-gold outline outline-1 outline-neutral-800">
                         <div className="space-y-1">
@@ -439,17 +449,19 @@ export default function BookingPage() {
                     {pricing ? (
                       <div className="text-center space-y-2">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400">Estimated Total:</p>
-                        <p className="font-serif font-black italic text-6xl text-gold">
+                        <p className="font-cinzel font-black italic text-4xl sm:text-5xl lg:text-6xl text-gold">
                           {formatPrice(pricing.totalPrice)}
                         </p>
                       </div>
                     ) : (
-                      <div className="text-center py-8 bg-neutral-900 px-6">
-                        <Info className="h-8 w-8 text-neutral-500 mx-auto mb-4" />
-                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Enter trip details to see pricing</p>
+                      <div className="text-center py-8 bg-[#111111] px-6 border border-neutral-800">
+                        <Info className="h-6 w-6 text-gold/40 mx-auto mb-4" />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500 leading-relaxed max-w-[200px] mx-auto">
+                          Enter trip details to see pricing guide
+                        </p>
                       </div>
                     )}
-                  <div className="p-6 bg-black">
+                  <div className="space-y-4">
                     <Button 
                       onClick={handleConfirm}
                       disabled={!pickup || !destination || !selectedCar || isBooking}
@@ -464,8 +476,8 @@ export default function BookingPage() {
                         "Confirm Reservation"
                       )}
                     </Button>
-                    <p className="text-[9px] font-bold text-neutral-500 text-center mt-4 uppercase tracking-widest leading-relaxed">
-                      By confirming, you agree to our <Link href="#" className="text-gold underline decoration-gold/30">Terms of Service</Link> and <Link href="#" className="text-gold underline decoration-gold/30">Cancellation Policy</Link>.
+                    <p className="text-[9px] font-bold text-neutral-500 text-center uppercase tracking-widest leading-relaxed">
+                      By confirming, you agree to our <Link href="#" className="text-gold underline decoration-gold/30">Terms</Link> and <Link href="#" className="text-gold underline decoration-gold/30">Policy</Link>.
                     </p>
                   </div>
                 </div>
@@ -481,11 +493,11 @@ export default function BookingPage() {
 
 function Step({ num, title, active, complete }: { num: string; title: string; active: boolean; complete: boolean }) {
   return (
-    <div className={`flex items-center gap-3 px-6 py-2 transition-all ${active ? "opacity-100" : "opacity-40"}`}>
-       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black italic text-sm border-2 ${active || complete ? "bg-gold border-gold text-white" : "border-white/20 text-white"}`}>
-         {complete ? <CheckCircle className="h-4 w-4" /> : num}
+    <div className={`flex items-center gap-2 md:gap-3 transition-all ${active ? "opacity-100" : "opacity-40"}`}>
+       <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-black italic text-[10px] md:text-sm border-2 ${active || complete ? "bg-gold border-gold text-white" : "border-white/20 text-white"}`}>
+         {complete ? <CheckCircle className="h-3 w-3 md:h-4 md:h-4" /> : num}
        </div>
-       <span className={`text-[10px] font-black uppercase tracking-widest hidden md:block ${active || complete ? "text-white" : "text-white/40"}`}>
+       <span className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest ${active || complete ? "text-white" : "text-white/40"}`}>
          {title}
        </span>
     </div>

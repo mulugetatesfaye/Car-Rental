@@ -7,8 +7,8 @@ const MapComponent = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full min-h-[400px] bg-surface-elevated flex items-center justify-center rounded-2xl">
-        <p className="text-foreground-muted">Loading map...</p>
+      <div className="w-full h-full min-h-[200px] bg-neutral-900 flex items-center justify-center rounded-none border-b border-neutral-800">
+        <p className="text-neutral-500 font-black uppercase tracking-[0.2em] text-[10px]">Loading lux map...</p>
       </div>
     ),
   }

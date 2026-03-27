@@ -12,6 +12,7 @@ interface LocationInputProps {
   onChange: (location: SearchResult | null) => void;
   disabled?: boolean;
   iconPosition?: "start" | "end";
+  className?: string;
 }
 
 export function LocationInput({
@@ -19,6 +20,7 @@ export function LocationInput({
   value,
   onChange,
   disabled,
+  className,
 }: LocationInputProps) {
   const [inputValue, setInputValue] = React.useState("");
   const [results, setResults] = React.useState<SearchResult[]>([]);
@@ -99,10 +101,11 @@ export function LocationInput({
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
-            "flex h-14 w-full rounded-xl border border-border bg-surface px-12 py-2 text-sm text-foreground placeholder:text-foreground-muted",
+            "flex h-12 w-full rounded-none border border-border bg-surface px-12 py-2 text-sm text-foreground placeholder:text-foreground-muted",
             "focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold",
             "disabled:cursor-not-allowed disabled:opacity-50",
-            "transition-colors duration-200"
+            "transition-colors duration-200",
+            className
           )}
         />
         {isLoading && (

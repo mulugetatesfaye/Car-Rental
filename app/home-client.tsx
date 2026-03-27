@@ -24,12 +24,14 @@ import {
   Clock
 } from "lucide-react";
 import NextImage from "next/image";
+import { LocationInput } from "@/components/booking/location-input";
+import { SearchResult } from "@/lib/tomtom/search";
 
 export default function HomeClient() {
   const router = useRouter();
   const [searchData, setSearchData] = React.useState({
-    pickup: "",
-    destination: "",
+    pickup: null as SearchResult | null,
+    destination: null as SearchResult | null,
     date: new Date().toISOString().split("T")[0],
     time: ""
   });
@@ -37,8 +39,8 @@ export default function HomeClient() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const params = new URLSearchParams();
-    if (searchData.pickup) params.set("p", searchData.pickup);
-    if (searchData.destination) params.set("d", searchData.destination);
+    if (searchData.pickup) params.set("p", searchData.pickup.address.freeformAddress);
+    if (searchData.destination) params.set("d", searchData.destination.address.freeformAddress);
     if (searchData.date) params.set("date", searchData.date);
     if (searchData.time) params.set("time", searchData.time);
     router.push(`/booking?${params.toString()}`);
@@ -85,30 +87,22 @@ export default function HomeClient() {
                 <form onSubmit={handleSearch} className="space-y-6 relative z-10">
                   <div className="space-y-2">
                     <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Pickup Location</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
-                      <input 
-                        type="text"
-                        placeholder="Airport, Hotel, or Office"
-                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all placeholder:text-neutral-700"
-                        value={searchData.pickup}
-                        onChange={(e) => setSearchData({...searchData, pickup: e.target.value})}
-                      />
-                    </div>
+                    <LocationInput 
+                      placeholder="Airport, Hotel, or Office"
+                      value={searchData.pickup}
+                      onChange={(location) => setSearchData({...searchData, pickup: location})}
+                      className="bg-black/60 border-neutral-800 text-white font-bold h-12"
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Drop-off Destination</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
-                      <input 
-                        type="text"
-                        placeholder="Where are you heading?"
-                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all placeholder:text-neutral-700"
-                        value={searchData.destination}
-                        onChange={(e) => setSearchData({...searchData, destination: e.target.value})}
-                      />
-                    </div>
+                    <LocationInput 
+                      placeholder="Where are you heading?"
+                      value={searchData.destination}
+                      onChange={(location) => setSearchData({...searchData, destination: location})}
+                      className="bg-black/60 border-neutral-800 text-white font-bold h-12"
+                    />
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">

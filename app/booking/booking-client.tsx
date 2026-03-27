@@ -124,38 +124,53 @@ export default function BookingClient() {
     return routeResult;
   };
 
+  const hasInitializedFromParams = React.useRef(false);
+
   // Handle deep links from Home Page
   React.useEffect(() => {
+    if (hasInitializedFromParams.current) return;
+    
     const initFromParams = async () => {
       const pParam = searchParams.get("p");
       const dParam = searchParams.get("d");
       const dateParam = searchParams.get("date");
       const timeParam = searchParams.get("time");
 
-      if (dateParam) {
-        setOptions(prev => ({ ...prev, pickupDate: dateParam }));
-      }
+      if (!pParam && !dParam && !dateParam && !timeParam) return;
+      
+      hasInitializedFromParams.current = true;
 
-      if (timeParam) {
-        setOptions(prev => ({ ...prev, pickupTime: timeParam }));
-      }
+      // Update basic options
+      setOptions(prev => ({
+        ...prev,
+        pickupDate: dateParam || prev.pickupDate,
+        pickupTime: timeParam || prev.pickupTime,
+      }));
 
-      let resolvedPickup = null;
-      let resolvedDestination = null;
+      try {
+        let resolvedPickup = null;
+        let resolvedDestination = null;
 
-      if (pParam) {
-        resolvedPickup = await geocodeAddress(pParam);
-        if (resolvedPickup) setPickup(resolvedPickup);
-      }
+        if (pParam) {
+          resolvedPickup = await geocodeAddress(pParam);
+          if (resolvedPickup) {
+            setPickup(resolvedPickup);
+          }
+        }
 
-      if (dParam) {
-        resolvedDestination = await geocodeAddress(dParam);
-        if (resolvedDestination) setDestination(resolvedDestination);
-      }
+        if (dParam) {
+          resolvedDestination = await geocodeAddress(dParam);
+          if (resolvedDestination) {
+            setDestination(resolvedDestination);
+          }
+        }
 
-      // If both resolved, trigger route calculation
-      if (resolvedPickup && resolvedDestination) {
-        await fetchRoute(resolvedPickup, resolvedDestination);
+        // If both resolved, trigger route calculation
+        if (resolvedPickup && resolvedDestination) {
+          await fetchRoute(resolvedPickup, resolvedDestination);
+        }
+      } catch (error) {
+        console.error("Initialization from params failed:", error);
       }
     };
 

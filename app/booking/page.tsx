@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   keywords: ["Book Limo Online", "Seattle Chauffeur Booking", "Airport Taxi Seattle Reservation", "Executive Car Booking"],
 };
 
+import { Suspense } from "react";
+
 export default function Page() {
-  return <BookingClient />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BookingClient />
+    </Suspense>
+  );
 }

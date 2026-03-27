@@ -26,6 +26,15 @@
   box-sizing: border-box;
 }
 
+input, textarea, select, button {
+  max-width: 100%;
+}
+
+.leaflet-container {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
 html, body {
   margin: 0;
   padding: 0;

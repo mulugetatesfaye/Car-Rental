@@ -70,7 +70,7 @@ export function MapComponent({ pickup, destination, routeCoordinates }: MapCompo
       center={center}
       zoom={12}
       style={{ height: "100%", width: "100%" }}
-      className="rounded-2xl"
+      className="rounded-none"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

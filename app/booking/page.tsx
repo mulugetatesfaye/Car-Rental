@@ -202,8 +202,8 @@ export default function BookingPage() {
   if (step === "complete") {
     // Keep confirmation UI similar but styled
      return (
-        <div className="min-h-screen bg-black text-white font-montserrat">
-        <main className="max-w-4xl mx-auto py-20 px-6 text-center">
+        <div className="min-h-screen bg-black text-white font-montserrat overflow-x-hidden w-full">
+        <main className="max-w-4xl mx-auto py-20 px-4 sm:px-6 text-center">
             <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-8 border border-gold/20">
               <CheckCircle className="h-12 w-12 text-gold" />
             </div>
@@ -219,11 +219,11 @@ export default function BookingPage() {
               <div className="space-y-4">
                 <div className="flex justify-between gap-4">
                   <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Pickup</span>
-                  <span className="text-sm font-bold text-right">{pickup?.address.freeformAddress}</span>
+                  <span className="text-sm font-bold text-right truncate max-w-[200px]">{pickup?.address.freeformAddress}</span>
                 </div>
                 <div className="flex justify-between gap-4">
                   <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Destination</span>
-                  <span className="text-sm font-bold text-right">{destination?.address.freeformAddress}</span>
+                  <span className="text-sm font-bold text-right truncate max-w-[200px]">{destination?.address.freeformAddress}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Vehicle</span>
@@ -278,10 +278,10 @@ export default function BookingPage() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+      <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 w-full max-w-full">
           {/* Left Column: Form */}
-          <div className="lg:col-span-7 order-first">
+          <div className="lg:col-span-7 order-first min-w-0">
             <div className="space-y-12">
               <section>
                 <div className="flex items-center gap-4 mb-8">
@@ -411,23 +411,23 @@ export default function BookingPage() {
           </div>
 
           {/* Right Column: Summary */}
-          <div className="lg:col-span-5 order-last lg:order-last">
-            <div className="lg:sticky lg:top-28">
-              <Card className="rounded-none shadow-2xl border border-neutral-800 overflow-hidden bg-neutral-900">
+          <div className="lg:col-span-5 order-last lg:order-last min-w-0">
+            <div className="lg:sticky lg:top-28 max-w-full">
+              <Card className="rounded-none shadow-2xl border border-neutral-800 overflow-hidden bg-neutral-900 max-w-full">
                 <div className="bg-black py-4 px-6 border-b border-neutral-800">
                   <h3 className="text-white font-black uppercase tracking-[0.3em] text-[12px] text-center">Trip Summary</h3>
                 </div>
                 
-                <div className="p-0">
-                  <div className="w-full h-[200px] sm:h-[300px] border-b border-neutral-800 grayscale hover:grayscale-0 transition-all duration-700 relative">
+                <div className="p-0 overflow-hidden">
+                  <div className="w-full h-[200px] sm:h-[300px] border-b border-neutral-800 grayscale hover:grayscale-0 transition-all duration-700 relative overflow-hidden">
                     <MapComponent
                       pickup={pickup ? { lat: pickup.position.lat, lng: pickup.position.lon } : null}
                       destination={destination ? { lat: destination.position.lat, lng: destination.position.lon } : null}
                       routeCoordinates={route?.coordinates}
                     />
                     {!route && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Enter Locations to View Route</p>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px] px-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.3em] text-white/60 text-center">Enter Locations to View Route</p>
                       </div>
                     )}
                   </div>

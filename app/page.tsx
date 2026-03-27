@@ -43,13 +43,13 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 relative z-20 px-2 sm:px-0">
               <Link href="tel:+12063274411" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto font-montserrat bg-gold hover:bg-gold-dark text-white rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-gold-dark flex items-center justify-center gap-2 sm:gap-3">
+                <Button className="w-full sm:w-auto font-sans bg-gold hover:bg-gold-dark text-white rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-gold-dark flex items-center justify-center gap-2 sm:gap-3">
                   <Phone className="h-4 w-4 flex-shrink-0" />
                   Call Now +1 (206) 327-4411
                 </Button>
               </Link>
               <Link href="/booking" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto font-montserrat bg-black hover:bg-neutral-800 text-gold rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-neutral-700 flex items-center justify-center gap-2 sm:gap-3">
+                <Button className="w-full sm:w-auto font-sans bg-black hover:bg-neutral-800 text-gold rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-neutral-700 flex items-center justify-center gap-2 sm:gap-3">
                   <Calendar className="h-4 w-4 flex-shrink-0" />
                   View Price & Book A Ride
                 </Button>
@@ -265,7 +265,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-3 mb-6">
-                <span className="font-cinzel text-2xl font-black italic uppercase text-gold leading-tight tracking-tighter">
+                <span className="font-serif text-2xl font-black italic uppercase text-gold leading-tight tracking-tighter">
                   Luna Limo
                 </span>
               </div>

@@ -88,7 +88,7 @@ export default function ServicesPage() {
                       <h4 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
                         {service.title}
                       </h4>
-                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed font-medium uppercase font-montserrat tracking-wide">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed font-medium uppercase font-sans tracking-wide">
                         {service.description}
                       </p>
                     </div>

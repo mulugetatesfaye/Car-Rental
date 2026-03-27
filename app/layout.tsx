@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cinzel, Montserrat } from "next/font/google";
+import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { ConvexProvider } from "@/lib/convex/provider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
-const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
+const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans", weight: ["400", "500", "600", "700"] });
+const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-serif", weight: "400" });
 
 export const metadata: Metadata = {
   title: "Luna Limo | Luxury Chauffeurs",
@@ -21,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${montserrat.variable} h-full antialiased dark`}>
+    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} h-full antialiased dark`}>
       <body className="h-full min-h-screen bg-background text-foreground font-sans">
         <ConvexProvider>
           <Header />

@@ -202,7 +202,7 @@ export default function BookingPage() {
   if (step === "complete") {
     // Keep confirmation UI similar but styled
      return (
-        <div className="min-h-screen bg-black text-white font-montserrat overflow-x-hidden w-full">
+        <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
         <main className="max-w-4xl mx-auto py-20 px-4 sm:px-6 text-center">
             <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-8 border border-gold/20">
               <CheckCircle className="h-12 w-12 text-gold" />
@@ -232,7 +232,7 @@ export default function BookingPage() {
                 {pricing && (
                   <div className="pt-4 border-t border-neutral-100 flex justify-between items-center">
                     <span className="text-neutral-900 font-black uppercase text-[11px] tracking-widest">Total Paid</span>
-                    <span className="text-2xl font-cinzel font-black italic text-gold">
+                    <span className="text-2xl font-serif font-black italic text-gold">
                       {formatPrice(pricing.totalPrice)}
                     </span>
                   </div>
@@ -240,7 +240,7 @@ export default function BookingPage() {
               </div>
             </Card>
 
-            <Button onClick={handleReset} className="bg-gold hover:bg-gold-dark text-white rounded-none px-12 py-8 text-xs font-montserrat font-black uppercase tracking-[0.2em] shadow-lg">
+            <Button onClick={handleReset} className="bg-gold hover:bg-gold-dark text-white rounded-none px-12 py-8 text-xs font-sans font-black uppercase tracking-[0.2em] shadow-lg">
               Book Another Ride
             </Button>
         </main>
@@ -249,7 +249,7 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-montserrat overflow-x-hidden w-full">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
 
       <div className="bg-[#111111] py-4 border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -285,7 +285,7 @@ export default function BookingPage() {
             <div className="space-y-12">
               <section>
                 <div className="flex items-center gap-4 mb-8">
-                  <h2 className="text-2xl sm:text-3xl font-cinzel font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
+                  <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
                     Trip Details
                   </h2>
                 </div>
@@ -364,19 +364,20 @@ export default function BookingPage() {
 
               {pickup && destination && route && (
                 <section className="animate-fade-in">
-                   <h2 className="text-2xl sm:text-3xl font-cinzel font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
+                   <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
                     Select Vehicle
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-2 sm:space-y-4">
                     {DEFAULT_CAR_TYPES.map((car) => (
                       <button
                         key={car.name}
                         onClick={() => setSelectedCar(car)}
-                        className={`w-full flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-4 sm:p-6 transition-all border-b border-neutral-800 hover:bg-neutral-900/50 ${
-                          selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold" : "opacity-60"
+                        className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
+                          selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
                         }`}
                       >
-                         <div className="w-full sm:w-32 h-24 sm:h-20 bg-neutral-800/50 flex items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
+                         {/* Compact icon for mobile, image card for desktop */}
+                         <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
                            <Image 
                              src="/fleet_black_bg.png"
                              alt={car.name}
@@ -386,21 +387,25 @@ export default function BookingPage() {
                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
                            <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
                          </div>
-                         <div className="flex-1 text-center sm:text-left">
-                            <h4 className="font-serif font-black italic uppercase text-lg text-white mb-1">{car.name}</h4>
-                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-neutral-500">{car.description}</p>
-                            <div className="flex items-center justify-center sm:justify-start gap-6 mt-3">
-                               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                                 <Users className="h-3 w-3 text-gold" /> {car.capacity} Passengers
-                               </div>
-                               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                                 <Luggage className="h-3 w-3 text-gold" /> {car.capacity} Bags
-                               </div>
+                         <div className="flex sm:hidden w-10 h-10 bg-neutral-800/60 items-center justify-center flex-shrink-0 border border-neutral-800">
+                           <Car className="h-5 w-5 text-gold" />
+                         </div>
+
+                         <div className="flex-1 text-left min-w-0">
+                            <h4 className="font-serif text-sm sm:text-lg text-white truncate">{car.name}</h4>
+                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-[0.15em] text-neutral-500 mt-0.5">{car.description}</p>
+                            <div className="flex items-center gap-3 sm:gap-6 mt-1 sm:mt-2">
+                               <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                                 <Users className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                               </span>
+                               <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                                 <Luggage className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                               </span>
                             </div>
                          </div>
-                         <div className="text-center sm:text-right mt-2 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-neutral-800 w-full sm:w-auto">
-                            <p className="hidden sm:block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1">From</p>
-                            <p className="font-cinzel font-black italic text-2xl text-gold">{formatPrice(car.baseFare)}</p>
+                         <div className="text-right flex-shrink-0">
+                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-widest text-neutral-500 mb-1">From</p>
+                            <p className="font-serif text-lg sm:text-2xl text-gold">{formatPrice(car.baseFare)}</p>
                          </div>
                       </button>
                     ))}
@@ -449,7 +454,7 @@ export default function BookingPage() {
                     {pricing ? (
                       <div className="text-center space-y-2">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400">Estimated Total:</p>
-                        <p className="font-cinzel font-black italic text-4xl sm:text-5xl lg:text-6xl text-gold">
+                        <p className="font-serif font-black italic text-4xl sm:text-5xl lg:text-6xl text-gold">
                           {formatPrice(pricing.totalPrice)}
                         </p>
                       </div>
@@ -465,7 +470,7 @@ export default function BookingPage() {
                     <Button 
                       onClick={handleConfirm}
                       disabled={!pickup || !destination || !selectedCar || isBooking}
-                      className="w-full font-montserrat bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                      className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
                     >
                       {isBooking ? (
                         <>

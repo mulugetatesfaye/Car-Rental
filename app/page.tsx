@@ -25,39 +25,39 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Hero Section */}
-        <section className="relative pt-20 pb-16 px-6 overflow-hidden bg-black text-white">
+        <section className="relative pt-12 sm:pt-20 pb-8 sm:pb-16 px-4 sm:px-6 overflow-hidden bg-black text-white">
           <div className="max-w-7xl mx-auto text-center relative z-20">
-            <h2 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white leading-tight tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight tracking-tight">
               REFINING THE ART OF <span className="text-gold">LUXURY TRAVEL</span>
               <br className="hidden md:block" />
-              ELITE TRANSPORTATION IN SEATTLE & BEYOND
+              <span className="block mt-2 sm:inline sm:mt-0"> ELITE TRANSPORTATION IN SEATTLE & BEYOND</span>
             </h2>
 
-            <p className="text-sm md:text-base text-neutral-400 mt-6 max-w-3xl mx-auto font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-neutral-400 mt-4 sm:mt-6 max-w-3xl mx-auto font-medium leading-relaxed px-2 sm:px-0">
               Luna Limo delivers a bespoke transportation experience tailored for those who demand excellence.
               From executive airport transfers to refined event solutions, we provide the ultimate in <span className="text-gold">discretion, safety, and sophistication</span> for every journey.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 relative z-20">
-              <Link href="tel:+12063274411">
-                <Button className="font-montserrat bg-gold hover:bg-gold-dark text-white rounded-none px-10 py-7 text-xs font-black uppercase tracking-[0.2em] shadow-lg border-b-4 border-gold-dark flex items-center gap-3">
-                  <Phone className="h-4 w-4" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 relative z-20 px-2 sm:px-0">
+              <Link href="tel:+12063274411" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto font-montserrat bg-gold hover:bg-gold-dark text-white rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-gold-dark flex items-center justify-center gap-2 sm:gap-3">
+                  <Phone className="h-4 w-4 flex-shrink-0" />
                   Call Now +1 (206) 327-4411
                 </Button>
               </Link>
-              <Link href="/booking">
-                <Button className="font-montserrat bg-black hover:bg-neutral-800 text-gold rounded-none px-10 py-7 text-xs font-black uppercase tracking-[0.2em] shadow-lg border-b-4 border-neutral-700 flex items-center gap-3">
-                  <Calendar className="h-4 w-4" />
+              <Link href="/booking" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto font-montserrat bg-black hover:bg-neutral-800 text-gold rounded-none px-6 sm:px-10 py-5 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg border-b-4 border-neutral-700 flex items-center justify-center gap-2 sm:gap-3">
+                  <Calendar className="h-4 w-4 flex-shrink-0" />
                   View Price & Book A Ride
                 </Button>
               </Link>
             </div>
           </div>
 
-          <div className="-mt-4 md:-mt-24 relative mx-auto max-w-6xl h-[180px] sm:h-[350px] md:h-[650px] -mb-12 sm:-mb-24 md:-mb-40 z-0">
+          <div className="-mt-2 sm:-mt-4 md:-mt-24 relative mx-auto max-w-6xl h-[150px] sm:h-[350px] md:h-[650px] -mb-6 sm:-mb-24 md:-mb-40 z-0">
             <Image
               src="/fleet_black_bg.png"
               alt="Luna Limo Fleet"

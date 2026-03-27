@@ -49,6 +49,9 @@ export const create = mutation({
     pickupTime: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Generate a secure 12-character random token for reviews
+    const reviewToken = Math.random().toString(36).substring(2, 14).toUpperCase();
+
     const ride = {
       userId: args.userId,
       customerName: args.customerName,
@@ -71,6 +74,7 @@ export const create = mutation({
       pickupDate: args.pickupDate,
       pickupTime: args.pickupTime,
       status: "pending" as const,
+      reviewToken,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };

@@ -58,9 +58,17 @@ export default defineSchema({
       v.literal("completed"),
       v.literal("cancelled")
     ),
+    reviewToken: v.string(),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index("by_status", ["status"])
     .index("by_created", ["createdAt"]),
+
+  reviews: defineTable({
+    rideId: v.id("rides"),
+    rating: v.number(),
+    comment: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_ride", ["rideId"]),
 });

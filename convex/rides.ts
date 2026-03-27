@@ -28,6 +28,9 @@ export const getById = query({
 export const create = mutation({
   args: {
     userId: v.optional(v.string()),
+    customerName: v.string(),
+    customerEmail: v.string(),
+    customerPhone: v.string(),
     pickupAddress: v.string(),
     destinationAddress: v.string(),
     pickupLat: v.number(),
@@ -48,6 +51,9 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const ride = {
       userId: args.userId,
+      customerName: args.customerName,
+      customerEmail: args.customerEmail,
+      customerPhone: args.customerPhone,
       pickupAddress: args.pickupAddress,
       destinationAddress: args.destinationAddress,
       pickupLat: args.pickupLat,

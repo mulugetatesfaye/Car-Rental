@@ -63,7 +63,20 @@ export default function AdminBookingsPage() {
                        {ride.status.replace("_", " ")}
                      </span>
                      <p className="text-white font-bold text-sm">{ride.pickupDate} at {ride.pickupTime || "TBD"}</p>
+                     <div className="h-4 w-px bg-neutral-800" />
+                     <p className="text-gold font-serif text-sm font-black italic uppercase tracking-tighter">{ride.customerName}</p>
                      <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest">{ride.carTypeName}</p>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[9px] font-bold text-neutral-400">
+                     <p className="flex items-center gap-1.5 border-r border-neutral-800 pr-4">
+                       <span className="text-neutral-600 uppercase tracking-widest text-[8px]">EMAIL</span>
+                       <span className="text-white">{ride.customerEmail}</span>
+                     </p>
+                     <p className="flex items-center gap-1.5 p-1 bg-neutral-900/50 border border-neutral-800/50">
+                       <span className="text-neutral-600 uppercase tracking-widest text-[8px]">PHONE</span>
+                       <span className="text-white">{ride.customerPhone}</span>
+                     </p>
                   </div>
                   
                   <div className="space-y-1">

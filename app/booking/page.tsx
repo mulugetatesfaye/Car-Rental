@@ -73,6 +73,9 @@ interface BookingOptions {
   accessible: boolean;
   pickupDate: string;
   pickupTime: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
 }
 
 export default function BookingPage() {
@@ -99,6 +102,9 @@ export default function BookingPage() {
     accessible: false,
     pickupDate: new Date().toISOString().split("T")[0],
     pickupTime: "",
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
   });
 
   const [bookingStep, setBookingStep] = React.useState<"trip" | "vehicle" | "payment">("trip");
@@ -161,6 +167,9 @@ export default function BookingPage() {
         accessible: options.accessible,
         pickupDate: options.pickupDate,
         pickupTime: options.pickupTime || undefined,
+        customerName: options.customerName,
+        customerEmail: options.customerEmail,
+        customerPhone: options.customerPhone,
       });
 
       setStep("complete");
@@ -184,6 +193,9 @@ export default function BookingPage() {
       accessible: false,
       pickupDate: new Date().toISOString().split("T")[0],
       pickupTime: "",
+      customerName: "",
+      customerEmail: "",
+      customerPhone: "",
     });
   };
 
@@ -412,6 +424,50 @@ export default function BookingPage() {
                   </div>
                 </section>
               )}
+
+              {pickup && destination && route && selectedCar && (
+                <section className="animate-fade-in py-12">
+                  <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
+                    Passenger Details
+                  </h2>
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
+                       <input 
+                         value={options.customerName} 
+                         onChange={(e) => updateOption("customerName", e.target.value)}
+                         placeholder="e.g. James Bond" 
+                         required 
+                         className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                       />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
+                         <input 
+                           type="email"
+                           value={options.customerEmail} 
+                           onChange={(e) => updateOption("customerEmail", e.target.value)}
+                           placeholder="james@mi6.gov" 
+                           required 
+                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                         />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Phone Number</label>
+                         <input 
+                           type="tel"
+                           value={options.customerPhone} 
+                           onChange={(e) => updateOption("customerPhone", e.target.value)}
+                           placeholder="+1 (206) 555-0123" 
+                           required 
+                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                         />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              )}
             </div>
           </div>
 
@@ -469,7 +525,7 @@ export default function BookingPage() {
                   <div className="space-y-4">
                     <Button 
                       onClick={handleConfirm}
-                      disabled={!pickup || !destination || !selectedCar || isBooking}
+                      disabled={!pickup || !destination || !selectedCar || !options.customerName || !options.customerEmail || !options.customerPhone || isBooking}
                       className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
                     >
                       {isBooking ? (

@@ -31,6 +31,9 @@ export default defineSchema({
 
   rides: defineTable({
     userId: v.optional(v.string()),
+    customerName: v.string(),
+    customerEmail: v.string(),
+    customerPhone: v.string(),
     pickupAddress: v.string(),
     destinationAddress: v.string(),
     pickupLat: v.number(),

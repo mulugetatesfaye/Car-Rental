@@ -59,7 +59,8 @@ export default function AdminDashboardPage() {
             {recentRides.map((ride) => (
               <div key={ride._id} className="flex justify-between items-center p-4 bg-black border border-neutral-800">
                 <div className="space-y-1">
-                   <p className="text-white text-sm font-bold">{ride.pickupAddress} <span className="text-gold mx-2">→</span> {ride.destinationAddress}</p>
+                   <p className="text-gold font-serif text-xs font-black italic uppercase tracking-widest">{ride.customerName}</p>
+                   <p className="text-white text-sm font-bold truncate max-w-md">{ride.pickupAddress} <span className="text-gold mx-2">→</span> {ride.destinationAddress}</p>
                    <p className="text-neutral-500 text-[10px] font-black uppercase tracking-[0.1em]">{ride.pickupDate} • {ride.carTypeName}</p>
                 </div>
                 <div>

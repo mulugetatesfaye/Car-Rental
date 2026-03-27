@@ -19,6 +19,9 @@ export async function createRide(rideData: {
   accessible: boolean;
   pickupDate: string;
   pickupTime?: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
 }) {
   if (!CONVEX_URL) {
     console.error("Convex URL not configured");

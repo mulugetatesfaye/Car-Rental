@@ -5,11 +5,15 @@ import { authTables } from "@convex-dev/auth/server";
 export default defineSchema({
   ...authTables,
   users: defineTable({
-    name: v.string(),
-    email: v.string(),
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
     phone: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    image: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    createdAt: v.optional(v.number()),
+    updatedAt: v.optional(v.number()),
   }).index("by_email", ["email"]),
 
   carTypes: defineTable({

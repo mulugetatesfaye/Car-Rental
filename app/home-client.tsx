@@ -20,7 +20,8 @@ import {
   Trophy,
   Quote,
   Zap,
-  Car
+  Car,
+  Clock
 } from "lucide-react";
 import NextImage from "next/image";
 
@@ -29,7 +30,8 @@ export default function HomeClient() {
   const [searchData, setSearchData] = React.useState({
     pickup: "",
     destination: "",
-    date: new Date().toISOString().split("T")[0]
+    date: new Date().toISOString().split("T")[0],
+    time: ""
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -38,6 +40,7 @@ export default function HomeClient() {
     if (searchData.pickup) params.set("p", searchData.pickup);
     if (searchData.destination) params.set("d", searchData.destination);
     if (searchData.date) params.set("date", searchData.date);
+    if (searchData.time) params.set("time", searchData.time);
     router.push(`/booking?${params.toString()}`);
   };
 
@@ -49,11 +52,6 @@ export default function HomeClient() {
           <div className="max-w-7xl mx-auto relative z-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
             {/* Left Column: Text */}
             <div className="flex-1 text-center lg:text-left space-y-6 sm:space-y-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 border border-gold/20 bg-gold/5 rounded-full mb-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-                <span className="text-gold text-[8px] font-black uppercase tracking-widest italic tracking-[0.3em]">Premier Seattle Chauffeur</span>
-              </div>
-              
               <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tighter">
                 REFINING THE ART OF <br />
                 <span className="text-gold">LUXURY TRAVEL</span>
@@ -113,16 +111,30 @@ export default function HomeClient() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Preferred Date</label>
-                    <div className="relative">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
-                      <input 
-                        type="date"
-                        className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
-                        value={searchData.date}
-                        onChange={(e) => setSearchData({...searchData, date: e.target.value})}
-                      />
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Preferred Date</label>
+                      <div className="relative">
+                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
+                        <input 
+                          type="date"
+                          className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
+                          value={searchData.date}
+                          onChange={(e) => setSearchData({...searchData, date: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Arrival Time</label>
+                      <div className="relative">
+                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
+                        <input 
+                          type="time"
+                          className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
+                          value={searchData.time}
+                          onChange={(e) => setSearchData({...searchData, time: e.target.value})}
+                        />
+                      </div>
                     </div>
                   </div>
 

@@ -130,9 +130,14 @@ export default function BookingClient() {
       const pParam = searchParams.get("p");
       const dParam = searchParams.get("d");
       const dateParam = searchParams.get("date");
+      const timeParam = searchParams.get("time");
 
       if (dateParam) {
         setOptions(prev => ({ ...prev, pickupDate: dateParam }));
+      }
+
+      if (timeParam) {
+        setOptions(prev => ({ ...prev, pickupTime: timeParam }));
       }
 
       let resolvedPickup = null;

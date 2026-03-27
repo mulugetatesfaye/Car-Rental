@@ -3,8 +3,9 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function AdminLayout({
   children,
@@ -14,6 +15,7 @@ export default function AdminLayout({
   const { signOut } = useAuthActions();
   const router = useRouter();
   const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // If we are on the login page, don't show the dashboard shell
   if (pathname === "/admin/login") {
@@ -25,6 +27,8 @@ export default function AdminLayout({
     router.push("/admin/login");
   };
 
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   const navLinks = [
     { href: "/admin", label: "Overview", icon: LayoutDashboard },
     { href: "/admin/bookings", label: "Reservations", icon: CalendarDays },
@@ -32,17 +36,55 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="h-screen overflow-hidden bg-black text-white font-sans flex flex-col md:flex-row">
+    <div className="h-screen overflow-hidden bg-black text-white font-sans flex flex-col md:flex-row relative">
+      
+      {/* Mobile Header */}
+      <header className="md:hidden bg-neutral-900 border-b border-neutral-800 p-4 flex items-center justify-between z-40">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="h-5 w-5 text-gold" />
+          <h2 className="font-serif text-sm font-black italic uppercase text-white tracking-widest">Commander</h2>
+        </div>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setIsSidebarOpen(true)}
+          className="text-gold"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      </header>
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 md:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-neutral-900 border-b md:border-b-0 md:border-r border-neutral-800 flex flex-col flex-shrink-0">
+      <aside className={`
+        fixed inset-y-0 left-0 w-64 bg-neutral-900 border-r border-neutral-800 flex flex-col z-[60] transition-transform duration-300 md:relative md:translate-x-0
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}>
         
         {/* Brand */}
-        <div className="p-8 border-b border-neutral-800 flex items-center gap-4">
-            <ShieldCheck className="h-6 w-6 text-gold" />
-            <div>
-              <h2 className="font-serif text-lg font-black italic uppercase text-white tracking-wider">Commander</h2>
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">Luna Limo</p>
+        <div className="p-8 border-b border-neutral-800 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <ShieldCheck className="h-6 w-6 text-gold" />
+              <div>
+                <h2 className="font-serif text-lg font-black italic uppercase text-white tracking-wider">Commander</h2>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">Luna Limo</p>
+              </div>
             </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={closeSidebar}
+              className="md:hidden text-neutral-500 hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </Button>
         </div>
 
         {/* Links */}
@@ -55,6 +97,7 @@ export default function AdminLayout({
               <Link 
                 key={link.href} 
                 href={link.href}
+                onClick={closeSidebar}
                 className={`flex items-center gap-4 px-4 py-4 transition-all border-l-2 ${
                   isActive 
                     ? "bg-black border-gold text-white shadow-[inset_4px_0_0_0_theme(colors.gold)]" 

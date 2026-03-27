@@ -57,14 +57,14 @@ export default function AdminDashboardPage() {
         ) : (
           <div className="space-y-4">
             {recentRides.map((ride) => (
-              <div key={ride._id} className="flex justify-between items-center p-4 bg-black border border-neutral-800">
-                <div className="space-y-1">
+              <div key={ride._id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 bg-black border border-neutral-800 gap-4">
+                <div className="space-y-1 min-w-0">
                    <p className="text-gold font-serif text-xs font-black italic uppercase tracking-widest">{ride.customerName}</p>
-                   <p className="text-white text-sm font-bold truncate max-w-md">{ride.pickupAddress} <span className="text-gold mx-2">→</span> {ride.destinationAddress}</p>
+                   <p className="text-white text-sm font-bold truncate">{ride.pickupAddress} <span className="text-gold mx-2">→</span> {ride.destinationAddress}</p>
                    <p className="text-neutral-500 text-[10px] font-black uppercase tracking-[0.1em]">{ride.pickupDate} • {ride.carTypeName}</p>
                 </div>
-                <div>
-                   <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest ${
+                <div className="shrink-0 flex sm:block">
+                   <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest inline-block ${
                      ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
                      : ride.status === "confirmed" ? "bg-emerald-950 text-emerald-500 border border-emerald-900"
                      : "bg-neutral-800 text-neutral-400 border border-neutral-700"

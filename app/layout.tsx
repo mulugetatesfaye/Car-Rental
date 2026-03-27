@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { ConvexProvider } from "@/lib/convex/provider";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans", weight: ["400", "500", "600", "700"] });
 const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-serif", weight: "400" });
@@ -19,13 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} h-full antialiased dark`}>
-      <body className="h-full min-h-screen bg-background text-foreground font-sans">
-        <ConvexProvider>
-          <Header />
-          {children}
-        </ConvexProvider>
-      </body>
-    </html>
+    <ConvexAuthNextjsServerProvider>
+      <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} h-full antialiased dark`}>
+        <body className="h-full min-h-screen bg-background text-foreground font-sans">
+          <ConvexProvider>
+            <Header />
+            {children}
+          </ConvexProvider>
+        </body>
+      </html>
+    </ConvexAuthNextjsServerProvider>
   );
 }

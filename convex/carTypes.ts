@@ -24,8 +24,8 @@ export const seedCarTypes = internalMutation({
     const carTypes = [
       {
         name: "Executive Sedan",
-        description: "Mercedes E-Class or similar. Perfect for business travel with premium comfort.",
-        image: "/cars/sedan.png",
+        description: "The ultimate business-class experience with Mercedes-Benz S-Class or BMW 7-Series. Optimal comfort and soundproofing.",
+        image: "/fleet_black_bg.png",
         baseFare: 25,
         perKmRate: 2.5,
         perMinuteRate: 0.5,
@@ -36,11 +36,11 @@ export const seedCarTypes = internalMutation({
       },
       {
         name: "Luxury SUV",
-        description: " Cadillac Escalade or similar. Spacious luxury for groups up to 6.",
-        image: "/cars/suv.png",
-        baseFare: 45,
-        perKmRate: 3.5,
-        perMinuteRate: 0.7,
+        description: "Commanding presence with Cadillac Escalade or Lincoln Navigator. First-class travel for up to 6 passengers.",
+        image: "/fleet_on_black_bg.png",
+        baseFare: 40,
+        perKmRate: 4.5,
+        perMinuteRate: 0.8,
         multiplier: 1.4,
         capacity: 6,
         isActive: true,
@@ -48,25 +48,25 @@ export const seedCarTypes = internalMutation({
       },
       {
         name: "Premium Electric",
-        description: "Tesla Model S or similar. Eco-conscious luxury with cutting-edge technology.",
-        image: "/cars/tesla.png",
-        baseFare: 55,
-        perKmRate: 4.0,
-        perMinuteRate: 0.8,
-        multiplier: 1.6,
+        description: "Silent innovation with Tesla Model S or Lucid Air. Future-focused luxury for the modern traveler.",
+        image: "/fleet_on_black_bg.png",
+        baseFare: 35,
+        perKmRate: 3.5,
+        perMinuteRate: 0.7,
+        multiplier: 1.2,
         capacity: 4,
         isActive: true,
         createdAt: Date.now(),
       },
       {
-        name: "Limousine",
-        description: "Stretch limousine. The ultimate in luxury for special occasions.",
-        image: "/cars/limo.png",
-        baseFare: 100,
-        perKmRate: 5.0,
-        perMinuteRate: 1.0,
-        multiplier: 2.2,
-        capacity: 10,
+        name: "Executive Van",
+        description: "Custom Mercedes Sprinter with high-ceiling and captain's chairs. Luxury logistics for groups up to 14.",
+        image: "/fleet_no_bg.png",
+        baseFare: 65,
+        perKmRate: 5.5,
+        perMinuteRate: 1.2,
+        multiplier: 1.8,
+        capacity: 14,
         isActive: true,
         createdAt: Date.now(),
       },
@@ -75,5 +75,54 @@ export const seedCarTypes = internalMutation({
     for (const carType of carTypes) {
       await ctx.db.insert("carTypes", carType);
     }
+  },
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("carTypes"),
+    name: v.optional(v.string()),
+    description: v.optional(v.string()),
+    image: v.optional(v.string()),
+    baseFare: v.optional(v.number()),
+    perKmRate: v.optional(v.number()),
+    perMinuteRate: v.optional(v.number()),
+    multiplier: v.optional(v.number()),
+    capacity: v.optional(v.number()),
+    isActive: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updates } = args;
+    await ctx.db.patch(id, {
+      ...updates,
+      updatedAt: Date.now(),
+    });
+  },
+});
+
+export const remove = mutation({
+  args: { id: v.id("carTypes") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
+  },
+});
+
+export const create = mutation({
+  args: {
+    name: v.string(),
+    description: v.string(),
+    image: v.string(),
+    baseFare: v.number(),
+    perKmRate: v.number(),
+    perMinuteRate: v.number(),
+    multiplier: v.number(),
+    capacity: v.number(),
+    isActive: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("carTypes", {
+      ...args,
+      createdAt: Date.now(),
+    });
   },
 });

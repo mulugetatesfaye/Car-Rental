@@ -27,6 +27,7 @@ export default defineSchema({
     capacity: v.number(),
     isActive: v.boolean(),
     createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
   }).index("by_name", ["name"]),
 
   rides: defineTable({

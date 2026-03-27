@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Phone, Menu, X, Calendar } from "lucide-react";
+import { Phone, Menu, X, Calendar, Mail } from "lucide-react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -34,6 +34,11 @@ export function Header() {
           <Link href="tel:+12063274411" className="flex items-center gap-2 hover:text-gold transition-colors">
             <Phone className="h-3 w-3 text-gold" />
             (206) 327-4411
+          </Link>
+          <div className="h-3 w-[1px] bg-neutral-800" />
+          <Link href="mailto:info@lunalimoz.com" className="flex items-center gap-2 hover:text-gold transition-colors">
+            <Mail className="h-3 w-3 text-gold" />
+            info@lunalimoz.com
           </Link>
           <div className="h-3 w-[1px] bg-neutral-800" />
           <p>24/7 Professional Service</p>
@@ -117,6 +122,13 @@ export function Header() {
                 >
                   <Phone className="h-4 w-4" />
                   (206) 327-4411
+                </Link>
+                <Link 
+                  href="mailto:info@lunalimoz.com" 
+                  className="flex items-center justify-center gap-3 text-gold text-[10px] font-black uppercase tracking-[0.3em] mt-6 pt-6 border-t border-neutral-800"
+                >
+                  <Mail className="h-4 w-4" />
+                  info@lunalimoz.com
                 </Link>
               </div>
             </div>

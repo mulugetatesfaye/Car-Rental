@@ -249,7 +249,7 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-montserrat">
+    <div className="min-h-screen bg-black text-white font-montserrat overflow-x-hidden w-full">
 
       <div className="bg-[#111111] py-4 border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -497,7 +497,7 @@ function Step({ num, title, active, complete }: { num: string; title: string; ac
        <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-black italic text-[10px] md:text-sm border-2 ${active || complete ? "bg-gold border-gold text-white" : "border-white/20 text-white"}`}>
          {complete ? <CheckCircle className="h-3 w-3 md:h-4 md:h-4" /> : num}
        </div>
-       <span className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest ${active || complete ? "text-white" : "text-white/40"}`}>
+       <span className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest hidden sm:block ${active || complete ? "text-white" : "text-white/40"}`}>
          {title}
        </span>
     </div>

@@ -119,6 +119,8 @@ export default function ServicesPage() {
                         src={service.image} 
                         alt={service.title} 
                         fill 
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="lazy"
                         className="object-contain grayscale hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-125"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />

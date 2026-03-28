@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
@@ -107,9 +108,11 @@ export default function RootLayout({
           <ConvexProvider>
             <Header />
             {children}
+          </ConvexProvider>
+          <Suspense fallback={null}>
             <Analytics />
             <SpeedInsights />
-          </ConvexProvider>
+          </Suspense>
           <GoogleAnalytics gaId="G-RTFJR2VRZG" />
         </body>
       </html>

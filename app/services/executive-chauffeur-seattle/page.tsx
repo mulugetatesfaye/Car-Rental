@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, 
@@ -53,9 +54,14 @@ export default function ExecutiveChauffeurPage() {
       <main>
         {/* Luxury Hero Section */}
         <section className="relative min-h-[70vh] flex items-center pt-24 overflow-hidden">
-          <div 
-            className="absolute inset-0 z-0 bg-cover bg-center scale-105"
-            style={{ backgroundImage: "url('/fleet_black_bg.png')" }}
+          <Image
+            src="/fleet_black_bg.png"
+            alt="Executive chauffeur fleet"
+            fill
+            priority
+            quality={75}
+            sizes="100vw"
+            className="object-cover scale-105 z-0"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-[1]" />
           <div className="absolute inset-0 bg-black/40 z-[1]" />
@@ -140,9 +146,13 @@ export default function ExecutiveChauffeurPage() {
             <div className="relative aspect-square">
                <div className="absolute inset-0 bg-gold/10 animate-pulse" />
                <div className="absolute inset-0 border border-neutral-800 rotate-3 group-hover:rotate-0 transition-transform duration-700" />
-               <img 
+               <Image 
                  src="/fleet.png" 
                  alt="Luxury Executive Sedan Interior" 
+                 width={600}
+                 height={600}
+                 sizes="(max-width: 1024px) 100vw, 50vw"
+                 loading="lazy"
                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
                />
                <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-black border border-neutral-800 p-8 hidden md:flex flex-col justify-center gap-2">

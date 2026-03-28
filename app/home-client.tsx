@@ -52,9 +52,14 @@ export default function HomeClient() {
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex items-center pt-12 sm:pt-20 pb-8 sm:pb-32 px-4 sm:px-6 overflow-hidden text-white">
           {/* Background Image Layer */}
-          <div 
-            className="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 scale-105"
-            style={{ backgroundImage: "url('/luxury_hero_bg.png')" }}
+          <NextImage
+            src="/luxury_hero_bg.png"
+            alt="Luxury chauffeur fleet at night"
+            fill
+            priority
+            quality={75}
+            sizes="100vw"
+            className="object-cover scale-105 z-0"
           />
           {/* Sophisticated Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/60 z-[1] backdrop-blur-[1px]" />
@@ -161,8 +166,9 @@ export default function HomeClient() {
               src="/fleet_black_bg.png"
               alt="Luna Limo Fleet"
               fill
+              sizes="(max-width: 768px) 100vw, 1280px"
               className="object-contain opacity-40 lg:opacity-100 grayscale hover:grayscale-0 transition-all duration-1000"
-              priority
+              loading="lazy"
             />
           </div>
         </section>
@@ -251,6 +257,8 @@ export default function HomeClient() {
                 alt="Luxury Car and Seattle Skyline"
                 width={600}
                 height={400}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                loading="lazy"
                 className="w-full h-auto object-contain grayscale hover:grayscale-0 transition-all duration-1000"
               />
             </div>

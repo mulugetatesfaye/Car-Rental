@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { 
   Compass, 
@@ -43,9 +44,14 @@ export default function CityTourLimoPage() {
       <main>
         {/* Leisure Hero Section */}
         <section className="relative min-h-[75vh] flex items-center pt-24 overflow-hidden">
-          <div 
-            className="absolute inset-0 z-0 bg-cover bg-center scale-105"
-            style={{ backgroundImage: "url('/fleet.png')" }}
+          <Image
+            src="/fleet.png"
+            alt="Seattle city tour fleet"
+            fill
+            priority
+            quality={75}
+            sizes="100vw"
+            className="object-cover scale-105 z-0"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-transparent z-[1]" />
           <div className="absolute inset-0 bg-black/50 z-[1] backdrop-blur-[1px]" />
@@ -134,9 +140,13 @@ export default function CityTourLimoPage() {
              <div className="flex-1 w-full max-w-2xl relative">
                 <div className="absolute -inset-10 bg-gold/5 blur-[120px] rounded-full" />
                 <div className="relative aspect-[16/10] bg-neutral-900 border border-neutral-800 p-2 overflow-hidden">
-                   <img 
+                   <Image 
                     src="/luxury_hero_bg.png" 
                     alt="Luxury Tour Vehicle in Seattle" 
+                    width={800}
+                    height={500}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    loading="lazy"
                     className="w-full h-full object-cover filter brightness-75 hover:brightness-100 transition-all duration-1000"
                    />
                 </div>

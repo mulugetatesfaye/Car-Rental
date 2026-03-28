@@ -92,6 +92,8 @@ export default function FleetClient() {
                       src={vehicle.image} 
                       alt={vehicle.name} 
                       fill 
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      loading="lazy"
                       className="object-contain grayscale hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-125"
                     />
                     <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 to-transparent">
@@ -178,6 +180,8 @@ export default function FleetClient() {
                       alt="Fleet Standard" 
                       width={500}
                       height={300}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      loading="lazy"
                       className="object-contain grayscale"
                     />
                   </div>

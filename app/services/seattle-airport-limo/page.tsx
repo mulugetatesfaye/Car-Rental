@@ -60,6 +60,7 @@ export default function AirportLimoPage() {
                 src="/fleet_black_bg.png" 
                 alt="Seattle Airport Limo - Fleet at Sea-Tac" 
                 fill 
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain"
                 priority
               />

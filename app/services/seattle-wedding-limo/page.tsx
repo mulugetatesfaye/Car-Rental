@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { 
   Heart, 
@@ -42,9 +43,14 @@ export default function WeddingLimoPage() {
       <main>
         {/* Wedding Hero Section */}
         <section className="relative min-h-[75vh] flex items-center pt-24 overflow-hidden">
-          <div 
-            className="absolute inset-0 z-0 bg-cover bg-center scale-105"
-            style={{ backgroundImage: "url('/fleet.png')" }}
+          <Image
+            src="/fleet.png"
+            alt="Wedding limo fleet"
+            fill
+            priority
+            quality={75}
+            sizes="100vw"
+            className="object-cover scale-105 z-0"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30 z-[1]" />
           <div className="absolute inset-0 bg-black/40 z-[1] backdrop-blur-[1px]" />
@@ -112,9 +118,13 @@ export default function WeddingLimoPage() {
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
              <div className="relative order-2 md:order-1">
                 <div className="aspect-[4/5] bg-neutral-900 border border-neutral-800 overflow-hidden group">
-                  <img 
+                  <Image 
                     src="/contact.png" 
                     alt="Luxury Wedding Getaway Car" 
+                    width={600}
+                    height={750}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    loading="lazy"
                     className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />

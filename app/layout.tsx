@@ -4,8 +4,8 @@ import "./globals.css";
 import { ConvexProvider } from "@/lib/convex/provider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans", weight: ["400", "500", "600", "700"] });
-const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-serif", weight: "400" });
+const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans", weight: ["400", "500", "600", "700"], display: "swap" });
+const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-serif", weight: "400", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -51,7 +51,7 @@ const jsonLd = {
   "telephone": "+12063274411",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "118th Avenue Southeast",
+    "streetAddress": "1100 2nd Avenue, Suite 400",
     "addressLocality": "Seattle",
     "addressRegion": "WA",
     "postalCode": "98101",

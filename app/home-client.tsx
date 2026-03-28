@@ -54,10 +54,10 @@ export default function HomeClient() {
           <div className="max-w-7xl mx-auto relative z-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
             {/* Left Column: Text */}
             <div className="flex-1 text-center lg:text-left space-y-6 sm:space-y-8">
-              <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tighter">
-                REFINING THE ART OF <br />
-                <span className="text-gold">LUXURY TRAVEL</span>
-              </h2>
+              <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tighter">
+                Seattle Limo Service & <br />
+                <span className="text-gold">Luxury Chauffeur</span>
+              </h1>
 
               <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed uppercase tracking-widest">
                 Luna Limo delivers a bespoke transportation experience tailored for those who demand excellence. 

@@ -1,4 +1,3 @@
-import { search as tomtomSearch } from "@tomtom-org/maps-sdk/services";
 import { getApiKey } from "@/lib/tomtom/config";
 
 export interface SearchResult {

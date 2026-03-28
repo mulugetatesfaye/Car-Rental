@@ -93,9 +93,9 @@ export default function ServicesPage() {
                       </p>
                     </div>
                     <div className="pt-4 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
-                      <Link href="/booking" className="w-full sm:w-auto">
+                      <Link href={index === 0 ? "/services/seattle-airport-limo" : "/booking"} className="w-full sm:w-auto">
                         <Button className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black rounded-none px-10 py-6 sm:py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all">
-                          Book This Service
+                          {index === 0 ? "View Service Details" : "Book This Service"}
                         </Button>
                       </Link>
                       <Link href="tel:+12063274411" className="text-gold text-[10px] font-black uppercase tracking-[0.3em] hover:text-white transition-all flex items-center gap-2">

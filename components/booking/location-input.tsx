@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { debounce } from "@/lib/utils";
 
 interface LocationInputProps {
+  id?: string;
   placeholder: string;
   value: SearchResult | null;
   onChange: (location: SearchResult | null) => void;
@@ -16,6 +17,7 @@ interface LocationInputProps {
 }
 
 export function LocationInput({
+  id,
   placeholder,
   value,
   onChange,
@@ -94,6 +96,7 @@ export function LocationInput({
       <div className="relative">
         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gold" />
         <input
+          id={id}
           ref={inputRef}
           type="text"
           value={value ? value.address.freeformAddress : inputValue}
@@ -115,6 +118,7 @@ export function LocationInput({
           <button
             onClick={handleClear}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground"
+            aria-label="Clear location"
           >
             <X className="h-5 w-5" />
           </button>

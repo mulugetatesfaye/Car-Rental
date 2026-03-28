@@ -46,17 +46,17 @@ export default function ContactUsPage() {
                   <form className="space-y-8">
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-3">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
-                         <input type="text" placeholder="John Doe" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
+                         <label htmlFor="contact-name" className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
+                         <input id="contact-name" type="text" placeholder="John Doe" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
                       </div>
                       <div className="space-y-3">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
-                         <input type="email" placeholder="john@example.com" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
+                         <label htmlFor="contact-email" className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
+                         <input id="contact-email" type="email" placeholder="john@example.com" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all placeholder:text-neutral-700" />
                       </div>
                     </div>
                     <div className="space-y-3">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Subject Of Inquiry</label>
-                       <select className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all appearance-none cursor-pointer">
+                       <label htmlFor="contact-subject" className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Subject Of Inquiry</label>
+                       <select id="contact-subject" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all appearance-none cursor-pointer">
                           <option>Corporate Account Request</option>
                           <option>Event Logistics Quote</option>
                           <option>General Reservation Support</option>
@@ -64,8 +64,8 @@ export default function ContactUsPage() {
                        </select>
                     </div>
                     <div className="space-y-3">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Detailed Message</label>
-                       <textarea rows={6} placeholder="How can we assist you?" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all resize-none placeholder:text-neutral-700" />
+                       <label htmlFor="contact-message" className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Detailed Message</label>
+                       <textarea id="contact-message" rows={6} placeholder="How can we assist you?" className="w-full bg-black border border-neutral-800 px-6 py-5 rounded-none text-xs font-bold text-white focus:border-gold outline-none transition-all resize-none placeholder:text-neutral-700" />
                     </div>
                     <Button className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-6 sm:py-8 text-[11px] sm:text-[12px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark shadow-gold/20 shadow-2xl transition-all flex items-center justify-center gap-3">
                       <Send className="h-5 w-5" />

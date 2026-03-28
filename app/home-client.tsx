@@ -86,8 +86,9 @@ export default function HomeClient() {
 
                 <form onSubmit={handleSearch} className="space-y-6 relative z-10">
                   <div className="space-y-2">
-                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Pickup Location</label>
+                    <label htmlFor="pickup-select" className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Pickup Location</label>
                     <LocationInput 
+                      id="pickup-select"
                       placeholder="Airport, Hotel, or Office"
                       value={searchData.pickup}
                       onChange={(location) => setSearchData({...searchData, pickup: location})}
@@ -96,8 +97,9 @@ export default function HomeClient() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Drop-off Destination</label>
+                    <label htmlFor="dropoff-select" className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Drop-off Destination</label>
                     <LocationInput 
+                      id="dropoff-select"
                       placeholder="Where are you heading?"
                       value={searchData.destination}
                       onChange={(location) => setSearchData({...searchData, destination: location})}
@@ -107,10 +109,11 @@ export default function HomeClient() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Preferred Date</label>
+                      <label htmlFor="res-date" className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Preferred Date</label>
                       <div className="relative">
                         <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
                         <input 
+                          id="res-date"
                           type="date"
                           className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
                           value={searchData.date}
@@ -119,10 +122,11 @@ export default function HomeClient() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Arrival Time</label>
+                      <label htmlFor="res-time" className="text-neutral-500 text-[9px] font-black uppercase tracking-[0.2em] ml-1">Arrival Time</label>
                       <div className="relative">
                         <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/50" />
                         <input 
+                          id="res-time"
                           type="time"
                           className="w-full bg-black/60 border border-neutral-800 text-white p-4 pl-12 text-xs font-bold focus:border-gold outline-none transition-all [color-scheme:dark]"
                           value={searchData.time}

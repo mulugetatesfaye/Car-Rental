@@ -54,7 +54,7 @@ export default function HomeClient() {
           {/* Background Image Layer */}
           <div 
             className="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 scale-105"
-            style={{ backgroundImage: "url('/hero-bg.png')" }}
+            style={{ backgroundImage: "url('/luxury_hero_bg.png')" }}
           />
           {/* Sophisticated Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/60 z-[1] backdrop-blur-[1px]" />

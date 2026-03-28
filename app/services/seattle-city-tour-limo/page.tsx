@@ -135,7 +135,7 @@ export default function CityTourLimoPage() {
                 <div className="absolute -inset-10 bg-gold/5 blur-[120px] rounded-full" />
                 <div className="relative aspect-[16/10] bg-neutral-900 border border-neutral-800 p-2 overflow-hidden">
                    <img 
-                    src="/hero-bg.png" 
+                    src="/luxury_hero_bg.png" 
                     alt="Luxury Tour Vehicle in Seattle" 
                     className="w-full h-full object-cover filter brightness-75 hover:brightness-100 transition-all duration-1000"
                    />

@@ -50,8 +50,17 @@ export default function HomeClient() {
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
       <main>
         {/* Hero Section */}
-        <section className="relative pt-12 sm:pt-20 pb-8 sm:pb-32 px-4 sm:px-6 overflow-hidden bg-black text-white">
-          <div className="max-w-7xl mx-auto relative z-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        <section className="relative min-h-[90vh] flex items-center pt-12 sm:pt-20 pb-8 sm:pb-32 px-4 sm:px-6 overflow-hidden text-white">
+          {/* Background Image Layer */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 scale-105"
+            style={{ backgroundImage: "url('/hero-bg.png')" }}
+          />
+          {/* Sophisticated Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/60 z-[1] backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-black/40 z-[1]" />
+          
+          <div className="max-w-7xl mx-auto relative z-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 w-full">
             {/* Left Column: Text */}
             <div className="flex-1 text-center lg:text-left space-y-6 sm:space-y-8">
               <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black italic uppercase text-white leading-[1.1] tracking-tighter">

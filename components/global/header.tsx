@@ -48,22 +48,12 @@ export function Header() {
       {/* Main Header */}
       <header className="bg-black/90 backdrop-blur-md border-b border-neutral-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-11 h-11 transition-transform duration-500 group-hover:scale-110">
-              <img 
-                src="/luna-logo.png" 
-                alt="Luna Limo Official Logo" 
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="font-serif text-lg font-black italic uppercase tracking-tighter leading-tight text-white transition-colors group-hover:text-gold">
-                Luna Limo
-              </h1>
-              <p className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-500 -mt-1">
-                Luxury Transportation
-              </p>
-            </div>
+          <Link href="/" className="group flex items-center">
+            <img 
+              src="/luna-logo.png" 
+              alt="Luna Limo" 
+              className="h-14 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            />
           </Link>
           
           <nav className="hidden lg:flex items-center gap-10">

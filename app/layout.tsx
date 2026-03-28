@@ -29,11 +29,13 @@ export const metadata: Metadata = {
     siteName: "Luna Limo",
     locale: "en_US",
     type: "website",
+    images: ["/luna-logo.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Luna Limo | Luxury Chauffeur Service",
     description: "Experience luxury travel in Seattle with Luna Limo. Professional, reliable, and elegant.",
+    images: ["/luna-logo.png"],
   },
   robots: {
     index: true,
@@ -45,7 +47,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Luna Limo",
-  "image": "https://lunalimoz.com/fleet_black_bg.png",
+  "image": "https://lunalimoz.com/luna-logo.png",
   "@id": "https://lunalimoz.com",
   "url": "https://lunalimoz.com",
   "telephone": "+12063274411",

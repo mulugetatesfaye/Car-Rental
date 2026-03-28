@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { ConvexProvider } from "@/lib/convex/provider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
@@ -104,7 +107,10 @@ export default function RootLayout({
           <ConvexProvider>
             <Header />
             {children}
+            <Analytics />
+            <SpeedInsights />
           </ConvexProvider>
+          <GoogleAnalytics gaId="G-RTFJR2VRZG" />
         </body>
       </html>
     </ConvexAuthNextjsServerProvider>

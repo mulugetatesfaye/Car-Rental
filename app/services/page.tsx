@@ -94,11 +94,17 @@ export default function ServicesPage() {
                     </div>
                     <div className="pt-4 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
                       <Link 
-                        href={index === 0 ? "/services/seattle-airport-limo" : index === 1 ? "/services/executive-chauffeur-seattle" : "/booking"} 
+                        href={
+                          index === 0 ? "/services/seattle-airport-limo" : 
+                          index === 1 ? "/services/executive-chauffeur-seattle" : 
+                          index === 2 ? "/services/seattle-wedding-limo" : 
+                          index === 3 ? "/services/seattle-city-tour-limo" :
+                          "/booking"
+                        } 
                         className="w-full sm:w-auto"
                       >
                         <Button className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black rounded-none px-10 py-6 sm:py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all">
-                          {index < 2 ? "View Service Details" : "Book This Service"}
+                          {index < 4 ? "View Service Details" : "Book This Service"}
                         </Button>
                       </Link>
                       <Link href="tel:+12063274411" className="text-gold text-[10px] font-black uppercase tracking-[0.3em] hover:text-white transition-all flex items-center gap-2">

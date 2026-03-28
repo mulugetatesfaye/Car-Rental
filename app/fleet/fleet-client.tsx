@@ -27,7 +27,7 @@ export default function FleetClient() {
       luggage: "2 Suitcases",
       description: "The ultimate business-class experience. Our fleet of Mercedes-Benz S-Class and BMW 7-Series offers unparalleled comfort, noise isolation, and a smooth ride for the modern professional.",
       features: ["Leather Seating", "Climate Control", "WiFi Access", "USB Charging"],
-      image: "/fleet_black_bg.png"
+      image: "/executive_sedan.png"
     },
     {
       name: "Luxury SUV",
@@ -36,7 +36,7 @@ export default function FleetClient() {
       luggage: "6 Suitcases",
       description: "Commanding presence meets uncompromising luxury. The Cadillac Escalade and Lincoln Navigator define first-class group travel with expansive interior space and state-of-the-art amenities.",
       features: ["Heated Seats", "Premium Audio", "Privacy Glass", "Extra Legroom"],
-      image: "/fleet_on_black_bg.png"
+      image: "/luxury_suv.png"
     },
     {
       name: "Premium Electric",
@@ -45,7 +45,7 @@ export default function FleetClient() {
       luggage: "2 Suitcases",
       description: "The future of elite transit. Experience the silent, dual-motor performance of the Tesla Model S and Lucid Air, combining sustainable innovation with futuristic luxury.",
       features: ["Glass Roof", "Silent Drive", "Zero Emissions", "Tech-Forward"],
-      image: "/fleet_on_black_bg.png"
+      image: "/premium_electric.png"
     },
     {
       name: "Executive Van",
@@ -54,7 +54,7 @@ export default function FleetClient() {
       luggage: "14 Suitcases",
       description: "Bespoke group logistics for the discerning traveler. Our custom Mercedes-Benz Sprinter vans are configured with personal lighting, captain's chairs, and dedicated luggage space.",
       features: ["Custom Lighting", "Easy Entry", "High Ceiling", "Ample Cargo"],
-      image: "/fleet_no_bg.png"
+      image: "/executive_van.png"
     }
   ];
 

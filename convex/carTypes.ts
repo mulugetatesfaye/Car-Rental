@@ -25,7 +25,7 @@ export const seedCarTypes = internalMutation({
       {
         name: "Executive Sedan",
         description: "The ultimate business-class experience with Mercedes-Benz S-Class or BMW 7-Series. Optimal comfort and soundproofing.",
-        image: "/fleet_black_bg.png",
+        image: "/executive_sedan.png",
         baseFare: 25,
         perKmRate: 2.5,
         perMinuteRate: 0.5,
@@ -37,7 +37,7 @@ export const seedCarTypes = internalMutation({
       {
         name: "Luxury SUV",
         description: "Commanding presence with Cadillac Escalade or Lincoln Navigator. First-class travel for up to 6 passengers.",
-        image: "/fleet_on_black_bg.png",
+        image: "/luxury_suv.png",
         baseFare: 40,
         perKmRate: 4.5,
         perMinuteRate: 0.8,
@@ -49,7 +49,7 @@ export const seedCarTypes = internalMutation({
       {
         name: "Premium Electric",
         description: "Silent innovation with Tesla Model S or Lucid Air. Future-focused luxury for the modern traveler.",
-        image: "/fleet_on_black_bg.png",
+        image: "/premium_electric.png",
         baseFare: 35,
         perKmRate: 3.5,
         perMinuteRate: 0.7,
@@ -61,7 +61,7 @@ export const seedCarTypes = internalMutation({
       {
         name: "Executive Van",
         description: "Custom Mercedes Sprinter with high-ceiling and captain's chairs. Luxury logistics for groups up to 14.",
-        image: "/fleet_no_bg.png",
+        image: "/executive_van.png",
         baseFare: 65,
         perKmRate: 5.5,
         perMinuteRate: 1.2,

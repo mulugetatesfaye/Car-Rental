@@ -176,7 +176,7 @@ export default function FleetClient() {
                   <div className="absolute inset-0 bg-gold/10 rotate-3 transform border border-gold/20" />
                   <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center border border-neutral-800 p-8">
                      <Image 
-                      src="/fleet_on_black_bg.png" 
+                      src="/fleet_black_bg.png" 
                       alt="Fleet Standard" 
                       width={500}
                       height={300}

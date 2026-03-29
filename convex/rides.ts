@@ -2,9 +2,26 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const list = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("rides").order("desc").collect();
+  args: {
+    status: v.optional(v.string()),
+    startDate: v.optional(v.string()),
+    endDate: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    let rides = await ctx.db.query("rides").order("desc").collect();
+    
+    // Server-side filtering for optional advanced args
+    if (args.status && args.status !== "all") {
+      rides = rides.filter(r => r.status === args.status);
+    }
+    if (args.startDate) {
+      rides = rides.filter(r => r.pickupDate >= args.startDate!);
+    }
+    if (args.endDate) {
+      rides = rides.filter(r => r.pickupDate <= args.endDate!);
+    }
+    
+    return rides;
   },
 });
 
@@ -98,5 +115,36 @@ export const updateStatus = mutation({
       status: args.status,
       updatedAt: Date.now(),
     });
+  },
+});
+
+export const addNote = mutation({
+  args: {
+    id: v.id("rides"),
+    note: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const ride = await ctx.db.get(args.id);
+    if (!ride) throw new Error("Ride not found");
+    
+    // Append to existing notes with timestamp
+    const dateStr = new Date().toISOString().split("T")[0];
+    const prefix = ride.notes ? ride.notes + "\n" : "";
+    const newNotes = `${prefix}[${dateStr}] ${args.note}`;
+    
+    await ctx.db.patch(args.id, {
+      notes: newNotes,
+      updatedAt: Date.now(),
+    });
+  },
+});
+
+export const search = query({
+  args: { query: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("rides")
+      .withSearchIndex("search_customer", (q) => q.search("customerName", args.query))
+      .take(50);
   },
 });

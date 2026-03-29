@@ -3,7 +3,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X } from "lucide-react";
+import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -32,7 +32,10 @@ export default function AdminLayout({
   const navLinks = [
     { href: "/admin", label: "Overview", icon: LayoutDashboard },
     { href: "/admin/bookings", label: "Reservations", icon: CalendarDays },
+    { href: "/admin/customers", label: "Client Roster", icon: Users },
     { href: "/admin/vehicles", label: "Our Fleet", icon: Car },
+    { href: "/admin/reviews", label: "Client Feedback", icon: Star },
+    { href: "/admin/settings", label: "System Config", icon: Settings },
   ];
 
   return (

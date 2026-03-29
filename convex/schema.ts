@@ -59,11 +59,13 @@ export default defineSchema({
       v.literal("cancelled")
     ),
     reviewToken: v.string(),
+    notes: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index("by_status", ["status"])
-    .index("by_created", ["createdAt"]),
+    .index("by_created", ["createdAt"])
+    .searchIndex("search_customer", { searchField: "customerName" }),
 
   reviews: defineTable({
     rideId: v.id("rides"),
@@ -71,4 +73,15 @@ export default defineSchema({
     comment: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_ride", ["rideId"]),
+
+  settings: defineTable({
+    companyName: v.string(),
+    phone: v.string(),
+    email: v.string(),
+    address: v.string(),
+    surgeMultiplier: v.number(),
+    minimumFare: v.number(),
+    notificationsEmail: v.boolean(),
+    updatedAt: v.number(),
+  }),
 });

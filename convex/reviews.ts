@@ -85,3 +85,55 @@ export const listAll = query({
       .take(args.limit ?? 50);
   },
 });
+
+export const listWithRides = query({
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const reviews = await ctx.db
+      .query("reviews")
+      .order("desc")
+      .take(args.limit ?? 50);
+      
+    // Join with rides
+    return await Promise.all(
+      reviews.map(async (review) => {
+        const ride = await ctx.db.get(review.rideId);
+        return {
+          ...review,
+          ride: ride ? {
+            customerName: ride.customerName,
+            pickupDate: ride.pickupDate,
+            carTypeName: ride.carTypeName,
+          } : null,
+        };
+      })
+    );
+  },
+});
+
+export const getStats = query({
+  args: {},
+  handler: async (ctx) => {
+    const reviews = await ctx.db.query("reviews").collect();
+    
+    if (reviews.length === 0) {
+      return { average: 0, total: 0, distribution: [0,0,0,0,0] };
+    }
+    
+    let totalScore = 0;
+    const distribution = [0, 0, 0, 0, 0]; // 1-star to 5-star
+    
+    for (const r of reviews) {
+      totalScore += r.rating;
+      if (r.rating >= 1 && r.rating <= 5) {
+        distribution[r.rating - 1]++;
+      }
+    }
+    
+    return {
+      average: totalScore / reviews.length,
+      total: reviews.length,
+      distribution: distribution.reverse(), // 5-star to 1-star
+    };
+  },
+});

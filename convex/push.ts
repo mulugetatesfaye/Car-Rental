@@ -39,19 +39,21 @@ export const notifyAdmins = internalAction({
       try {
         const absoluteUrl = args.url ? (args.url.startsWith("/") ? `${siteUrl}${args.url}` : args.url) : siteUrl;
 
+        if (!admin.pushAlertSubscriberId) continue;
+        const params = new URLSearchParams();
+        params.append("subscriber", admin.pushAlertSubscriberId);
+        params.append("title", args.title);
+        params.append("message", args.message);
+        params.append("url", absoluteUrl);
+        params.append("icon", `${siteUrl}/luna-logo.png`);
+
         const response = await fetch("https://api.pushalert.co/rest/v1/send", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": `api_key=${apiKey}`,
           },
-          body: JSON.stringify({
-            subscriber: admin.pushAlertSubscriberId,
-            title: args.title,
-            message: args.message,
-            url: absoluteUrl,
-            icon: `${siteUrl}/luna-logo.png`,
-          }),
+          body: params.toString(),
         });
 
         const result = await response.json().catch(() => ({}));

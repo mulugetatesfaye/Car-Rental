@@ -39,7 +39,7 @@ export const notifyAdmins = internalAction({
       try {
         const absoluteUrl = args.url ? (args.url.startsWith("/") ? `${siteUrl}${args.url}` : args.url) : siteUrl;
 
-        const response = await fetch("https://pushalert.co/api/v1/send", {
+        const response = await fetch("https://api.pushalert.co/rest/v1/send", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

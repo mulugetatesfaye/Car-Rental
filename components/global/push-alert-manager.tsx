@@ -34,6 +34,12 @@ export function PushAlertManager() {
         if (window.PushAlertCo) {
             console.log("PushAlertManager: window.PushAlertCo found, subscriber_id:", window.PushAlertCo.subscriber_id || "MISSING");
             
+            // If it's missing and permission is already granted, the Service Worker is likely stuck/mismatched
+            if (!window.PushAlertCo.subscriber_id && typeof Notification !== "undefined" && Notification.permission === "granted") {
+                console.warn("PushAlertManager: Permission is 'granted' but subscriber_id is MISSING. SERVICE WORKER LIKELY MISMATCHED.");
+                console.info("FIX: Go to DevTools -> Application -> Service Workers -> Unregister 'sw.js' AND Refresh the page.");
+            }
+
             // If it's missing and permission is default, try to trigger the prompt
             if (!window.PushAlertCo.subscriber_id && typeof Notification !== "undefined" && Notification.permission === "default") {
                 console.log("PushAlertManager: Permission is default, attempting to show prompt...");

@@ -11,12 +11,18 @@ export function WhatsAppSupport() {
   const [currentTime, setCurrentTime] = React.useState("");
 
   React.useEffect(() => {
-    // Set time on client to avoid hydration mismatch
-    setCurrentTime(new Date().toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
-    }));
+    const updateTime = () => {
+      setCurrentTime(new Date().toLocaleTimeString([], { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      }));
+    };
+
+    updateTime();
+    // Update every minute (60000ms)
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
   }, []);
   
   // Professional pre-filled message

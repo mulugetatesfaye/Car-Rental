@@ -465,9 +465,9 @@ export default function HomeClient() {
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gold mb-6 border-b border-gold/20 pb-2 inline-block">Quick Links</h4>
               <ul className="space-y-3 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
                 <li><Link href="/booking">Reservations</Link></li>
-                <li><Link href="#">Fleet</Link></li>
-                <li><Link href="#">About Us</Link></li>
-                <li><Link href="#">Contact</Link></li>
+                <li><Link href="/fleet">Fleet</Link></li>
+                <li><Link href="/about">About Us</Link></li>
+                <li><Link href="/contact">Contact</Link></li>
               </ul>
             </div>
 
@@ -484,7 +484,7 @@ export default function HomeClient() {
 
           <div className="pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
-              Copyright © 2026 Luna Limo (Luna Limoz). All Rights Reserved
+              Copyright © 2026 Luna Limo. Established Feb 20, 2023.
             </p>
             <div className="flex items-center gap-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
               <Link href="#">Privacy Policy</Link>

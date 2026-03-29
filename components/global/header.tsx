@@ -18,6 +18,7 @@ export function Header() {
   // Navigation Items
   const navItems = [
     { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
     { name: "Services", href: "/services" },
     { name: "Our Fleet", href: "/fleet" },
     { name: "Reservations", href: "/reservations" },

@@ -58,10 +58,10 @@ const jsonLd = {
   "telephone": "+12063274411",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "1100 2nd Avenue, Suite 400",
+    "streetAddress": "1902 E Yesler way",
     "addressLocality": "Seattle",
     "addressRegion": "WA",
-    "postalCode": "98101",
+    "postalCode": "98122",
     "addressCountry": "US"
   },
   "geo": {
@@ -91,6 +91,7 @@ const jsonLd = {
 
 import { Header } from "@/components/global/header";
 import { WhatsAppSupport } from "@/components/global/whatsapp-support";
+import { PushAlertManager } from "@/components/global/push-alert-manager";
 
 
 export default function RootLayout({
@@ -112,6 +113,7 @@ export default function RootLayout({
             <Header />
             {children}
             <WhatsAppSupport />
+            <PushAlertManager />
           </ConvexProvider>
           <Suspense fallback={null}>
             <Analytics />

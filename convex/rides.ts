@@ -104,6 +104,13 @@ export const create = mutation({
       rideId, 
       type: "new_booking" 
     });
+
+    // Notify admins via push
+    await ctx.scheduler.runAfter(0, internal.push.notifyAdmins, {
+      title: "New Booking!",
+      message: `A new ${args.carTypeName} booking was made by ${args.customerName}.`,
+      url: `/admin/rides/${rideId}`
+    });
     
     return rideId;
   },

@@ -12,9 +12,12 @@ export default defineSchema({
     emailVerificationTime: v.optional(v.number()),
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
+    isAdmin: v.optional(v.boolean()),
+    pushAlertSubscriberId: v.optional(v.string()),
     createdAt: v.optional(v.number()),
     updatedAt: v.optional(v.number()),
-  }).index("by_email", ["email"]),
+  }).index("by_email", ["email"])
+    .index("by_admin", ["isAdmin"]),
 
   carTypes: defineTable({
     name: v.string(),

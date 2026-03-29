@@ -52,3 +52,23 @@ export const update = mutation({
     });
   },
 });
+
+export const updatePushId = mutation({
+  args: { pushId: v.string() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity || !identity.email) return;
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", identity.email as string))
+      .unique();
+
+    if (user) {
+      await ctx.db.patch(user._id, {
+        pushAlertSubscriberId: args.pushId,
+        updatedAt: Date.now(),
+      });
+    }
+  },
+});

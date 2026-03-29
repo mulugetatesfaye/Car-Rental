@@ -106,8 +106,8 @@ export default function ContactUsPage() {
                       </div>
                       <div className="space-y-3">
                         <h5 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Seattle Headquarters</h5>
-                        <p className="font-serif font-black italic uppercase text-lg sm:text-2xl text-white">1100 2nd Avenue</p>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Suite 400 | Seattle, WA 98101</p>
+                        <p className="font-serif font-black italic uppercase text-lg sm:text-2xl text-white">1902 E Yesler way</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Seattle, WA 98122</p>
                       </div>
                     </div>
                  </div>

@@ -61,12 +61,37 @@ export const updatePushIdByEmail = mutation({
       .withIndex("by_email", (q) => q.eq("email", args.email))
       .unique();
 
+    const isAdmin = args.email === "admin@lunalimoz.com";
+
     if (user) {
       await ctx.db.patch(user._id, {
         pushAlertSubscriberId: args.pushId,
+        isAdmin: user.isAdmin || isAdmin, // Keep existing admin status or promote if default admin
+        updatedAt: Date.now(),
+      });
+    } else {
+      // Create the user if it doesn't exist yet
+      await ctx.db.insert("users", {
+        email: args.email,
+        pushAlertSubscriberId: args.pushId,
+        isAdmin: isAdmin,
+        createdAt: Date.now(),
         updatedAt: Date.now(),
       });
     }
+  },
+});
+
+export const makeAdmin = mutation({
+  args: { email: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .unique();
+    if (!user) throw new Error("User not found");
+    await ctx.db.patch(user._id, { isAdmin: true });
+    return true;
   },
 });
 

@@ -61,7 +61,7 @@ export function PushAlertManager() {
             console.warn("PushAlertManager: Not authenticated, using email fallback...");
             updatePushIdByEmail({ 
                 pushId: subId, 
-                email: "mulugeta.t.ayalew@gmail.com" 
+                email: "admin@lunalimoz.com" 
             })
             .then(() => {
                 console.log("PushAlertManager: Synced via Email Fallback");

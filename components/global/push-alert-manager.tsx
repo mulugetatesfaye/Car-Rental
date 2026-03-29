@@ -32,7 +32,7 @@ export function PushAlertManager() {
         });
 
         if (window.PushAlertCo) {
-            const paSubId = window.PushAlertCo.subscriber_id || window.PushAlertCo.push_id || window.PushAlertCo.sub_id;
+            const paSubId = window.PushAlertCo.subs_id || window.PushAlertCo.subscriber_id || window.PushAlertCo.push_id || window.PushAlertCo.sub_id;
             console.log("PushAlertManager: window.PushAlertCo stats - ID:", paSubId || "MISSING", "Keys:", Object.keys(window.PushAlertCo));
             
             // If it's missing and permission is already granted, the Service Worker is likely stuck/mismatched

@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import Script from "next/script";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useConvexAuth } from "@convex-dev/auth/react";
+import { useConvexAuth } from "convex/react";
 
 declare global {
   interface Window {
@@ -39,7 +39,6 @@ export function PushAlertManager() {
                       .catch(err => console.error("PushAlertManager: Auth mutation failed:", err));
                   } 
                   // Fallback: Try a hardcoded email update if it matches your admin email
-                  // This is a temporary bypass for diagnosing auth-state issues
                   else {
                     console.warn("PushAlertManager: Not authenticated, attempting email fallback update...");
                     updatePushIdByEmail({ 

@@ -10,6 +10,7 @@ declare global {
   interface Window {
     PushAlertCo?: any;
     pushalertbyid?: any;
+    _pa?: any;
   }
 }
 
@@ -21,9 +22,8 @@ export function PushAlertManager() {
   React.useEffect(() => {
     console.log("PushAlertManager: Monitoring for subscriber registration...");
     
-    // Check every 5 seconds for the ID
     const interval = setInterval(() => {
-        // Direct object check
+        // Method 1: Global Object check
         if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
             const subId = window.PushAlertCo.subscriber_id;
             console.log("PushAlertManager: Found subscriber ID via object:", subId);
@@ -31,20 +31,23 @@ export function PushAlertManager() {
             return;
         }
 
-        // JS API check
+        // Method 2: Global _pa object commonly used by PushAlert
+        if (window._pa && window._pa.subscriber_id) {
+            console.log("PushAlertManager: Found subscriber ID via _pa:", window._pa.subscriber_id);
+            syncId(window._pa.subscriber_id);
+            return;
+        }
+
+        // Method 3: JavaScript API call
         if (typeof window.pushalertbyid === "function") {
             window.pushalertbyid(function(result: any) {
                 if (result && result.subscriber_id) {
                     console.log("PushAlertManager: Found subscriber ID via API:", result.subscriber_id);
                     syncId(result.subscriber_id);
-                } else {
-                    console.log("PushAlertManager: SDK ready but no ID yet. Have you clicked 'Allow'?", result);
                 }
             });
-        } else {
-            console.log("PushAlertManager: Waiting for PushAlert SDK to load on window...");
         }
-    }, 5000);
+    }, 3000);
 
     const syncId = (subId: string) => {
         if (isAuthenticated) {
@@ -73,10 +76,13 @@ export function PushAlertManager() {
 
   return (
     <>
+      {/* Standard load to ensure it's on window */}
       <Script
         id="pushalert-unified"
         strategy="afterInteractive"
         src="https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js"
+        onLoad={() => console.log("PushAlertManager: Script onLoad fired")}
+        onError={() => console.error("PushAlertManager: Script load error")}
       />
     </>
   );

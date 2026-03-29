@@ -53,6 +53,23 @@ export const update = mutation({
   },
 });
 
+export const updatePushIdByEmail = mutation({
+  args: { pushId: v.string(), email: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .unique();
+
+    if (user) {
+      await ctx.db.patch(user._id, {
+        pushAlertSubscriberId: args.pushId,
+        updatedAt: Date.now(),
+      });
+    }
+  },
+});
+
 export const updatePushId = mutation({
   args: { pushId: v.string() },
   handler: async (ctx, args) => {

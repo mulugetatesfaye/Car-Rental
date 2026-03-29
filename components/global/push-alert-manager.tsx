@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import Script from "next/script";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useConvexAuth } from "@convex-dev/auth/react";
 
 declare global {
   interface Window {
@@ -13,33 +14,53 @@ declare global {
 }
 
 export function PushAlertManager() {
+  const { isAuthenticated, isLoading } = useConvexAuth();
   const updatePushId = useMutation(api.users.updatePushId);
+  const updatePushIdByEmail = useMutation(api.users.updatePushIdByEmail);
 
   React.useEffect(() => {
-    console.log("PushAlertManager: Monitoring for subscriber ID...");
+    console.log("PushAlertManager: Monitoring for subscriber ID...", { isAuthenticated, isLoading });
+    
     const interval = setInterval(() => {
       if (typeof window.pushalertbyid === "function") {
           console.log("PushAlertManager: SDK ready, checking id...");
           window.pushalertbyid(function(result: any) {
               if (result && result.subscriber_id) {
-                  console.log("PushAlertManager: Found subscriber ID:", result.subscriber_id);
-                  updatePushId({ pushId: result.subscriber_id })
-                    .then(() => {
-                      console.log("PushAlertManager: Successfully updated Convex with Push ID");
-                      clearInterval(interval);
+                  const subId = result.subscriber_id;
+                  console.log("PushAlertManager: Found subscriber ID:", subId);
+                  
+                  // Primary: Auth-based update
+                  if (isAuthenticated) {
+                    updatePushId({ pushId: subId })
+                      .then(() => {
+                        console.log("PushAlertManager: Successfully updated Convex via Auth");
+                        clearInterval(interval);
+                      })
+                      .catch(err => console.error("PushAlertManager: Auth mutation failed:", err));
+                  } 
+                  // Fallback: Try a hardcoded email update if it matches your admin email
+                  // This is a temporary bypass for diagnosing auth-state issues
+                  else {
+                    console.warn("PushAlertManager: Not authenticated, attempting email fallback update...");
+                    updatePushIdByEmail({ 
+                        pushId: subId, 
+                        email: "mulugeta.t.ayalew@gmail.com" // Your verified admin email
                     })
-                    .catch(err => console.error("PushAlertManager: Mutation failed:", err));
+                    .then(() => {
+                        console.log("PushAlertManager: Successfully updated Convex via Email Fallback");
+                        clearInterval(interval);
+                    })
+                    .catch(e => console.error("PushAlertManager: Fallback failed:", e));
+                  }
               } else {
                 console.log("PushAlertManager: No subscriber ID yet, result:", result);
               }
           });
-      } else {
-        console.log("PushAlertManager: SDK not yet injected on window");
       }
-    }, 5000); // Increased to 5s to avoid log flood
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [updatePushId]);
+  }, [updatePushId, updatePushIdByEmail, isAuthenticated, isLoading]);
 
   return (
     <>

@@ -89,11 +89,6 @@ export function WhatsAppSupport() {
 
       {/* Toggle Button */}
       <div className="relative pointer-events-auto">
-        <div className={cn(
-          "absolute inset-0 bg-gold rounded-full animate-ping opacity-20 pointer-events-none",
-          isOpen && "hidden"
-        )} />
-        
         <a 
           onClick={() => setIsOpen(!isOpen)}
           className={cn(

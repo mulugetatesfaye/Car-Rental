@@ -46,9 +46,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/luna-logo.png",
-    shortcut: "/luna-logo.png",
-    apple: "/luna-logo.png",
+    icon: "/luna-logo.png?v=1",
+    shortcut: "/luna-logo.png?v=1",
+    apple: "/luna-logo.png?v=1",
   },
 };
 

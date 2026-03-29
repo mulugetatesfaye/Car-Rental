@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 
@@ -27,9 +28,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto text-center space-y-10">
         <div className="flex justify-center mb-8">
           <Link href="/">
-            <img 
+            <Image 
               src="/luna-logo.png" 
               alt="Luna Limo" 
+              width={180}
+              height={64}
               className="h-16 w-auto grayscale transition-all hover:grayscale-0 duration-500" 
             />
           </Link>

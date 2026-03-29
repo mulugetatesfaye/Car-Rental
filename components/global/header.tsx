@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Phone, Menu, X, Calendar, Mail } from "lucide-react";
@@ -50,9 +51,12 @@ export function Header() {
       <header className="bg-black/90 backdrop-blur-md border-b border-neutral-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="group flex items-center">
-            <img 
+            <Image 
               src="/luna-logo.png" 
               alt="Luna Limo" 
+              width={160}
+              height={56}
+              priority
               className="h-14 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
             />
           </Link>

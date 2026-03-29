@@ -16,18 +16,27 @@ export function PushAlertManager() {
   const updatePushId = useMutation(api.users.updatePushId);
 
   React.useEffect(() => {
-    // This interval checks if PushAlert SDK is ready to give us the subscriber ID
+    console.log("PushAlertManager: Monitoring for subscriber ID...");
     const interval = setInterval(() => {
       if (typeof window.pushalertbyid === "function") {
+          console.log("PushAlertManager: SDK ready, checking id...");
           window.pushalertbyid(function(result: any) {
-              if (result.subscriber_id) {
+              if (result && result.subscriber_id) {
+                  console.log("PushAlertManager: Found subscriber ID:", result.subscriber_id);
                   updatePushId({ pushId: result.subscriber_id })
-                    .catch(err => console.error("Failed to sync Push ID:", err));
-                  clearInterval(interval);
+                    .then(() => {
+                      console.log("PushAlertManager: Successfully updated Convex with Push ID");
+                      clearInterval(interval);
+                    })
+                    .catch(err => console.error("PushAlertManager: Mutation failed:", err));
+              } else {
+                console.log("PushAlertManager: No subscriber ID yet, result:", result);
               }
           });
+      } else {
+        console.log("PushAlertManager: SDK not yet injected on window");
       }
-    }, 2000);
+    }, 5000); // Increased to 5s to avoid log flood
 
     return () => clearInterval(interval);
   }, [updatePushId]);

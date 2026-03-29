@@ -5,12 +5,23 @@ import { internal } from "./_generated/api";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
+// Default settings if none exist
+const DEFAULT_SETTINGS = {
+  companyName: "Luna Limo",
+  email: "reservations@lunalimo.com",
+  phone: "+1 (555) 123-4567",
+  address: "1902 E Yesler way, Seattle, WA 98122",
+  surgeMultiplier: 1.0,
+  minimumFare: 50.0,
+  notificationsEmail: true,
+};
+
 // Internal query to securely fetch data for the email action
 export const getEmailData = internalQuery({
   args: { rideId: v.id("rides") },
   handler: async (ctx, args) => {
     const ride = await ctx.db.get(args.rideId);
-    const settings = await ctx.db.query("settings").first();
+    const settings = (await ctx.db.query("settings").first()) || DEFAULT_SETTINGS;
     return { ride, settings };
   },
 });

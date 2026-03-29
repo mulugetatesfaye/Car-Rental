@@ -24,21 +24,30 @@ export function PushAlertManager() {
     
     const interval = setInterval(() => {
         // Debug logs to see what's available
-        if (window.PushAlertCo) console.log("PushAlertManager: window.PushAlertCo exists", !!window.PushAlertCo.subscriber_id);
-        if (window._pa) console.log("PushAlertManager: window._pa exists", !!window._pa.subscriber_id);
+        console.log("PushAlert Detection Check:", {
+            PushAlertCo: !!window.PushAlertCo,
+            _pa: !!window._pa,
+            pushalertbyid: typeof window.pushalertbyid,
+            // @ts-ignore
+            PushAlert: !!window.PushAlert
+        });
 
         // Method 1: Global Object check
         if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
-            const subId = window.PushAlertCo.subscriber_id;
-            console.log("PushAlertManager: Found subscriber ID via object:", subId);
-            syncId(subId);
+            syncId(window.PushAlertCo.subscriber_id);
             return;
         }
 
         // Method 2: Global _pa object
         if (window._pa && window._pa.subscriber_id) {
-            console.log("PushAlertManager: Found subscriber ID via _pa:", window._pa.subscriber_id);
             syncId(window._pa.subscriber_id);
+            return;
+        }
+
+        // @ts-ignore
+        if (window.PushAlert && window.PushAlert.subscriber_id) {
+            // @ts-ignore
+            syncId(window.PushAlert.subscriber_id);
             return;
         }
 
@@ -46,7 +55,6 @@ export function PushAlertManager() {
         if (typeof window.pushalertbyid === "function") {
             window.pushalertbyid(function(result: any) {
                 if (result && result.subscriber_id) {
-                    console.log("PushAlertManager: Found subscriber ID via API:", result.subscriber_id);
                     syncId(result.subscriber_id);
                 }
             });

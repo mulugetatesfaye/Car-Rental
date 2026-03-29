@@ -9,25 +9,32 @@ export const notifyAdmins = internalAction({
     url: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const admins = await ctx.runQuery(internal.push.getAdminsWithPushId);
+    const allAdmins = await ctx.runQuery(internal.push.getAllAdmins);
+    const admins = allAdmins.filter(a => !!a.pushAlertSubscriberId);
     
-    console.log(`Push Alert: Found ${admins.length} admins to notify.`);
+    console.log(`Push Alert: Found ${allAdmins.length} total admins, ${admins.length} with push IDs.`);
 
     if (admins.length === 0) {
-      console.warn("Push Alert: No admins found with isAdmin=true and a pushAlertSubscriberId.");
+      if (allAdmins.length > 0) {
+        console.warn("Push Alert: Admins exist, but none have registered for push notifications yet.");
+        console.log("Admin Emails:", allAdmins.map(a => a.email).join(", "));
+      } else {
+        console.warn("Push Alert: No admins found at all (isAdmin: true).");
+      }
       return;
     }
 
     const apiKey = process.env.PUSHALERT_API_KEY;
     if (!apiKey) {
-      console.error("Push Alert: PUSHALERT_API_KEY is not defined in Convex environmental variables.");
+      console.error("Push Alert: PUSHALERT_API_KEY is not defined.");
       return;
     }
 
+    console.log(`Push Alert: Using API Key starting with ${apiKey.substring(0, 4)}...`);
     const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://lunalimoz.com').replace(/\/$/, "");
 
     for (const admin of admins) {
-      console.log(`Push Alert: Sending to admin ${admin.name || admin.email} (${admin.pushAlertSubscriberId})`);
+      console.log(`Push Alert: Sending to admin ${admin.email} (${admin.pushAlertSubscriberId})`);
       
       try {
         const absoluteUrl = args.url ? (args.url.startsWith("/") ? `${siteUrl}${args.url}` : args.url) : siteUrl;
@@ -47,26 +54,26 @@ export const notifyAdmins = internalAction({
           }),
         });
 
+        const result = await response.json().catch(() => ({}));
+        
         if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          console.error(`Push Alert: Failed to send to admin ${admin._id}. Status: ${response.status}`, errorData);
+          console.error(`Push Alert Error [Status ${response.status}]:`, result);
         } else {
-          console.log(`Push Alert: Successfully sent to admin ${admin._id}`);
+          console.log(`Push Alert Success for ${admin.email}:`, result);
         }
       } catch (error) {
-        console.error(`Push Alert: Request error for admin ${admin._id}:`, error);
+        console.error(`Push Alert Request Error:`, error);
       }
     }
   },
 });
 
-export const getAdminsWithPushId = internalQuery({
+export const getAllAdmins = internalQuery({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
       .query("users")
       .withIndex("by_admin", (q) => q.eq("isAdmin", true))
-      .filter((q) => q.neq(q.field("pushAlertSubscriberId"), undefined))
       .collect();
   },
 });

@@ -104,7 +104,7 @@ export function LocationInput({
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
-            "flex h-12 w-full rounded-none border border-border bg-surface px-12 py-2 text-sm text-foreground placeholder:text-foreground-muted",
+            "flex h-12 w-full rounded-none border border-neutral-800 bg-neutral-900 px-12 py-2 text-sm text-white placeholder:text-neutral-700 font-sans",
             "focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "transition-colors duration-200",
@@ -126,18 +126,18 @@ export function LocationInput({
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute z-50 w-full mt-2 bg-surface border border-border rounded-xl shadow-lg overflow-hidden">
+        <div className="absolute z-50 w-full mt-2 bg-neutral-950 border border-neutral-800 shadow-3xl overflow-hidden glass rounded-none">
           {results.map((result) => (
             <button
               key={result.id}
               onClick={() => handleSelect(result)}
-              className="flex items-start gap-3 w-full p-4 text-left hover:bg-surface-elevated transition-colors border-b border-border last:border-b-0"
+              className="flex items-start gap-3 w-full p-4 text-left hover:bg-gold/5 transition-colors border-b border-neutral-900 last:border-b-0 group"
             >
-              <MapPin className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+              <MapPin className="h-5 w-5 text-gold/40 group-hover:text-gold flex-shrink-0 mt-0.5 transition-colors" />
               <div>
-                <p className="text-sm text-foreground">{result.address.freeformAddress}</p>
+                <p className="text-sm text-neutral-200 group-hover:text-white transition-colors">{result.address.freeformAddress}</p>
                 {result.address.municipality && (
-                  <p className="text-xs text-foreground-muted mt-0.5">
+                  <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-600 group-hover:text-neutral-400 transition-colors mt-1">
                     {result.address.municipality}
                     {result.address.country && `, ${result.address.country}`}
                   </p>

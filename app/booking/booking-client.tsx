@@ -363,7 +363,7 @@ export default function BookingClient() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Pickup Location</label>
                     <LocationInput
-                      placeholder="e.g. Seattle-Tacoma International Airport (SEA)"
+                      placeholder="Enter pickup location (e.g. SEA Airport)"
                       value={pickup}
                       onChange={handlePickupSelect}
                     />
@@ -372,7 +372,7 @@ export default function BookingClient() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Drop-off Location</label>
                     <LocationInput
-                      placeholder="e.g. Belltown, Seattle, WA"
+                      placeholder="Enter destination (e.g. Hotel or Address)"
                       value={destination}
                       onChange={handleDestinationSelect}
                     />

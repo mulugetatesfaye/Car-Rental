@@ -90,6 +90,8 @@ const jsonLd = {
 };
 
 import { Header } from "@/components/global/header";
+import { WhatsAppSupport } from "@/components/global/whatsapp-support";
+
 
 export default function RootLayout({
   children,
@@ -109,6 +111,7 @@ export default function RootLayout({
           <ConvexProvider>
             <Header />
             {children}
+            <WhatsAppSupport />
           </ConvexProvider>
           <Suspense fallback={null}>
             <Analytics />

@@ -437,63 +437,6 @@ export default function HomeClient() {
         </section>
       </main>
 
-      <footer className="bg-neutral-900 border-t border-neutral-800 pt-12 sm:pt-16 pb-8 px-4 sm:px-6 text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="flex flex-col items-center md:items-start">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="font-serif text-2xl font-black italic uppercase text-gold leading-tight tracking-tighter">
-                  Luna Limo
-                </span>
-              </div>
-              <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest leading-relaxed text-center md:text-left">
-                Premium Chauffeur Service in Seattle and Washington Area. Operated by Luna Limoz. Dedicated to your journey.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gold mb-6 border-b border-gold/20 pb-2 inline-block">Our Services</h4>
-              <ul className="space-y-3 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                <li>Airport Transfers</li>
-                <li>Corporate Travel</li>
-                <li>Special Events</li>
-                <li>City Tours</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gold mb-6 border-b border-gold/20 pb-2 inline-block">Quick Links</h4>
-              <ul className="space-y-3 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                <li><Link href="/booking">Reservations</Link></li>
-                <li><Link href="/fleet">Fleet</Link></li>
-                <li><Link href="/about">About Us</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gold mb-6 border-b border-gold/20 pb-2 inline-block">Social Media</h4>
-              <div className="flex gap-4">
-                <Globe className="h-5 w-5 text-neutral-400 hover:text-gold cursor-pointer" />
-                <Mail className="h-5 w-5 text-neutral-400 hover:text-gold cursor-pointer" />
-                <MapPin className="h-5 w-5 text-neutral-400 hover:text-gold cursor-pointer" />
-                <Phone className="h-5 w-5 text-neutral-400 hover:text-gold cursor-pointer" />
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
-              Copyright © 2026 Luna Limo. Established Feb 20, 2023.
-            </p>
-            <div className="flex items-center gap-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
-              <Link href="#">Privacy Policy</Link>
-              <Link href="#">Terms of Service</Link>
-              <Link href="#">Contact</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

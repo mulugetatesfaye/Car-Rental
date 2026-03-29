@@ -90,6 +90,7 @@ const jsonLd = {
 };
 
 import { Header } from "@/components/global/header";
+import { Footer } from "@/components/global/footer";
 import { WhatsAppSupport } from "@/components/global/whatsapp-support";
 import { PushAlertManager } from "@/components/global/push-alert-manager";
 
@@ -108,10 +109,13 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
         </head>
-        <body className="h-full min-h-screen bg-background text-foreground font-sans">
+        <body className="h-full min-h-screen bg-background text-foreground font-sans flex flex-col">
           <ConvexProvider>
             <Header />
-            {children}
+            <div className="flex-1">
+              {children}
+            </div>
+            <Footer />
             <WhatsAppSupport />
             <PushAlertManager />
           </ConvexProvider>

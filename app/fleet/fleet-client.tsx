@@ -214,22 +214,6 @@ export default function FleetClient() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-neutral-900 border-t border-neutral-800 py-12 sm:py-16 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-8">
-          <h2 className="font-serif text-2xl font-black italic uppercase text-gold">Luna Limo</h2>
-          <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-            <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-            <Link href="/services" className="hover:text-gold transition-colors">Services</Link>
-            <Link href="/fleet" className="hover:text-gold transition-colors text-white">Our Fleet</Link>
-            <Link href="/booking" className="hover:text-gold transition-colors">Reservations</Link>
-            <Link href="/contact" className="hover:text-gold transition-colors">Support</Link>
-          </nav>
-          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-neutral-600">
-            © 2026 Luna Limo. Professional Excellence Dedicated To Your Journey.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

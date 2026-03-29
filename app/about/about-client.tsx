@@ -162,37 +162,11 @@ export default function AboutClient() {
               </div>
            </div>
 
-           {/* Subtle Watermark Decoration */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-5 select-none pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-5 select-none pointer-events-none">
               <span className="font-serif text-[15vw] font-black italic uppercase text-white">LUNA PRESTIGE</span>
            </div>
         </section>
       </main>
-
-      {/* Reused Footer from other pages */}
-      <footer className="bg-black border-t border-neutral-900 py-16 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-10">
-          <div className="flex justify-center mb-8">
-             <img src="/luna-logo.png" alt="Luna Limo" className="h-16 w-auto grayscale" />
-          </div>
-          <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-[10px] font-black uppercase tracking-widest text-neutral-500">
-            <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-            <Link href="/about" className="text-white hover:text-gold transition-colors">About Us</Link>
-            <Link href="/services" className="hover:text-gold transition-colors">Services</Link>
-            <Link href="/fleet" className="hover:text-gold transition-colors">The Fleet</Link>
-            <Link href="/reservations" className="hover:text-gold transition-colors">Booking</Link>
-            <Link href="/contact" className="hover:text-gold transition-colors">Concierge</Link>
-          </nav>
-          <div className="pt-8 border-t border-neutral-900 max-w-xl mx-auto">
-             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-600 mb-4">
-              Luna Limo Professional Chauffeur Services. Seattle, WA.
-            </p>
-             <p className="text-[8px] font-bold uppercase tracking-[0.3em] text-neutral-800">
-              © 2026 Luna Limo. Established February 20, 2023.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

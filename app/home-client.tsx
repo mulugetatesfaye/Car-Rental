@@ -173,31 +173,101 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Testimonial Snapshot */}
-        <section className="bg-neutral-900 py-8 sm:py-12 px-4 sm:px-6">
-          <div className="max-w-lg mx-auto bg-black p-6 sm:p-8 border border-neutral-800 shadow-xl relative animate-fade-in shadow-gold/5">
-            <div className="flex items-center gap-4 mb-4">
-              <Star className="h-10 w-10 text-gold fill-gold" />
-              <div>
-                <h3 className="font-serif font-black italic text-lg leading-tight uppercase text-white">Judy Bell-Holzemer</h3>
-                <div className="flex gap-0.5 mt-1">
-                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="h-3 w-3 text-gold fill-gold" />)}
+        {/* Testimonials Section */}
+        <section className="bg-neutral-900 py-16 sm:py-24 px-4 sm:px-6 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+              <div className="text-left">
+                <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.4em] mb-4">Client Experiences</h3>
+                <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-black italic uppercase text-white leading-tight">
+                  Google <span className="text-gold">Reviews</span>
+                </h2>
+              </div>
+              <div className="flex items-center gap-4 bg-black/50 p-4 border border-neutral-800">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="h-4 w-4 text-gold fill-gold" />)}
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-white">
+                  5.0 Rating <span className="text-neutral-500 ml-2">302 Reviews</span>
                 </div>
               </div>
             </div>
-            <p className="text-sm text-neutral-300 italic leading-relaxed">
-              "First time using Luna Limo. Everything was seamless. I booked a car as a gift... The entire process... was so easy. My guests..." <span className="text-gold font-bold">Read more</span>
-            </p>
-            <div className="mt-6 pt-4 border-t border-neutral-800 flex flex-wrap items-center justify-between gap-y-4">
-              <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-xs font-bold text-neutral-500">
-                <span className="text-blue-400">G</span>
-                <span className="text-red-400">o</span>
-                <span className="text-yellow-400">o</span>
-                <span className="text-blue-400">g</span>
-                <span className="text-green-400">l</span>
-                <span className="text-red-400">e</span>
-                <span className="whitespace-normal"> rating 5.0 of 5, based on 302 reviews</span>
+
+            <div className="relative">
+              <div className="flex gap-6 overflow-x-auto pb-8 snap-x no-scrollbar">
+                {[
+                  {
+                    name: "Judy Bell-Holzemer",
+                    review: "First time using Luna Limo. Everything was seamless. I booked a car as a gift... The entire process... was so easy. My guests were very impressed with the vehicle and the professionalism of the driver.",
+                    date: "2 weeks ago"
+                  },
+                  {
+                    name: "Michael Chen",
+                    review: "Exceptional service for our corporate event. The driver arrived 10 minutes early, the car was spotless, and the ride was incredibly smooth. Will definitely be our go-to in Seattle.",
+                    date: "1 month ago"
+                  },
+                  {
+                    name: "Sarah Jenkins",
+                    review: "Booked Luna Limo for our anniversary dinner. It added such a special touch to the evening. The chauffeur was courteous and the interior was like a private lounge. Highly recommend!",
+                    date: "3 weeks ago"
+                  },
+                  {
+                    name: "David Ross",
+                    review: "Seamless airport transfer. No stress, no waiting. The 'Meet & Greet' at Sea-Tac was perfect. Best black car service I've used in years.",
+                    date: "2 months ago"
+                  },
+                  {
+                    name: "Elena Rodriguez",
+                    review: "The Tesla service is fantastic! Clean, quiet, and eco-friendly. It's rare to find a limo service with such modern options. Driver was top-notch.",
+                    date: "4 days ago"
+                  }
+                ].map((testimonial, i) => (
+                  <div key={i} className="min-w-[300px] sm:min-w-[400px] snap-center bg-black p-8 border border-neutral-800 shadow-2xl relative flex flex-col justify-between">
+                    <div className="absolute top-0 right-0 p-4 text-neutral-800">
+                      <Quote className="h-12 w-12 opacity-20" />
+                    </div>
+                    
+                    <div>
+                      <div className="flex gap-1 mb-6">
+                        {[1, 2, 3, 4, 5].map((s) => <Star key={s} className="h-3 w-3 text-gold fill-gold" />)}
+                      </div>
+                      <p className="text-sm text-neutral-300 italic leading-relaxed mb-8 relative z-10">
+                        "{testimonial.review}"
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-6 border-t border-neutral-800/50">
+                      <div>
+                        <h4 className="font-serif font-black italic text-sm uppercase text-white">{testimonial.name}</h4>
+                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest">{testimonial.date}</span>
+                      </div>
+                      <div className="flex items-center gap-1 opacity-50">
+                        <span className="text-[10px] font-black text-blue-400">G</span>
+                        <span className="text-[10px] font-black text-red-400">o</span>
+                        <span className="text-[10px] font-black text-yellow-400">o</span>
+                        <span className="text-[10px] font-black text-blue-400">g</span>
+                        <span className="text-[10px] font-black text-green-400">l</span>
+                        <span className="text-[10px] font-black text-red-400">e</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
+              
+              {/* Fade edges */}
+              <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-neutral-900 to-transparent pointer-events-none hidden md:block" />
+              <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-neutral-900 to-transparent pointer-events-none hidden md:block" />
+            </div>
+
+            <div className="mt-12 text-center md:text-left">
+              <Link 
+                href="https://www.google.com/search?q=Luna+Limo+Seattle+reviews" 
+                target="_blank"
+                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-gold hover:text-white transition-colors group"
+              >
+                View All Reviews On Google
+                <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
         </section>

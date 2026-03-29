@@ -31,7 +31,8 @@ export const sendBookingEmail = internalAction({
     const fromAddress = "Luna Limo <onboarding@resend.dev>";
     // Sending to both customer and admin. Note: Under Resend's free tier with onboarding@resend.dev, 
     // it may only actually deliver to the verified Resend account owner's email address.
-    const toAddresses = Array.from(new Set([ride.customerEmail, settings.email]));
+    const rawToAddresses = [ride.customerEmail, settings.email].filter(Boolean) as string[];
+    const toAddresses = Array.from(new Set(rawToAddresses));
 
     const isNew = args.type === "new_booking";
     const statusText = isNew ? "RECEIVED" : (args.newStatus || ride.status).toUpperCase().replace("_", " ");

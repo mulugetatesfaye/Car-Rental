@@ -27,13 +27,19 @@ export function PushAlertManager() {
         console.log("PushAlert Detection Check:", {
             PushAlertCo: !!window.PushAlertCo,
             _pa: !!window._pa,
-            pushalertbyid: typeof window.pushalertbyid,
-            // @ts-ignore
-            PushAlert: !!window.PushAlert
+            PushAlert: !!window.PushAlert,
+            permission: typeof Notification !== "undefined" ? Notification.permission : "N/A"
         });
 
         if (window.PushAlertCo) {
             console.log("PushAlertManager: window.PushAlertCo found, subscriber_id:", window.PushAlertCo.subscriber_id || "MISSING");
+            
+            // If it's missing and permission is default, try to trigger the prompt
+            if (!window.PushAlertCo.subscriber_id && typeof Notification !== "undefined" && Notification.permission === "default") {
+                console.log("PushAlertManager: Permission is default, attempting to show prompt...");
+                if (typeof window.PushAlertCo.show_prompt === "function") window.PushAlertCo.show_prompt();
+            }
+
             if (window.PushAlertCo.subscriber_id) {
                 syncId(window.PushAlertCo.subscriber_id);
                 return;

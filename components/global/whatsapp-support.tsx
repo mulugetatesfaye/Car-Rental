@@ -8,6 +8,16 @@ import { cn } from "@/lib/utils";
 export function WhatsAppSupport() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
+  const [currentTime, setCurrentTime] = React.useState("");
+
+  React.useEffect(() => {
+    // Set time on client to avoid hydration mismatch
+    setCurrentTime(new Date().toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    }));
+  }, []);
   
   // Professional pre-filled message
   const message = encodeURIComponent(
@@ -50,11 +60,17 @@ export function WhatsAppSupport() {
 
         {/* Body */}
         <div className="p-6 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat">
-          <div className="bg-neutral-900 border border-neutral-800 p-4 shadow-xl">
-            <p className="text-xs text-neutral-300 leading-relaxed">
+          <div className="bg-neutral-900 border border-neutral-800 p-4 shadow-xl relative group">
+            <div className="absolute -top-1 -left-1 bg-gold h-4 w-4 rounded-full border-2 border-black flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
+               <User className="h-2 w-2 text-black" />
+            </div>
+            <p className="text-xs text-neutral-300 leading-relaxed font-medium">
               Welcome to Luna Limo. How can I assist you with your luxury transportation needs today?
             </p>
-            <span className="text-[9px] text-neutral-600 font-bold uppercase mt-2 block tracking-tighter">11:42 PM</span>
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-[9px] text-neutral-600 font-bold uppercase tracking-widest">{currentTime || "Just now"}</span>
+              <span className="text-[9px] text-gold/40 font-black italic uppercase tracking-[0.2em] group-hover:text-gold transition-colors">Luna Standard</span>
+            </div>
           </div>
           
           <div className="flex justify-end">

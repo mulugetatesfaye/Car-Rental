@@ -18,11 +18,11 @@ export function WhatsAppSupport() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
       {/* Chat Window */}
       <div 
         className={cn(
-          "mb-4 w-[320px] sm:w-[380px] bg-neutral-950 border border-neutral-800 shadow-3xl overflow-hidden transition-all duration-500 ease-in-out origin-bottom-right",
+          "mb-4 w-[320px] sm:w-[380px] bg-neutral-950 border border-neutral-800 shadow-3xl overflow-hidden transition-all duration-500 ease-in-out origin-bottom-right pointer-events-auto",
           isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 translate-y-4 pointer-events-none"
         )}
       >
@@ -88,7 +88,7 @@ export function WhatsAppSupport() {
       </div>
 
       {/* Toggle Button */}
-      <div className="relative">
+      <div className="relative pointer-events-auto">
         <div className={cn(
           "absolute inset-0 bg-gold rounded-full animate-ping opacity-20",
           isOpen && "hidden"

@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "Seattle Wedding Limo | Luxury Wedding Transportation & Bridal Cars",
   description: "Make your special day perfect with Seattle's premier wedding limo service. Elegant bridal cars, wedding party transportation, and professional chauffeurs. Red carpet service included.",
-  keywords: ["Seattle Wedding Limo", "Wedding Transportation Seattle", "Bridal Car Seattle", "Wedding Chauffeur Seattle", "Luxury Wedding Car"],
+  keywords: ["Luna Limoz", "Luna Limo", "Seattle Wedding Limo", "Wedding Transportation Seattle", "Bridal Car Seattle", "Wedding Chauffeur Seattle", "Luxury Wedding Car"],
 };
 
 export default function WeddingLimoPage() {

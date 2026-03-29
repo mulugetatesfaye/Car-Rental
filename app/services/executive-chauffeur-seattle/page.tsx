@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "Executive Chauffeur Seattle | Corporate Car Service & Private Driver",
   description: "Elite executive chauffeur services in Seattle. Professional private drivers for corporate travel, business meetings, and high-profile events. Discretion and luxury guaranteed.",
-  keywords: ["Executive Chauffeur Seattle", "Corporate Car Service Seattle", "Private Driver Seattle", "Business Travel Seattle", "Seattle Luxury Chauffeur"],
+  keywords: ["Luna Limoz", "Luna Limo", "Executive Chauffeur Seattle", "Corporate Car Service Seattle", "Private Driver Seattle", "Business Travel Seattle", "Seattle Luxury Chauffeur"],
 };
 
 export default function ExecutiveChauffeurPage() {

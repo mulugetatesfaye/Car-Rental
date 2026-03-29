@@ -377,7 +377,7 @@ export default function HomeClient() {
                 </span>
               </div>
               <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest leading-relaxed text-center md:text-left">
-                Premium Chauffeur Service in Seattle and Washington Area. Dedicated to your journey.
+                Premium Chauffeur Service in Seattle and Washington Area. Operated by Luna Limoz. Dedicated to your journey.
               </p>
             </div>
 
@@ -414,7 +414,7 @@ export default function HomeClient() {
 
           <div className="pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
-              Copyright © 2026 Luna Limo. All Rights Reserved
+              Copyright © 2026 Luna Limo (Luna Limoz). All Rights Reserved
             </p>
             <div className="flex items-center gap-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-600">
               <Link href="#">Privacy Policy</Link>

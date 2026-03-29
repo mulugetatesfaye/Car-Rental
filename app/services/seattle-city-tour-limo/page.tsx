@@ -17,7 +17,7 @@ import {
 export const metadata: Metadata = {
   title: "Seattle City Tours & Woodinville Wine Limo | Luxury Sightseeing",
   description: "Explore the Pacific Northwest in style. Premium Seattle city tours, Woodinville wine tasting transportation, and private sightseeing in luxury limousines and SUVs.",
-  keywords: ["Seattle City Tour Limo", "Woodinville Wine Tour", "Seattle Sightseeing Limo", "Private Wine Tour Seattle", "Luxury Tour Car"],
+  keywords: ["Luna Limoz", "Luna Limo", "Seattle City Tour Limo", "Woodinville Wine Tour", "Seattle Sightseeing Limo", "Private Wine Tour Seattle", "Luxury Tour Car"],
 };
 
 export default function CityTourLimoPage() {

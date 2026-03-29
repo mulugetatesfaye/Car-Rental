@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "Seattle Airport Limo Service | Sea-Tac Luxury Transfers",
   description: "Premier Seattle airport limo service to and from Sea-Tac International. Punctual, professional chauffeurs, flat rates, and a luxury fleet. Book your airport transfer today.",
-  keywords: ["Sea-Tac Limo", "Seattle Airport Transfer", "Limo Service Seattle Airport", "Airport Black Car Seattle", "Sea-Tac Chauffeur"],
+  keywords: ["Luna Limoz", "Luna Limo", "Sea-Tac Limo", "Seattle Airport Transfer", "Limo Service Seattle Airport", "Airport Black Car Seattle", "Sea-Tac Chauffeur"],
 };
 
 export default function AirportLimoPage() {

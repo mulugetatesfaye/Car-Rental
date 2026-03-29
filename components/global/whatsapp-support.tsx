@@ -90,21 +90,21 @@ export function WhatsAppSupport() {
       {/* Toggle Button */}
       <div className="relative pointer-events-auto">
         <div className={cn(
-          "absolute inset-0 bg-gold rounded-full animate-ping opacity-20",
+          "absolute inset-0 bg-gold rounded-full animate-ping opacity-20 pointer-events-none",
           isOpen && "hidden"
         )} />
         
-        <button 
+        <a 
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "h-16 w-16 rounded-full shadow-3xl flex items-center justify-center transition-all active:scale-95 border-2",
+            "h-16 w-16 rounded-full shadow-3xl flex items-center justify-center transition-all active:scale-95 border-2 cursor-pointer",
             isOpen 
               ? "bg-neutral-900 border-neutral-800 text-white rotate-90" 
               : "bg-gold border-black text-white hover:bg-gold-dark"
           )}
         >
           {isOpen ? <X className="h-8 w-8" /> : <MessageSquare className="h-8 w-8" />}
-        </button>
+        </a>
 
         {/* Permanent Close */}
         {!isOpen && (

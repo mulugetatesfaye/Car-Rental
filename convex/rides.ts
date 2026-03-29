@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 
 export const list = query({
   args: {
@@ -95,7 +96,16 @@ export const create = mutation({
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    return await ctx.db.insert("rides", ride);
+    
+    const rideId = await ctx.db.insert("rides", ride);
+    
+    // Trigger the email asynchronously
+    await ctx.scheduler.runAfter(0, internal.emails.sendBookingEmail, { 
+      rideId, 
+      type: "new_booking" 
+    });
+    
+    return rideId;
   },
 });
 
@@ -114,6 +124,13 @@ export const updateStatus = mutation({
     await ctx.db.patch(args.id, {
       status: args.status,
       updatedAt: Date.now(),
+    });
+
+    // Trigger status update email
+    await ctx.scheduler.runAfter(0, internal.emails.sendBookingEmail, { 
+      rideId: args.id, 
+      type: "status_update",
+      newStatus: args.status
     });
   },
 });

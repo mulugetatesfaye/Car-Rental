@@ -23,6 +23,10 @@ export function PushAlertManager() {
     console.log("PushAlertManager: Monitoring for subscriber registration...");
     
     const interval = setInterval(() => {
+        // Debug logs to see what's available
+        if (window.PushAlertCo) console.log("PushAlertManager: window.PushAlertCo exists", !!window.PushAlertCo.subscriber_id);
+        if (window._pa) console.log("PushAlertManager: window._pa exists", !!window._pa.subscriber_id);
+
         // Method 1: Global Object check
         if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
             const subId = window.PushAlertCo.subscriber_id;
@@ -47,7 +51,7 @@ export function PushAlertManager() {
                 }
             });
         }
-    }, 5000);
+    }, 2000);
 
     const syncId = (subId: string) => {
         if (isAuthenticated) {

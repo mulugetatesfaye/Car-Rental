@@ -9,6 +9,7 @@ export const notifyAdmins = internalAction({
     url: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // @ts-ignore
     const admins = await ctx.runQuery(internal.push.getAdminsWithPushId);
 
     for (const admin of admins) {

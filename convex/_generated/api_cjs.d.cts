@@ -13,6 +13,7 @@ import type * as carTypes from "../carTypes.js";
 import type * as emails from "../emails.js";
 import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
+import type * as push from "../push.js";
 import type * as reviews from "../reviews.js";
 import type * as rides from "../rides.js";
 import type * as settings from "../settings.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   emails: typeof emails;
   http: typeof http;
   migrations: typeof migrations;
+  push: typeof push;
   reviews: typeof reviews;
   rides: typeof rides;
   settings: typeof settings;

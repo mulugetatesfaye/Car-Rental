@@ -45,6 +45,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/luna-logo.png",
+    shortcut: "/luna-logo.png",
+    apple: "/luna-logo.png",
+  },
 };
 
 const jsonLd = {

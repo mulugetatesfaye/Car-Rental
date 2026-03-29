@@ -32,10 +32,12 @@ export function PushAlertManager() {
             PushAlert: !!window.PushAlert
         });
 
-        // Method 1: Global Object check
-        if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
-            syncId(window.PushAlertCo.subscriber_id);
-            return;
+        if (window.PushAlertCo) {
+            console.log("PushAlertManager: window.PushAlertCo found, subscriber_id:", window.PushAlertCo.subscriber_id || "MISSING");
+            if (window.PushAlertCo.subscriber_id) {
+                syncId(window.PushAlertCo.subscriber_id);
+                return;
+            }
         }
 
         // Method 2: Global _pa object

@@ -31,7 +31,7 @@ export function PushAlertManager() {
             return;
         }
 
-        // Method 2: Global _pa object commonly used by PushAlert
+        // Method 2: Global _pa object
         if (window._pa && window._pa.subscriber_id) {
             console.log("PushAlertManager: Found subscriber ID via _pa:", window._pa.subscriber_id);
             syncId(window._pa.subscriber_id);
@@ -47,7 +47,7 @@ export function PushAlertManager() {
                 }
             });
         }
-    }, 3000);
+    }, 5000);
 
     const syncId = (subId: string) => {
         if (isAuthenticated) {
@@ -76,13 +76,11 @@ export function PushAlertManager() {
 
   return (
     <>
-      {/* Standard load to ensure it's on window */}
-      <Script
-        id="pushalert-unified"
-        strategy="afterInteractive"
+      {/* We use a standard script tag here because of PushAlert's reliance on specific load timing */}
+      <script
+        async
         src="https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js"
-        onLoad={() => console.log("PushAlertManager: Script onLoad fired")}
-        onError={() => console.error("PushAlertManager: Script load error")}
+        type="text/javascript"
       />
     </>
   );

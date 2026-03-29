@@ -493,9 +493,9 @@ export default function BookingClient() {
                        <input 
                          value={options.customerName} 
                          onChange={(e) => updateOption("customerName", e.target.value)}
-                         placeholder="e.g. James Bond" 
+                         placeholder="Enter your full name" 
                          required 
-                         className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                         className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                        />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
@@ -505,9 +505,9 @@ export default function BookingClient() {
                            type="email"
                            value={options.customerEmail} 
                            onChange={(e) => updateOption("customerEmail", e.target.value)}
-                           placeholder="james@mi6.gov" 
+                           placeholder="email@example.com" 
                            required 
-                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                          />
                       </div>
                       <div className="space-y-2">
@@ -516,9 +516,9 @@ export default function BookingClient() {
                            type="tel"
                            value={options.customerPhone} 
                            onChange={(e) => updateOption("customerPhone", e.target.value)}
-                           placeholder="+1 (206) 555-0123" 
+                           placeholder="(555) 000-0000" 
                            required 
-                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors" 
+                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                          />
                       </div>
                     </div>

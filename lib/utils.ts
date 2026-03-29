@@ -40,8 +40,9 @@ export function formatDuration(minutes: number): string {
 }
 
 export function formatDistance(km: number): string {
-  if (km < 1) {
-    return `${Math.round(km * 1000)} m`;
+  const miles = km * 0.621371;
+  if (miles < 0.1) {
+    return "Less than 0.1 miles";
   }
-  return `${km.toFixed(1)} km`;
+  return `${miles.toFixed(1)} miles`;
 }

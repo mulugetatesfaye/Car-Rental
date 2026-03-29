@@ -19,44 +19,54 @@ export function PushAlertManager() {
   const updatePushIdByEmail = useMutation(api.users.updatePushIdByEmail);
 
   React.useEffect(() => {
-    console.log("PushAlertManager: Monitoring for subscriber ID...", { isAuthenticated, isLoading });
+    console.log("PushAlertManager: Monitoring for subscriber registration...");
     
+    // Check every 5 seconds for the ID
     const interval = setInterval(() => {
-      if (typeof window.pushalertbyid === "function") {
-          console.log("PushAlertManager: SDK ready, checking id...");
-          window.pushalertbyid(function(result: any) {
-              if (result && result.subscriber_id) {
-                  const subId = result.subscriber_id;
-                  console.log("PushAlertManager: Found subscriber ID:", subId);
-                  
-                  // Primary: Auth-based update
-                  if (isAuthenticated) {
-                    updatePushId({ pushId: subId })
-                      .then(() => {
-                        console.log("PushAlertManager: Successfully updated Convex via Auth");
-                        clearInterval(interval);
-                      })
-                      .catch(err => console.error("PushAlertManager: Auth mutation failed:", err));
-                  } 
-                  // Fallback: Try a hardcoded email update if it matches your admin email
-                  else {
-                    console.warn("PushAlertManager: Not authenticated, attempting email fallback update...");
-                    updatePushIdByEmail({ 
-                        pushId: subId, 
-                        email: "mulugeta.t.ayalew@gmail.com" // Your verified admin email
-                    })
-                    .then(() => {
-                        console.log("PushAlertManager: Successfully updated Convex via Email Fallback");
-                        clearInterval(interval);
-                    })
-                    .catch(e => console.error("PushAlertManager: Fallback failed:", e));
-                  }
-              } else {
-                console.log("PushAlertManager: No subscriber ID yet, result:", result);
-              }
-          });
-      }
+        // Direct object check
+        if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
+            const subId = window.PushAlertCo.subscriber_id;
+            console.log("PushAlertManager: Found subscriber ID via object:", subId);
+            syncId(subId);
+            return;
+        }
+
+        // JS API check
+        if (typeof window.pushalertbyid === "function") {
+            window.pushalertbyid(function(result: any) {
+                if (result && result.subscriber_id) {
+                    console.log("PushAlertManager: Found subscriber ID via API:", result.subscriber_id);
+                    syncId(result.subscriber_id);
+                } else {
+                    console.log("PushAlertManager: SDK ready but no ID yet. Have you clicked 'Allow'?", result);
+                }
+            });
+        } else {
+            console.log("PushAlertManager: Waiting for PushAlert SDK to load on window...");
+        }
     }, 5000);
+
+    const syncId = (subId: string) => {
+        if (isAuthenticated) {
+            updatePushId({ pushId: subId })
+              .then(() => {
+                console.log("PushAlertManager: Synced via Auth");
+                clearInterval(interval);
+              })
+              .catch(err => console.error("PushAlertManager: Auth sync failed:", err));
+        } else {
+            console.warn("PushAlertManager: Not authenticated, using email fallback...");
+            updatePushIdByEmail({ 
+                pushId: subId, 
+                email: "mulugeta.t.ayalew@gmail.com" 
+            })
+            .then(() => {
+                console.log("PushAlertManager: Synced via Email Fallback");
+                clearInterval(interval);
+            })
+            .catch(e => console.error("PushAlertManager: Fallback sync failed:", e));
+        }
+    };
 
     return () => clearInterval(interval);
   }, [updatePushId, updatePushIdByEmail, isAuthenticated, isLoading]);
@@ -66,16 +76,7 @@ export function PushAlertManager() {
       <Script
         id="pushalert-unified"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(d, t) {
-                var g = d.createElement(t),
-                s = d.getElementsByTagName(t)[0];
-                g.src = "https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js";
-                s.parentNode.insertBefore(g, s);
-            }(document, "script"));
-          `,
-        }}
+        src="https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js"
       />
     </>
   );

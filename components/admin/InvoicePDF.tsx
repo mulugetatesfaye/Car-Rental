@@ -9,13 +9,14 @@ import {
 } from "@react-pdf/renderer";
 import { Doc } from "@/convex/_generated/dataModel";
 
-// Register an elegant serif font for the stylized logo
+/*
 Font.register({
   family: "PlayfairDisplay",
   src: "https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvL-7_Wvese6dfjaMjGRUpd86B-VV9SDRmS7-J.ttf",
   fontStyle: "italic",
   fontWeight: "bold",
 });
+*/
 
 const styles = StyleSheet.create({
   page: {
@@ -35,10 +36,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 24,
-    fontFamily: "PlayfairDisplay",
+    fontFamily: "Helvetica-Bold",
     color: "#C6A87C", // Gold color from Luna Limo theme
     fontStyle: "italic",
-    fontWeight: "bold",
     textTransform: "uppercase",
   },
   tagline: {

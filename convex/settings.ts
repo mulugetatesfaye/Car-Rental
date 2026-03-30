@@ -4,9 +4,9 @@ import { mutation, query } from "./_generated/server";
 // Default settings if none exist
 const DEFAULT_SETTINGS = {
   companyName: "Luna Limo",
-  email: "reservations@lunalimo.com",
-  phone: "+1 (555) 123-4567",
-  address: "123 Executive Way, NY, 10001",
+  email: "concierge@lunalimo.com",
+  phone: "(206) 327-4411",
+  address: "1902 E Yesler way, Seattle, WA 98122",
   surgeMultiplier: 1.0,
   minimumFare: 50.0,
   notificationsEmail: true,

@@ -64,13 +64,15 @@ export function GenerateInvoiceButton({ ride }: Props) {
       
       if (result.success) {
         setEmailStatus("success");
-        setTimeout(() => setEmailStatus("idle"), 3000);
+        setTimeout(() => {
+          setEmailStatus("idle");
+          setShowOptions(false);
+        }, 2000);
       } else {
         setEmailStatus("error");
       }
     } catch (error) {
-      console.error("Invoicing Error:", error);
-      alert("Failed to generate or send the invoice email. Please check the browser console.");
+      console.error("Action Invoicing Error:", error);
       setEmailStatus("error");
     } finally {
       setIsEmailing(false);
@@ -81,36 +83,25 @@ export function GenerateInvoiceButton({ ride }: Props) {
     if (isDownloading) return;
     setIsDownloading(true);
     try {
-      console.log("Generating Minimal Test PDF...");
-      // Try rendering a very minimal doc to see if the library itself works
-      const testDoc = (
-        <Document>
-          <Page size="A4">
-            <View style={{ padding: 40 }}>
-              <Text>Luna Limo Invoice Test</Text>
-              <Text>ID: {ride._id}</Text>
-            </View>
-          </Page>
-        </Document>
-      );
-      
-      const blob = await pdf(testDoc).toBlob();
-      console.log("PDF generated successfully, size:", blob.size);
+      const doc = <InvoicePDF ride={ride} settings={settings as any} />;
+      const blob = await pdf(doc).toBlob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `LunaLimo-Test-${ride._id.slice(-6)}.pdf`;
+      link.download = `LunaLimo-Invoice-${invoiceNumber}.pdf`;
       link.click();
       URL.revokeObjectURL(url);
+      
+      setTimeout(() => setShowOptions(false), 1000);
     } catch (error) {
-      console.error("Critical PDF Generation Error:", error);
-      alert("PDF library failed even with minimal doc. See console for error.");
+      console.error("PDF Generation Error:", error);
+      alert("Executive Error: Failed to generate document.");
     } finally {
       setIsDownloading(false);
     }
   };
 
-  const invoiceNumber = `INV-${ride._id.slice(-6).toUpperCase()}`;
+  const invoiceNumber = ride._id.slice(-8).toUpperCase();
 
   return (
     <div className="relative inline-block w-full">
@@ -119,48 +110,47 @@ export function GenerateInvoiceButton({ ride }: Props) {
           onClick={() => setShowOptions(true)}
           variant="outline"
           size="sm"
-          className="w-full bg-gold/10 text-gold border-gold/30 hover:bg-gold hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-8"
+          className="w-full bg-gold/5 text-gold border-gold/20 hover:bg-gold hover:text-white rounded-none text-[10px] font-bold uppercase tracking-[0.2em] h-9 transition-all duration-300"
         >
-          <FileText className="h-3 w-3 mr-2" />
-          Invoicing
+          <FileText className="h-3.5 w-3.5 mr-2" />
+          Manage Invoice
         </Button>
       ) : (
-        <div className="flex flex-col gap-1 animate-in slide-in-from-right-2 duration-300">
-          {/* Download Option */}
+        <div className="flex flex-col gap-1.5 p-2 bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 animate-in fade-in zoom-in-95 duration-200">
+          <div className="text-[7px] text-neutral-500 uppercase tracking-widest mb-1 px-1">Invoice Options</div>
+          
           <Button
             onClick={handleDownloadInvoice}
-            variant="outline"
+            variant="ghost"
             size="sm"
             disabled={isDownloading}
-            className="w-full bg-black border-neutral-800 text-neutral-400 hover:text-white rounded-none text-[8px] font-black uppercase tracking-widest h-7 justify-start gap-2"
+            className="w-full text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-none text-[8px] font-bold uppercase tracking-widest h-8 justify-start gap-3 px-2 border-l-2 border-transparent hover:border-gold transition-all"
           >
-            {isDownloading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+            {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5 text-gold" />}
             {isDownloading ? "Generating..." : "Download PDF"}
           </Button>
 
-          {/* Email Option */}
           <Button
             onClick={handleEmailInvoice}
             disabled={isEmailing}
-            variant="outline"
+            variant="ghost"
             size="sm"
-            className={`w-full border-neutral-800 rounded-none text-[8px] font-black uppercase tracking-widest h-7 justify-start gap-2 ${
-              emailStatus === "success" ? "bg-emerald-950/30 text-emerald-500 border-emerald-900" :
-              emailStatus === "error" ? "bg-red-950/30 text-red-500 border-red-900" :
-              "bg-black text-neutral-400 hover:text-white"
+            className={`w-full rounded-none text-[8px] font-bold uppercase tracking-widest h-8 justify-start gap-3 px-2 border-l-2 transition-all ${
+              emailStatus === "success" ? "text-emerald-400 border-emerald-500 bg-emerald-500/5" :
+              emailStatus === "error" ? "text-red-400 border-red-500 bg-red-500/5" :
+              "text-neutral-300 hover:text-white hover:bg-neutral-800 border-transparent hover:border-gold"
             }`}
           >
-            {isEmailing ? <Loader2 className="h-3 w-3 animate-spin" /> : 
-             emailStatus === "success" ? <Check className="h-3 w-3" /> :
-             emailStatus === "error" ? <AlertCircle className="h-3 w-3" /> :
-             <Mail className="h-3 w-3" />}
-            {isEmailing ? "Sending..." : emailStatus === "success" ? "Sent!" : emailStatus === "error" ? "Failed" : "Email to Client"}
+            {isEmailing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 
+             emailStatus === "success" ? <Check className="h-3.5 w-3.5" /> :
+             emailStatus === "error" ? <AlertCircle className="h-3.5 w-3.5" /> :
+             <Mail className="h-3.5 w-3.5 text-gold" />}
+            {isEmailing ? "Sending..." : emailStatus === "success" ? "Transmission Successful" : emailStatus === "error" ? "Dispatch Failed" : "Send to Client"}
           </Button>
 
-          {/* Close Options */}
           <button 
             onClick={() => setShowOptions(false)}
-            className="text-neutral-600 hover:text-neutral-400 text-[7px] font-black uppercase tracking-widest mt-1 underline"
+            className="w-full py-1.5 text-neutral-500 hover:text-white text-[8px] font-bold uppercase tracking-[0.1em] mt-1 transition-colors border-t border-neutral-800"
           >
             Cancel
           </button>

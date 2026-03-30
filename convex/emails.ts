@@ -141,18 +141,53 @@ export const sendInvoiceEmail = internalAction({
         to: toAddress,
         subject: `Invoice for your Luna Limo Journey - ${ride.pickupDate}`,
         html: `
-          <div style="font-family: Arial, sans-serif; background-color: #000; color: #fff; padding: 40px; border: 1px solid #333;">
-            <div style="text-align: center; margin-bottom: 40px;">
-              <h1 style="color: #C6A87C; font-size: 24px; font-style: italic;">Luna Limo</h1>
+          <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #000; color: #fff; padding: 60px 40px; border: 1px solid #333; max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+              <h1 style="color: #C6A87C; font-size: 28px; font-style: italic; text-transform: uppercase; letter-spacing: 5px; margin: 0;">Luna Limo</h1>
+              <p style="color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px;">Executive Chauffeur Service</p>
             </div>
-            <p>Dear ${ride.customerName},</p>
-            <p>Please find attached the official invoice for your recent executive transportation service.</p>
-            <p>We appreciate your business and look forward to serving you again soon.</p>
-            <br>
-            <p style="color: #888; font-size: 12px;">
-              Executive Dispatch Team<br>
-              ${settings.companyName}
+            
+            <div style="border-left: 2px solid #C6A87C; padding-left: 25px; margin-bottom: 40px;">
+              <h2 style="color: #fff; font-size: 18px; font-weight: normal; margin-bottom: 15px;">Official Invoice Attached</h2>
+              <p style="color: #ccc; line-height: 1.8; font-size: 15px;">
+                Dear ${ride.customerName || "Valued Client"},
+              </p>
+              <p style="color: #ccc; line-height: 1.8; font-size: 15px;">
+                Please find the official invoice for your recent journey with Luna Limo attached to this email. We hope you enjoyed the executive experience and the service met your highest expectations.
+              </p>
+            </div>
+
+            <div style="background-color: #111; padding: 25px; margin-bottom: 40px; border: 1px solid #222;">
+              <h3 style="color: #C6A87C; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; margin-bottom: 15px;">Service Summary</h3>
+              <table style="width: 100%; font-size: 14px; color: #ccc;">
+                <tr>
+                  <td style="padding: 5px 0; color: #888;">Date:</td>
+                  <td style="padding: 5px 0; text-align: right; color: #fff;">${ride.pickupDate}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px 0; color: #888;">Vehicle:</td>
+                  <td style="padding: 5px 0; text-align: right; color: #fff;">${ride.carTypeName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px 0; color: #888;">Amount:</td>
+                  <td style="padding: 5px 0; text-align: right; color: #C6A87C; font-weight: bold;">$${ride.price.toFixed(2)}</td>
+                </tr>
+              </table>
+            </div>
+
+            <p style="color: #888; line-height: 1.8; font-size: 14px; text-align: center;">
+              Thank you for choosing Luna Limo. We look forward to your next reservation.
             </p>
+            
+            <div style="margin-top: 50px; text-align: center; border-top: 1px solid #222; paddingTop: 30px;">
+              <p style="color: #C6A87C; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">
+                Luna Limo Worldwide
+              </p>
+              <p style="color: #555; font-size: 11px;">
+                ${settings.address}<br>
+                ${settings.phone} | ${settings.email}
+              </p>
+            </div>
           </div>
         `,
         attachments: [

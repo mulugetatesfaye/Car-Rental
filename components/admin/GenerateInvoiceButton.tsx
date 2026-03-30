@@ -18,8 +18,14 @@ export function GenerateInvoiceButton({ ride }: Props) {
   const sendInvoiceAction = useAction(api.actions.sendInvoice);
   
   const [isEmailing, setIsEmailing] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"idle" | "success" | "error">("idle");
   const [showOptions, setShowOptions] = useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Convert Blob to Base64 for the Convex Action
   const blobToBase64 = (blob: Blob): Promise<string> => {
@@ -64,6 +70,7 @@ export function GenerateInvoiceButton({ ride }: Props) {
       }
     } catch (error) {
       console.error("Invoicing Error:", error);
+      alert("Failed to generate or send the invoice email. Please check the browser console.");
       setEmailStatus("error");
     } finally {
       setIsEmailing(false);
@@ -71,9 +78,13 @@ export function GenerateInvoiceButton({ ride }: Props) {
   };
 
   const handleDownloadInvoice = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
     try {
+      console.log("Generating PDF for download...");
       const doc = <InvoicePDF ride={ride} settings={settings as any} />;
       const blob = await pdf(doc).toBlob();
+      console.log("PDF generated successfully, size:", blob.size);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -82,6 +93,9 @@ export function GenerateInvoiceButton({ ride }: Props) {
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download Error:", error);
+      alert("Failed to generate PDF download. Please check console for details.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -106,10 +120,11 @@ export function GenerateInvoiceButton({ ride }: Props) {
             onClick={handleDownloadInvoice}
             variant="outline"
             size="sm"
+            disabled={isDownloading}
             className="w-full bg-black border-neutral-800 text-neutral-400 hover:text-white rounded-none text-[8px] font-black uppercase tracking-widest h-7 justify-start gap-2"
           >
-            <Download className="h-3 w-3" />
-            Download PDF
+            {isDownloading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+            {isDownloading ? "Generating..." : "Download PDF"}
           </Button>
 
           {/* Email Option */}

@@ -10,14 +10,14 @@ export const notifyAdmins = internalAction({
   },
   handler: async (ctx, args) => {
     const allAdmins = await ctx.runQuery(internal.push.getAllAdmins);
-    const admins = allAdmins.filter(a => !!a.pushAlertSubscriberId);
+    const admins = allAdmins.filter((a: any) => !!a.pushAlertSubscriberId);
     
     console.log(`Push Alert: Found ${allAdmins.length} total admins, ${admins.length} with push IDs.`);
 
     if (admins.length === 0) {
       if (allAdmins.length > 0) {
         console.warn("Push Alert: Admins exist, but none have registered for push notifications yet.");
-        console.log("Admin Emails:", allAdmins.map(a => a.email).join(", "));
+        console.log("Admin Emails:", allAdmins.map((a: any) => a.email).join(", "));
       } else {
         console.warn("Push Alert: No admins found at all (isAdmin: true).");
       }

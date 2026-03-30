@@ -6,6 +6,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { CalendarDays, MapPin, Search, Filter, Download, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { GenerateInvoiceButton } from "@/components/admin/GenerateInvoiceButton";
 
 export default function AdminBookingsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -256,14 +257,15 @@ export default function AdminBookingsPage() {
                         Complete
                       </Button>
                    )}
-                   <Button 
-                      onClick={() => handleStatusChange(ride._id, "cancelled")}
-                      variant="outline" 
-                      size="sm" 
-                      className={`w-full bg-transparent border-neutral-800 text-neutral-500 hover:bg-red-900/20 hover:text-red-500 rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8 mt-auto ${ride.status === "completed" || ride.status === "cancelled" ? "hidden" : ""}`}
-                    >
-                      Cancel Ride
-                    </Button>
+                    <GenerateInvoiceButton ride={ride} />
+                    <Button 
+                       onClick={() => handleStatusChange(ride._id, "cancelled")}
+                       variant="outline" 
+                       size="sm" 
+                       className={`w-full bg-transparent border-neutral-800 text-neutral-500 hover:bg-red-900/20 hover:text-red-500 rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8 mt-auto ${ride.status === "completed" || ride.status === "cancelled" ? "hidden" : ""}`}
+                     >
+                       Cancel Ride
+                     </Button>
                 </div>
               </div>
             ))

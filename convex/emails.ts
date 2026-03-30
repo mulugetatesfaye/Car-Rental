@@ -117,3 +117,56 @@ export const sendBookingEmail = internalAction({
     }
   },
 });
+
+export const sendInvoiceEmail = internalAction({
+  args: {
+    rideId: v.id("rides"),
+    pdfBase64: v.string(), // The PDF generated on the client
+  },
+  handler: async (ctx, args) => {
+    const data = await ctx.runQuery(internal.emails.getEmailData, { rideId: args.rideId });
+    if (!data.ride || !data.settings) throw new Error("Data not found for invoice email");
+
+    const { ride, settings } = data;
+    
+    const fromAddress = "Luna Limo <onboarding@resend.dev>";
+    const toAddress = ride.customerEmail as string;
+    
+    const dateStr = new Date(ride.createdAt).toLocaleDateString().replace(/\//g, "-");
+    const attachmentName = `Invoice-LunaLimo-${dateStr}.pdf`;
+
+    try {
+      const resp = await resend.emails.send({
+        from: fromAddress,
+        to: toAddress,
+        subject: `Invoice for your Luna Limo Journey - ${ride.pickupDate}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; background-color: #000; color: #fff; padding: 40px; border: 1px solid #333;">
+            <div style="text-align: center; margin-bottom: 40px;">
+              <h1 style="color: #C6A87C; font-size: 24px; font-style: italic;">Luna Limo</h1>
+            </div>
+            <p>Dear ${ride.customerName},</p>
+            <p>Please find attached the official invoice for your recent executive transportation service.</p>
+            <p>We appreciate your business and look forward to serving you again soon.</p>
+            <br>
+            <p style="color: #888; font-size: 12px;">
+              Executive Dispatch Team<br>
+              ${settings.companyName}
+            </p>
+          </div>
+        `,
+        attachments: [
+          {
+            filename: attachmentName,
+            content: args.pdfBase64,
+          },
+        ],
+      });
+      console.log("Invoice email dispatched successfully:", resp);
+      return { success: true };
+    } catch (error) {
+      console.error("Failed to send invoice email:", error);
+      return { success: false, error: String(error) };
+    }
+  },
+});

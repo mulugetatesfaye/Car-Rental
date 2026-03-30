@@ -168,6 +168,7 @@ interface InvoicePDFProps {
     email: string;
     phone: string;
     address: string;
+    [key: string]: any;
   };
 }
 

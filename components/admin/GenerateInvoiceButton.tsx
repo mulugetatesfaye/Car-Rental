@@ -44,7 +44,7 @@ export function GenerateInvoiceButton({ ride }: Props) {
     
     try {
       // 1. Generate the PDF instance
-      const doc = <InvoicePDF ride={ride} settings={settings} />;
+      const doc = <InvoicePDF ride={ride} settings={settings as any} />;
       const blob = await pdf(doc).toBlob();
       
       // 2. Convert to base64
@@ -88,7 +88,7 @@ export function GenerateInvoiceButton({ ride }: Props) {
         <div className="flex flex-col gap-1 animate-in slide-in-from-right-2 duration-300">
           {/* Download Option */}
           <PDFDownloadLink
-            document={<InvoicePDF ride={ride} settings={settings} />}
+            document={<InvoicePDF ride={ride} settings={settings as any} />}
             fileName={`LunaLimo-${invoiceNumber}.pdf`}
             className="w-full"
           >

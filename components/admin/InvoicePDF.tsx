@@ -163,7 +163,12 @@ const styles = StyleSheet.create({
 
 interface InvoicePDFProps {
   ride: Doc<"rides">;
-  settings?: Doc<"settings">;
+  settings?: {
+    companyName: string;
+    email: string;
+    phone: string;
+    address: string;
+  };
 }
 
 export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {

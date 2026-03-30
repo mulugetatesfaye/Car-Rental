@@ -6,7 +6,7 @@ import Link from "next/link";
 import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import AdminHeader from "@/components/admin/admin-header";
+import AdminHeader, { NotificationBell } from "@/components/admin/admin-header";
 
 export default function AdminLayout({
   children,
@@ -48,14 +48,17 @@ export default function AdminLayout({
           <ShieldCheck className="h-5 w-5 text-gold" />
           <h2 className="font-serif text-sm font-black italic uppercase text-white tracking-widest">Admin</h2>
         </div>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={() => setIsSidebarOpen(true)}
-          className="text-gold"
-        >
-          <Menu className="h-6 w-6" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <NotificationBell align="right" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSidebarOpen(true)}
+            className="text-gold"
+          >
+            <Menu className="h-6 w-6" />
+          </Button>
+        </div>
       </header>
 
       {/* Mobile Sidebar Overlay */}

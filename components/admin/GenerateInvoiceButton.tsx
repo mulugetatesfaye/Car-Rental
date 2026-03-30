@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { FileText, Mail, Download, Check, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
+import { PDFDownloadLink, pdf, Document, Page, Text, View } from "@react-pdf/renderer";
 import { InvoicePDF } from "./InvoicePDF";
 
 interface Props {
@@ -81,19 +81,30 @@ export function GenerateInvoiceButton({ ride }: Props) {
     if (isDownloading) return;
     setIsDownloading(true);
     try {
-      console.log("Generating PDF for download...");
-      const doc = <InvoicePDF ride={ride} settings={settings as any} />;
-      const blob = await pdf(doc).toBlob();
+      console.log("Generating Minimal Test PDF...");
+      // Try rendering a very minimal doc to see if the library itself works
+      const testDoc = (
+        <Document>
+          <Page size="A4">
+            <View style={{ padding: 40 }}>
+              <Text>Luna Limo Invoice Test</Text>
+              <Text>ID: {ride._id}</Text>
+            </View>
+          </Page>
+        </Document>
+      );
+      
+      const blob = await pdf(testDoc).toBlob();
       console.log("PDF generated successfully, size:", blob.size);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `LunaLimo-${invoiceNumber}.pdf`;
+      link.download = `LunaLimo-Test-${ride._id.slice(-6)}.pdf`;
       link.click();
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Download Error:", error);
-      alert("Failed to generate PDF download. Please check console for details.");
+      console.error("Critical PDF Generation Error:", error);
+      alert("PDF library failed even with minimal doc. See console for error.");
     } finally {
       setIsDownloading(false);
     }

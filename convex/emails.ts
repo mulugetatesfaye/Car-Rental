@@ -10,7 +10,7 @@ const DEFAULT_SETTINGS = {
   companyName: "Luna Limo",
   email: "reservations@lunalimo.com",
   phone: "+1 (555) 123-4567",
-  address: "1902 E Yesler way, Seattle, WA 98122",
+  address: "123 Executive Way, NY, 10001",
   surgeMultiplier: 1.0,
   minimumFare: 50.0,
   notificationsEmail: true,

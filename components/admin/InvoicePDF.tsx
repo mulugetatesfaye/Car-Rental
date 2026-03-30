@@ -357,13 +357,13 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
         <View style={styles.addressSection}>
           <View style={styles.addressBlock}>
             <Text style={styles.sectionHeading}>Issued By Information</Text>
-            <Text style={styles.addressName}>{settings?.companyName || "Luna Limo Executive Service"}</Text>
+            <Text style={styles.addressName}>{settings?.companyName || "Luna Limo"}</Text>
             <Text style={styles.addressText}>
-              {settings?.address || "Global Reservation Center\n90210 Beverly Hills\nCalifornia, USA"}
+              {settings?.address || "123 Executive Way\nNY, 10001"}
             </Text>
             <View style={{ marginTop: 8 }}>
-              <Text style={styles.addressText}>{settings?.email || "concierge@lunalimo.com"}</Text>
-              <Text style={styles.addressText}>{settings?.phone || "+1 (555) LUNA-LIMO"}</Text>
+              <Text style={styles.addressText}>{settings?.email || "reservations@lunalimo.com"}</Text>
+              <Text style={styles.addressText}>{settings?.phone || "+1 (555) 123-4567"}</Text>
             </View>
           </View>
           <View style={styles.addressBlock}>

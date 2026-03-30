@@ -181,6 +181,21 @@ export default function AdminSettingsPage() {
 
         <div className="flex items-center gap-4">
            <Button 
+             type="button"
+             variant="outline"
+             onClick={() => setFormData({
+               ...formData,
+               companyName: "Luna Limo",
+               email: "concierge@lunalimo.com",
+               phone: "(206) 327-4411",
+               address: "1902 E Yesler way, Seattle, WA 98122",
+             })}
+             className="border-neutral-800 hover:border-gold text-neutral-500 hover:text-gold rounded-none font-black uppercase tracking-widest text-xs px-6 py-6"
+           >
+             Reset to Website Defaults
+           </Button>
+
+           <Button 
              type="submit" 
              disabled={isSaving}
              className="bg-gold hover:bg-gold-dark text-black rounded-none font-black uppercase tracking-widest text-xs px-8 py-6 flex items-center gap-2"

@@ -70,6 +70,21 @@ export function GenerateInvoiceButton({ ride }: Props) {
     }
   };
 
+  const handleDownloadInvoice = async () => {
+    try {
+      const doc = <InvoicePDF ride={ride} settings={settings as any} />;
+      const blob = await pdf(doc).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `LunaLimo-${invoiceNumber}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download Error:", error);
+    }
+  };
+
   const invoiceNumber = `INV-${ride._id.slice(-6).toUpperCase()}`;
 
   return (
@@ -87,23 +102,15 @@ export function GenerateInvoiceButton({ ride }: Props) {
       ) : (
         <div className="flex flex-col gap-1 animate-in slide-in-from-right-2 duration-300">
           {/* Download Option */}
-          <PDFDownloadLink
-            document={<InvoicePDF ride={ride} settings={settings as any} />}
-            fileName={`LunaLimo-${invoiceNumber}.pdf`}
-            className="w-full"
+          <Button
+            onClick={handleDownloadInvoice}
+            variant="outline"
+            size="sm"
+            className="w-full bg-black border-neutral-800 text-neutral-400 hover:text-white rounded-none text-[8px] font-black uppercase tracking-widest h-7 justify-start gap-2"
           >
-            {({ loading }) => (
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={loading}
-                className="w-full bg-black border-neutral-800 text-neutral-400 hover:text-white rounded-none text-[8px] font-black uppercase tracking-widest h-7 justify-start gap-2"
-              >
-                {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
-                Download PDF
-              </Button>
-            )}
-          </PDFDownloadLink>
+            <Download className="h-3 w-3" />
+            Download PDF
+          </Button>
 
           {/* Email Option */}
           <Button

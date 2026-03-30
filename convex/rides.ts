@@ -111,6 +111,14 @@ export const create = mutation({
       message: `A new ${args.carTypeName} booking was made by ${args.customerName}.`,
       url: `/admin/rides/${rideId}`
     });
+
+    // Create in-app notification
+    await ctx.scheduler.runAfter(0, internal.notifications.create, {
+      type: "new_booking",
+      title: "New Booking Received",
+      message: `${args.customerName} booked a ${args.carTypeName} for ${args.pickupDate}.`,
+      link: "/admin/bookings",
+    });
     
     return rideId;
   },
@@ -128,6 +136,7 @@ export const updateStatus = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const ride = await ctx.db.get(args.id);
     await ctx.db.patch(args.id, {
       status: args.status,
       updatedAt: Date.now(),
@@ -138,6 +147,16 @@ export const updateStatus = mutation({
       rideId: args.id, 
       type: "status_update",
       newStatus: args.status
+    });
+
+    // Create in-app notification for status changes
+    const notifType = args.status === "cancelled" ? "cancellation" as const : "status_update" as const;
+    const customerName = ride?.customerName || "A customer";
+    await ctx.scheduler.runAfter(0, internal.notifications.create, {
+      type: notifType,
+      title: args.status === "cancelled" ? "Booking Cancelled" : "Status Updated",
+      message: `${customerName}'s booking has been ${args.status.replace("_", " ")}.`,
+      link: "/admin/bookings",
     });
   },
 });

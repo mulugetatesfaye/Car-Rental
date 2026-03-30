@@ -87,4 +87,19 @@ export default defineSchema({
     notificationsEmail: v.boolean(),
     updatedAt: v.number(),
   }),
+
+  notifications: defineTable({
+    type: v.union(
+      v.literal("new_booking"),
+      v.literal("status_update"),
+      v.literal("cancellation"),
+      v.literal("system")
+    ),
+    title: v.string(),
+    message: v.string(),
+    link: v.optional(v.string()),
+    isRead: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_isRead", ["isRead"])
+    .index("by_createdAt", ["createdAt"]),
 });

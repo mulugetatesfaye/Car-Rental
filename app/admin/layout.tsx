@@ -6,6 +6,7 @@ import Link from "next/link";
 import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import AdminHeader from "@/components/admin/admin-header";
 
 export default function AdminLayout({
   children,
@@ -128,10 +129,16 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 bg-black overflow-y-auto relative">
-        <div className="absolute top-0 left-0 w-1 h-full bg-neutral-900/50 hidden md:block" />
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Professional Top Header Bar */}
+        <AdminHeader />
+        
+        {/* Page Content */}
+        <main className="flex-1 bg-black overflow-y-auto relative">
+          <div className="absolute top-0 left-0 w-1 h-full bg-neutral-900/50 hidden md:block" />
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

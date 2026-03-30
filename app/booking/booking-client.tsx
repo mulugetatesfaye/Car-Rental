@@ -28,44 +28,13 @@ import { createRide } from "@/lib/convex/api";
 import { calculateRouteBetween } from "@/lib/tomtom/routing";
 import { formatDuration, formatDistance } from "@/lib/utils";
 import { formatPrice, calculatePrice } from "@/lib/pricing";
-import type { SearchResult } from "@/lib/tomtom/search";
 import type { CarType } from "@/lib/pricing";
+import { useSearchParams } from "next/navigation";
+import { geocodeAddress } from "@/lib/tomtom/search";
+import type { SearchResult } from "@/lib/tomtom/search";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-const DEFAULT_CAR_TYPES: CarType[] = [
-  {
-    name: "Executive Sedan",
-    description: "Mercedes E-Class or similar.",
-    image: "/fleet_black_bg.png",
-    baseFare: 25,
-    perKmRate: 2.5,
-    perMinuteRate: 0.5,
-    multiplier: 1.0,
-    capacity: 3,
-    isActive: true,
-  },
-  {
-    name: "Luxury SUV",
-    description: "Cadillac Escalade or similar.",
-    image: "/fleet_black_bg.png",
-    baseFare: 45,
-    perKmRate: 3.5,
-    perMinuteRate: 0.7,
-    multiplier: 1.4,
-    capacity: 6,
-    isActive: true,
-  },
-  {
-    name: "Premium Electric",
-    description: "Tesla Model S or similar.",
-    image: "/fleet_black_bg.png",
-    baseFare: 55,
-    perKmRate: 4.0,
-    perMinuteRate: 0.8,
-    multiplier: 1.6,
-    capacity: 4,
-    isActive: true,
-  },
-];
 
 interface BookingOptions {
   passengers: number;
@@ -78,11 +47,15 @@ interface BookingOptions {
   customerPhone: string;
 }
 
-import { useSearchParams } from "next/navigation";
-import { geocodeAddress } from "@/lib/tomtom/search";
-
 export default function BookingClient() {
   const searchParams = useSearchParams();
+  const dbCarTypes = useQuery(api.carTypes.list);
+  
+  // Filter active car types
+  const activeCarTypes = React.useMemo(() => {
+    return dbCarTypes?.filter((car: CarType) => car.isActive) || [];
+  }, [dbCarTypes]);
+
   const {
     pickup,
     destination,
@@ -178,10 +151,10 @@ export default function BookingClient() {
   }, [searchParams]);
 
   React.useEffect(() => {
-    if (!selectedCar) {
-      setSelectedCar(DEFAULT_CAR_TYPES[0]);
+    if (activeCarTypes.length > 0 && !selectedCar) {
+      setSelectedCar(activeCarTypes[0]);
     }
-  }, []);
+  }, [activeCarTypes, selectedCar, setSelectedCar]);
 
   const handlePickupSelect = async (location: SearchResult | null) => {
     setPickup(location);
@@ -241,7 +214,7 @@ export default function BookingClient() {
     setPickup(null);
     setDestination(null);
     setRoute(null);
-    setSelectedCar(DEFAULT_CAR_TYPES[0]);
+    setSelectedCar(activeCarTypes[0] || null);
     setStep("pickup");
     setBookingStep("trip");
     setOptions({
@@ -436,48 +409,55 @@ export default function BookingClient() {
                    <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
                     Select Vehicle
                   </h2>
-                  <div className="space-y-2 sm:space-y-4">
-                    {DEFAULT_CAR_TYPES.map((car) => (
-                      <button
-                        key={car.name}
-                        onClick={() => setSelectedCar(car)}
-                        className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
-                          selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
-                        }`}
-                      >
-                         {/* Compact icon for mobile, image card for desktop */}
-                         <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
-                           <Image 
-                             src="/fleet_black_bg.png"
-                             alt={car.name}
-                             fill
-                             className="object-cover opacity-50 group-hover:scale-110 transition-transform duration-700"
-                           />
-                           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-                           <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
-                         </div>
-                         <div className="flex sm:hidden w-10 h-10 bg-neutral-800/60 items-center justify-center flex-shrink-0 border border-neutral-800">
-                           <Car className="h-5 w-5 text-gold" />
-                         </div>
+                   <div className="space-y-2 sm:space-y-4">
+                    {activeCarTypes.length === 0 ? (
+                      <div className="py-20 text-center border border-neutral-800 bg-neutral-900/30">
+                        <Loader2 className="h-8 w-8 animate-spin text-gold mx-auto mb-4" />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Retrieving Elite Fleet...</p>
+                      </div>
+                    ) : (
+                      activeCarTypes.map((car) => (
+                        <button
+                          key={car.name}
+                          onClick={() => setSelectedCar(car)}
+                          className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
+                            selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
+                          }`}
+                        >
+                           {/* Compact icon for mobile, image card for desktop */}
+                           <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
+                             <Image 
+                               src={car.image || "/fleet_black_bg.png"}
+                               alt={car.name}
+                               fill
+                               className="object-cover opacity-50 group-hover:scale-110 transition-transform duration-700"
+                             />
+                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                             <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
+                           </div>
+                           <div className="flex sm:hidden w-10 h-10 bg-neutral-800/60 items-center justify-center flex-shrink-0 border border-neutral-800">
+                             <Car className="h-5 w-5 text-gold" />
+                           </div>
 
-                         <div className="flex-1 text-left min-w-0">
-                            <h4 className="font-serif text-sm sm:text-lg text-white truncate">{car.name}</h4>
-                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-[0.15em] text-neutral-500 mt-0.5">{car.description}</p>
-                            <div className="flex items-center gap-3 sm:gap-6 mt-1 sm:mt-2">
-                               <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                                 <Users className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
-                               </span>
-                               <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                                 <Luggage className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
-                               </span>
-                            </div>
-                         </div>
-                         <div className="text-right flex-shrink-0">
-                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-widest text-neutral-500 mb-1">From</p>
-                            <p className="font-serif text-lg sm:text-2xl text-gold">{formatPrice(car.baseFare)}</p>
-                         </div>
-                      </button>
-                    ))}
+                           <div className="flex-1 text-left min-w-0">
+                              <h4 className="font-serif text-sm sm:text-lg text-white truncate">{car.name}</h4>
+                              <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-[0.15em] text-neutral-500 mt-0.5 whitespace-normal line-clamp-1">{car.description}</p>
+                              <div className="flex items-center gap-3 sm:gap-6 mt-1 sm:mt-2">
+                                 <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                                   <Users className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                                 </span>
+                                 <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                                   <Luggage className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                                 </span>
+                              </div>
+                           </div>
+                           <div className="text-right flex-shrink-0">
+                              <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-widest text-neutral-500 mb-1">From</p>
+                              <p className="font-serif text-lg sm:text-2xl text-gold">{formatPrice(car.baseFare)}</p>
+                           </div>
+                        </button>
+                      ))
+                    )}
                   </div>
                 </section>
               )}

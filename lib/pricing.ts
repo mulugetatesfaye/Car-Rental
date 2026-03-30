@@ -9,6 +9,8 @@ export interface CarType {
   multiplier: number;
   capacity: number;
   isActive: boolean;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export interface PricingResult {

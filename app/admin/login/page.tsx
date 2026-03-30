@@ -15,25 +15,20 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // In a real application, you might want to disable sign-up completely
-  // and only allow an existing admin to create other admins. For this demo,
-  // we'll leave it as a toggle, or you can force it to "signIn" in production.
+  // Sign-up is disabled completely to prevent unauthorized admin creation.
+  // Admins must be promoted via the backend or created by an existing super-admin.
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setIsLoading(true);
     
-    // We get the submitter button name to determine the flow
-    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
-    const requestedFlow = submitter?.name === "signUp" ? "signUp" : "signIn";
-    
     const formData = new FormData(event.currentTarget);
     const password = formData.get("password") as string;
     const email = formData.get("email") as string;
     
     try {
-      await signIn("password", { email, password, flow: requestedFlow });
+      await signIn("password", { email, password, flow: "signIn" });
       // Use window.location.href to guarantee a full page reload so Next.js proxy.ts sees the newly set cookie.
       window.location.href = "/admin";
     } catch (err: any) {
@@ -53,7 +48,7 @@ export default function AdminLoginPage() {
         <div className="mb-10 text-center">
           <ShieldCheck className="h-12 w-12 text-gold mx-auto mb-6" />
           <h3 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-4">Luna Limo</h3>
-          <h4 className="font-serif text-3xl font-black italic uppercase text-white">Commander</h4>
+          <h4 className="font-serif text-3xl font-black italic uppercase text-white">Admin</h4>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -94,16 +89,6 @@ export default function AdminLoginPage() {
               className="w-full bg-gold hover:bg-gold-dark text-white rounded-none py-6 text-[11px] font-black uppercase tracking-[0.3em] border-b-4 border-gold-dark transition-all flex items-center justify-center gap-3 disabled:opacity-50"
             >
               {isLoading ? "Authenticating..." : "Authorize Access"}
-            </Button>
-            
-            <Button 
-              type="submit" 
-              name="signUp"
-              variant="outline"
-              disabled={isLoading}
-              className="w-full bg-transparent border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-none py-6 text-[9px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-            >
-               Create Commander Account
             </Button>
           </div>
         </form>

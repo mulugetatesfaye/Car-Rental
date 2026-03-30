@@ -45,7 +45,7 @@ export default function AdminLayout({
       <header className="md:hidden bg-neutral-900 border-b border-neutral-800 p-4 flex items-center justify-between z-40">
         <div className="flex items-center gap-3">
           <ShieldCheck className="h-5 w-5 text-gold" />
-          <h2 className="font-serif text-sm font-black italic uppercase text-white tracking-widest">Commander</h2>
+          <h2 className="font-serif text-sm font-black italic uppercase text-white tracking-widest">Admin</h2>
         </div>
         <Button 
           variant="ghost" 
@@ -76,7 +76,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-4">
               <ShieldCheck className="h-6 w-6 text-gold" />
               <div>
-                <h2 className="font-serif text-lg font-black italic uppercase text-white tracking-wider">Commander</h2>
+                <h2 className="font-serif text-lg font-black italic uppercase text-white tracking-wider">Admin</h2>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">Luna Limo</p>
               </div>
             </div>

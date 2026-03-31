@@ -11,6 +11,7 @@ export default function AdminVehiclesPage() {
   const cars = useQuery(api.carTypes.list);
   const updateVehicle = useMutation(api.carTypes.update);
   const createVehicle = useMutation(api.carTypes.create);
+  const deleteVehicle = useMutation(api.carTypes.remove);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [editingVehicle, setEditingVehicle] = React.useState<Doc<"carTypes"> | null>(null);
@@ -77,6 +78,15 @@ export default function AdminVehiclesPage() {
     }
   };
 
+  const handleDelete = async (vehicle: Doc<"carTypes">) => {
+    if (!confirm(`Are you sure you want to delete "${vehicle.name}"? This cannot be undone.`)) return;
+    try {
+      await deleteVehicle({ id: vehicle._id });
+    } catch (err) {
+      console.error("Failed to delete vehicle", err);
+    }
+  };
+
   if (cars === undefined) {
     return <div className="p-12 text-center text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em]">Loading fleet configuration...</div>;
   }
@@ -132,21 +142,31 @@ export default function AdminVehiclesPage() {
                  </p>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-neutral-800 flex flex-wrap gap-4 justify-between items-center">
-                 <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${
-                   car.isActive ? "bg-emerald-950/30 text-emerald-500 border-emerald-900/50" : "bg-neutral-800/30 text-neutral-500 border-neutral-700"
-                 }`}>
-                    {car.isActive ? "Online" : "Offline"}
-                 </span>
-                 <Button 
-                   onClick={() => handleEdit(car)}
-                   variant="outline" 
-                   size="sm" 
-                   className="bg-transparent text-gold border-gold/30 hover:bg-gold hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest"
-                 >
-                    Edit Settings
-                 </Button>
-              </div>
+               <div className="mt-6 pt-6 border-t border-neutral-800 flex flex-wrap gap-4 justify-between items-center">
+                  <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${
+                    car.isActive ? "bg-emerald-950/30 text-emerald-500 border-emerald-900/50" : "bg-neutral-800/30 text-neutral-500 border-neutral-700"
+                  }`}>
+                     {car.isActive ? "Online" : "Offline"}
+                  </span>
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={() => handleEdit(car)}
+                      variant="outline" 
+                      size="sm" 
+                      className="bg-transparent text-gold border-gold/30 hover:bg-gold hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest"
+                    >
+                       Edit Settings
+                    </Button>
+                    <Button 
+                      onClick={() => handleDelete(car)}
+                      variant="outline" 
+                      size="sm" 
+                      className="bg-transparent text-red-500 border-red-900/50 hover:bg-red-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest"
+                    >
+                       Delete
+                    </Button>
+                  </div>
+               </div>
            </div>
         ))}
       </div>

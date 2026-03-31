@@ -14,9 +14,76 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Seattle Wedding Limo | Luxury Wedding Transportation & Bridal Cars",
+  title: "Seattle Wedding Limo | Luxury Wedding Transportation - Luna Limo",
   description: "Make your special day perfect with Seattle's premier wedding limo service. Elegant bridal cars, wedding party transportation, and professional chauffeurs. Red carpet service included.",
-  keywords: ["Luna Limoz", "Luna Limo", "Seattle Wedding Limo", "Wedding Transportation Seattle", "Bridal Car Seattle", "Wedding Chauffeur Seattle", "Luxury Wedding Car"],
+  keywords: ["Luna Limo", "Seattle wedding limo", "wedding transportation Seattle", "bridal car Seattle", "wedding chauffeur Seattle", "luxury wedding car Seattle", "prom limo Seattle"],
+  alternates: {
+    canonical: "https://lunalimoz.com/services/seattle-wedding-limo"
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How far in advance should I book a wedding limo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We recommend booking your wedding limo 6-12 months in advance, especially for peak wedding season (May-October). This ensures availability of your preferred vehicle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide decorations for wedding vehicles?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we offer customizable vehicle decorations including ribbons, flowers, and 'Just Married' signs upon request. Please discuss your preferences during booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you coordinate multiple vehicles for a wedding party?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. Luna Limo can coordinate a fleet of matching vehicles for the entire wedding party, including shuttles for guests between venues."
+      }
+    }
+  ]
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Wedding Limo Service",
+  "provider": {
+    "@type": "Organization",
+    "name": "Luna Limo",
+    "url": "https://lunalimoz.com"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Seattle"
+  },
+  "description": "Luxury wedding limousine service with red carpet, champagne toast, and professional chauffeurs for your special day in Seattle.",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "299.00",
+    "priceValidUntil": "2026-12-31",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lunalimoz.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://lunalimoz.com/services" },
+    { "@type": "ListItem", "position": 3, "name": "Wedding Limo", "item": "https://lunalimoz.com/services/seattle-wedding-limo" }
+  ]
 };
 
 export default function WeddingLimoPage() {
@@ -189,7 +256,21 @@ export default function WeddingLimoPage() {
               </div>
            </div>
         </section>
-      </main>
+       </main>
+
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </div>
   );
 }

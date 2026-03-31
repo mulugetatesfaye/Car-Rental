@@ -401,7 +401,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
           <View style={styles.journeyRow}>
             <View style={styles.journeyItem}>
               <Text style={styles.journeyLabel}>Total Distance</Text>
-              <Text style={styles.journeyValue}>{ride.distance.toFixed(2)} Miles</Text>
+              <Text style={styles.journeyValue}>{ride.distance.toFixed(2)} km</Text>
             </View>
             <View style={styles.journeyItem}>
               <Text style={styles.journeyLabel}>Passengers / Luggage</Text>
@@ -432,7 +432,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
             <View style={{ flex: 3 }}>
               <Text style={styles.cellDescription}>Executive {ride.carTypeName} Reservation</Text>
               <Text style={{ fontSize: 7, color: "#999", marginTop: 4 }}>
-                Private transportation services calculated by per-mile executive rates plus base fare.
+                Private transportation services calculated by per-km executive rates plus base fare.
               </Text>
             </View>
             <Text style={styles.cellQty}>1</Text>

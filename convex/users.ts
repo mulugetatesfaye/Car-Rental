@@ -1,6 +1,13 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("users").order("desc").take(500);
+  },
+});
+
 export const get = query({
   args: { id: v.id("users") },
   handler: async (ctx, args) => {
@@ -83,14 +90,11 @@ export const updatePushIdByEmail = mutation({
 });
 
 export const makeAdmin = mutation({
-  args: { email: v.string() },
+  args: { userId: v.id("users"), isAdmin: v.boolean() },
   handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
-      .unique();
+    const user = await ctx.db.get(args.userId);
     if (!user) throw new Error("User not found");
-    await ctx.db.patch(user._id, { isAdmin: true });
+    await ctx.db.patch(args.userId, { isAdmin: args.isAdmin });
     return true;
   },
 });

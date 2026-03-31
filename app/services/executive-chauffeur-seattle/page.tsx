@@ -16,9 +16,76 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Executive Chauffeur Seattle | Corporate Car Service & Private Driver",
+  title: "Executive Chauffeur Seattle | Corporate Car Service - Luna Limo",
   description: "Elite executive chauffeur services in Seattle. Professional private drivers for corporate travel, business meetings, and high-profile events. Discretion and luxury guaranteed.",
-  keywords: ["Luna Limoz", "Luna Limo", "Executive Chauffeur Seattle", "Corporate Car Service Seattle", "Private Driver Seattle", "Business Travel Seattle", "Seattle Luxury Chauffeur"],
+  keywords: ["Luna Limo", "executive chauffeur Seattle", "corporate car service Seattle", "private driver Seattle", "business travel Seattle", "luxury chauffeur Seattle", "corporate transportation Seattle"],
+  alternates: {
+    canonical: "https://lunalimoz.com/services/executive-chauffeur-seattle"
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do you offer corporate accounts for businesses?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Luna Limo offers streamlined corporate accounts with priority booking, consolidated billing, and dedicated account managers for Seattle businesses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I book a chauffeur for multiple days?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. We offer daily, weekly, and monthly chauffeur services for extended business trips, conferences, and ongoing corporate transportation needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What areas do you serve for executive transportation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We serve the entire Seattle metropolitan area including Downtown Seattle, Bellevue, Redmond, Kirkland, and surrounding areas."
+      }
+    }
+  ]
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Executive Chauffeur Service",
+  "provider": {
+    "@type": "Organization",
+    "name": "Luna Limo",
+    "url": "https://lunalimoz.com"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Seattle"
+  },
+  "description": "Professional executive chauffeur service for corporate travel, business meetings, and high-profile events in Seattle.",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "95.00",
+    "priceValidUntil": "2026-12-31",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lunalimoz.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://lunalimoz.com/services" },
+    { "@type": "ListItem", "position": 3, "name": "Executive Chauffeur", "item": "https://lunalimoz.com/services/executive-chauffeur-seattle" }
+  ]
 };
 
 export default function ExecutiveChauffeurPage() {
@@ -188,6 +255,20 @@ export default function ExecutiveChauffeurPage() {
           </div>
         </section>
       </main>
+
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </div>
   );
 }

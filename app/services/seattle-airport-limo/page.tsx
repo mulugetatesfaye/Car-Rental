@@ -16,9 +16,84 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Seattle Airport Limo Service | Sea-Tac Luxury Transfers",
-  description: "Premier Seattle airport limo service to and from Sea-Tac International. Punctual, professional chauffeurs, flat rates, and a luxury fleet. Book your airport transfer today.",
-  keywords: ["Luna Limoz", "Luna Limo", "Sea-Tac Limo", "Seattle Airport Transfer", "Limo Service Seattle Airport", "Airport Black Car Seattle", "Sea-Tac Chauffeur"],
+  title: "Seattle Airport Limo Service | Sea-Tac Luxury Transfers - Luna Limo",
+  description: "Premier Seattle airport limo service to and from Sea-Tac International. 24/7 punctual chauffeurs, flat rates, flight tracking, and luxury fleet. Book your airport transfer today.",
+  keywords: ["Luna Limo", "Sea-Tac limo service", "Seattle airport transfer", "airport limo Seattle", "Sea-Tac chauffeur", "luxury airport car Seattle", "airport black car Seattle"],
+  alternates: {
+    canonical: "https://lunalimoz.com/services/seattle-airport-limo"
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where do I meet my driver at Sea-Tac?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our standard service is curbside pickup. For 'Meet & Greet' service, your chauffeur will wait at the arrival level baggage claim for your specific flight with a name board."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if my flight is delayed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No need to worry. We track your flight number in real-time and adjust your pickup time automatically. We will be there whenever you land."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many passengers can you accommodate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our Premium SUVs accommodate up to 6-7 passengers with luggage, while our Executive Sedans are perfect for up to 3 passengers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are car seats available for family airport travel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we provide booster and toddler seats upon request. Please specify your requirements during the booking process."
+      }
+    }
+  ]
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Airport Limo Service",
+  "provider": {
+    "@type": "Organization",
+    "name": "Luna Limo",
+    "url": "https://lunalimoz.com"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Seattle"
+  },
+  "description": "Professional airport limousine service to and from Sea-Tac Airport with luxury vehicles and experienced chauffeurs. Flight tracking, meet & greet, and fixed pricing included.",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "75.00",
+    "priceValidUntil": "2026-12-31",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lunalimoz.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://lunalimoz.com/services" },
+    { "@type": "ListItem", "position": 3, "name": "Airport Limo", "item": "https://lunalimoz.com/services/seattle-airport-limo" }
+  ]
 };
 
 export default function AirportLimoPage() {
@@ -248,6 +323,20 @@ export default function AirportLimoPage() {
           </div>
         </div>
       </footer>
+
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </div>
   );
 }

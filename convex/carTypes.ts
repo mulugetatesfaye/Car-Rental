@@ -4,7 +4,7 @@ import { v } from "convex/values";
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("carTypes").collect();
+    return await ctx.db.query("carTypes").take(50);
   },
 });
 
@@ -18,7 +18,7 @@ export const getById = query({
 export const seedCarTypes = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const existing = await ctx.db.query("carTypes").collect();
+    const existing = await ctx.db.query("carTypes").take(50);
     if (existing.length > 0) return;
 
     const carTypes = [

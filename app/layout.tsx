@@ -52,47 +52,86 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Luna Limo",
-  "alternateName": "Luna Limoz",
-  "image": "https://lunalimoz.com/luna-logo.png",
-  "@id": "https://lunalimoz.com",
-  "url": "https://lunalimoz.com",
-  "telephone": "+12063274411",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "1902 E Yesler way",
-    "addressLocality": "Seattle",
-    "addressRegion": "WA",
-    "postalCode": "98122",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 47.6062,
-    "longitude": -122.3321
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Luna Limo",
+    "alternateName": "Luna Limoz",
+    "image": "https://lunalimoz.com/luna-logo.png",
+    "@id": "https://lunalimoz.com",
+    "url": "https://lunalimoz.com",
+    "telephone": "+12063274411",
+    "priceRange": "$$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1902 E Yesler way",
+      "addressLocality": "Seattle",
+      "addressRegion": "WA",
+      "postalCode": "98122",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 47.6062,
+      "longitude": -122.3321
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "sameAs": [
+      "https://facebook.com/lunalimo",
+      "https://instagram.com/lunalimo"
     ],
-    "opens": "00:00",
-    "closes": "23:59"
+    "areaServed": [
+      { "@type": "City", "name": "Seattle" },
+      { "@type": "City", "name": "Bellevue" },
+      { "@type": "City", "name": "Redmond" },
+      { "@type": "City", "name": "Kirkland" },
+      { "@type": "City", "name": "Tacoma" }
+    ]
   },
-  "sameAs": [
-    "https://facebook.com/lunalimo",
-    "https://instagram.com/lunalimo"
-  ]
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Luna Limo",
+    "alternateName": "Luna Limoz",
+    "url": "https://lunalimoz.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://lunalimoz.com/fleet?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Luna Limo",
+    "url": "https://lunalimoz.com",
+    "logo": "https://lunalimoz.com/luna-logo.png",
+    "sameAs": [
+      "https://facebook.com/lunalimo",
+      "https://instagram.com/lunalimo"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-206-327-4411",
+      "contactType": "customer service",
+      "availableLanguage": "English"
+    }
+  }
+];
 
 import { Header } from "@/components/global/header";
 import { Footer } from "@/components/global/footer";

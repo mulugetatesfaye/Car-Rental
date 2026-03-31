@@ -15,9 +15,76 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Seattle City Tours & Woodinville Wine Limo | Luxury Sightseeing",
+  title: "Seattle City Tours & Woodinville Wine Limo | Luxury Sightseeing - Luna Limo",
   description: "Explore the Pacific Northwest in style. Premium Seattle city tours, Woodinville wine tasting transportation, and private sightseeing in luxury limousines and SUVs.",
-  keywords: ["Luna Limoz", "Luna Limo", "Seattle City Tour Limo", "Woodinville Wine Tour", "Seattle Sightseeing Limo", "Private Wine Tour Seattle", "Luxury Tour Car"],
+  keywords: ["Luna Limo", "Seattle city tour limo", "Woodinville wine tour", "Seattle sightseeing limo", "private wine tour Seattle", "luxury tour car Seattle", "Seattle limo tour"],
+  alternates: {
+    canonical: "https://lunalimoz.com/services/seattle-city-tour-limo"
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long is a typical Seattle city tour?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our Seattle city tours typically range from 3-6 hours depending on your itinerary. We customize each tour to include your preferred landmarks and attractions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer Woodinville wine tours?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our Woodinville wine tours include visits to premier wineries like Chateau Ste. Michelle and Delille Cellars with a professional chauffeur so you can enjoy every tasting safely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you customize the tour route?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. Every tour is fully customizable. Our chauffeurs know the best photo spots and hidden gems throughout Seattle and the Pacific Northwest."
+      }
+    }
+  ]
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "City Tour & Wine Tour Limo Service",
+  "provider": {
+    "@type": "Organization",
+    "name": "Luna Limo",
+    "url": "https://lunalimoz.com"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Seattle"
+  },
+  "description": "Luxury city tour and wine tour limousine service in Seattle and Woodinville. Customizable itineraries with professional chauffeurs.",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "150.00",
+    "priceValidUntil": "2026-12-31",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lunalimoz.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://lunalimoz.com/services" },
+    { "@type": "ListItem", "position": 3, "name": "City Tours", "item": "https://lunalimoz.com/services/seattle-city-tour-limo" }
+  ]
 };
 
 export default function CityTourLimoPage() {
@@ -182,7 +249,21 @@ export default function CityTourLimoPage() {
               </div>
            </div>
         </section>
-      </main>
+       </main>
+
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </div>
   );
 }

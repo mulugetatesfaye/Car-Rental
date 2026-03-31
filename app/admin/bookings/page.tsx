@@ -1,12 +1,13 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
+import { usePaginatedQuery, useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { CalendarDays, MapPin, Search, Filter, Download, MessageSquare } from "lucide-react";
+import { CalendarDays, MapPin, Search, Download, MessageSquare, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { GenerateInvoiceButton } from "@/components/admin/GenerateInvoiceButton";
+import Link from "next/link";
 
 export default function AdminBookingsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -15,17 +16,25 @@ export default function AdminBookingsPage() {
   const [activeNoteId, setActiveNoteId] = useState<Id<"rides"> | null>(null);
   const [noteText, setNoteText] = useState("");
 
-  const rides = useQuery(api.rides.list, { 
+  const { results: paginatedRides, status: paginationStatus, loadMore } = usePaginatedQuery(
+    api.rides.listPaginated,
+    { status: statusFilter !== "all" ? statusFilter : undefined },
+    { initialNumItems: 20 }
+  );
+  
+  const ridesWithDateFilter = useQuery(api.rides.list, { 
     status: statusFilter !== "all" ? statusFilter : undefined,
     startDate: dateRange.start || undefined,
     endDate: dateRange.end || undefined
   });
+  
   const searchResults = useQuery(api.rides.search, { query: searchQuery });
   
   const updateStatus = useMutation(api.rides.updateStatus);
   const addNote = useMutation(api.rides.addNote);
 
-  const displayedRides = searchQuery ? searchResults : rides;
+  const hasDateFilter = dateRange.start || dateRange.end;
+  const displayedRides = searchQuery ? searchResults : hasDateFilter ? ridesWithDateFilter : paginatedRides;
 
   const handleStatusChange = async (id: Id<"rides">, status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled") => {
     try {
@@ -44,6 +53,37 @@ export default function AdminBookingsPage() {
     } catch (error) {
       console.error("Failed to add note:", error);
     }
+  };
+
+  const handleExportCSV = () => {
+    if (!displayedRides || displayedRides.length === 0) return;
+    
+    const headers = ["Status", "Customer", "Email", "Phone", "Pickup Date", "Pickup Time", "Pickup Address", "Destination", "Vehicle", "Price", "Distance (km)", "Passengers", "Luggage", "Notes"];
+    const rows = displayedRides.map((ride) => [
+      ride.status,
+      `"${(ride.customerName || "").replace(/"/g, '""')}"`,
+      ride.customerEmail,
+      ride.customerPhone,
+      ride.pickupDate,
+      ride.pickupTime || "TBD",
+      `"${(ride.pickupAddress || "").replace(/"/g, '""')}"`,
+      `"${(ride.destinationAddress || "").replace(/"/g, '""')}"`,
+      ride.carTypeName,
+      ride.price.toFixed(2),
+      ride.distance.toFixed(1),
+      ride.passengers,
+      ride.luggage,
+      `"${(ride.notes || "").replace(/"/g, '""')}"`
+    ]);
+    
+    const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `luna-limo-bookings-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -110,7 +150,7 @@ export default function AdminBookingsPage() {
                <CalendarDays className="h-4 w-4" /> 
                {searchQuery ? "Search Results" : "Filtered Reservations"}
             </h2>
-            <Button variant="outline" size="sm" className="bg-transparent border-neutral-700 text-neutral-400 hover:text-white rounded-none text-[9px] uppercase tracking-widest h-8 hidden sm:flex">
+            <Button onClick={handleExportCSV} variant="outline" size="sm" className="bg-transparent border-neutral-700 text-neutral-400 hover:text-white rounded-none text-[9px] uppercase tracking-widest h-8 hidden sm:flex">
               <Download className="h-3 w-3 mr-2" /> Export CSV
             </Button>
         </div>
@@ -125,7 +165,7 @@ export default function AdminBookingsPage() {
                No reservations found
              </div>
           ) : (
-            displayedRides.map((ride) => (
+             displayedRides.map((ride) => (
               <div key={ride._id} className="p-4 md:p-6 flex flex-col lg:flex-row lg:items-start justify-between gap-6 hover:bg-neutral-800/20 transition-colors">
                 
                 {/* Info */}
@@ -142,7 +182,10 @@ export default function AdminBookingsPage() {
                      </span>
                      <p className="text-white font-bold text-xs md:text-sm whitespace-nowrap">{ride.pickupDate} at {ride.pickupTime || "TBD"}</p>
                      <div className="hidden md:block h-4 w-px bg-neutral-800" />
-                     <p className="text-gold font-serif text-lg md:text-xl font-black italic uppercase tracking-tighter truncate">{ride.customerName}</p>
+                     <Link href={`/admin/bookings/${ride._id}`} className="text-gold font-serif text-lg md:text-xl font-black italic uppercase tracking-tighter truncate hover:underline flex items-center gap-1">
+                       {ride.customerName}
+                       <ChevronRight className="h-4 w-4" />
+                     </Link>
                      <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest ml-auto md:ml-0 bg-neutral-900 border border-neutral-800 px-2 py-1">{ride.carTypeName}</p>
                   </div>
                   
@@ -271,6 +314,18 @@ export default function AdminBookingsPage() {
             ))
           )}
         </div>
+        
+        {!searchQuery && !hasDateFilter && paginationStatus === "CanLoadMore" && (
+          <div className="p-6 border-t border-neutral-800 flex justify-center">
+            <Button 
+              onClick={() => loadMore(20)}
+              variant="outline"
+              className="bg-transparent border-neutral-700 text-neutral-400 hover:text-gold hover:border-gold/30 rounded-none text-[10px] font-black uppercase tracking-widest px-8 py-4"
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </section>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Settings, Save, Building, Phone, Mail, DollarSign, Clock } from "lucide-react";
+import { Settings, Save, Building, Phone, Mail, DollarSign, Clock, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
@@ -141,43 +141,69 @@ export default function AdminSettingsPage() {
           </div>
         </section>
 
-        {/* Pricing Rules */}
-        <section className="bg-neutral-900 border border-neutral-800">
-          <div className="p-6 border-b border-neutral-800 flex items-center gap-2">
-             <DollarSign className="h-4 w-4 text-gold" />
-             <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Rates &amp; Rules</h2>
-          </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div className="space-y-2">
-                <label className="text-neutral-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                   <DollarSign className="h-3 w-3" /> Minimum Fare ($)
-                </label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  min="0"
-                  name="minimumFare"
-                  value={formData.minimumFare}
-                  onChange={handleChange}
-                  className="w-full bg-black border border-neutral-800 p-3 text-sm text-white focus:border-gold outline-none"
-                />
-             </div>
-             <div className="space-y-2">
-                <label className="text-neutral-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                   <Clock className="h-3 w-3" /> Surge Multiplier
-                </label>
-                <input 
-                  type="number" 
-                  step="0.1"
-                  min="1"
-                  name="surgeMultiplier"
-                  value={formData.surgeMultiplier}
-                  onChange={handleChange}
-                  className="w-full bg-black border border-neutral-800 p-3 text-sm text-white focus:border-gold outline-none"
-                />
-             </div>
-          </div>
-        </section>
+         {/* Pricing Rules */}
+         <section className="bg-neutral-900 border border-neutral-800">
+           <div className="p-6 border-b border-neutral-800 flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-gold" />
+              <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Rates &amp; Rules</h2>
+           </div>
+           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="text-neutral-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <DollarSign className="h-3 w-3" /> Minimum Fare ($)
+                 </label>
+                 <input 
+                   type="number" 
+                   step="0.01"
+                   min="0"
+                   name="minimumFare"
+                   value={formData.minimumFare}
+                   onChange={handleChange}
+                   className="w-full bg-black border border-neutral-800 p-3 text-sm text-white focus:border-gold outline-none"
+                 />
+              </div>
+              <div className="space-y-2">
+                 <label className="text-neutral-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <Clock className="h-3 w-3" /> Surge Multiplier
+                 </label>
+                 <input 
+                   type="number" 
+                   step="0.1"
+                   min="1"
+                   name="surgeMultiplier"
+                   value={formData.surgeMultiplier}
+                   onChange={handleChange}
+                   className="w-full bg-black border border-neutral-800 p-3 text-sm text-white focus:border-gold outline-none"
+                 />
+              </div>
+           </div>
+         </section>
+
+         {/* Notifications */}
+         <section className="bg-neutral-900 border border-neutral-800">
+           <div className="p-6 border-b border-neutral-800 flex items-center gap-2">
+              <Bell className="h-4 w-4 text-gold" />
+              <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Notifications</h2>
+           </div>
+           <div className="p-6">
+             <label className="flex items-center gap-4 cursor-pointer group">
+               <div className="relative">
+                 <input 
+                   type="checkbox" 
+                   name="notificationsEmail"
+                   checked={formData.notificationsEmail}
+                   onChange={handleChange}
+                   className="sr-only peer"
+                 />
+                 <div className="w-11 h-6 bg-neutral-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+               </div>
+               <div>
+                 <p className="text-white text-sm font-bold uppercase tracking-widest">Email Notifications</p>
+                 <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-wider">Receive email alerts for new bookings and status changes</p>
+               </div>
+             </label>
+           </div>
+         </section>
 
         <div className="flex items-center gap-4">
            <Button 

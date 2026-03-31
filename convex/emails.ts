@@ -38,6 +38,11 @@ export const sendBookingEmail = internalAction({
 
     const { ride, settings } = data;
     
+    if (!settings.notificationsEmail) {
+      console.log("Email notifications disabled, skipping booking email");
+      return;
+    }
+    
     // As requested, using the testing domain provided by Resend
     const fromAddress = "Luna Limo <onboarding@resend.dev>";
     // Sending to both customer and admin. Note: Under Resend's free tier with onboarding@resend.dev, 

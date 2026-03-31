@@ -1,6 +1,7 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
+import { paginationOptsValidator } from "convex/server";
 
 export const list = query({
   args: {
@@ -9,12 +10,22 @@ export const list = query({
     endDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    let rides = await ctx.db.query("rides").order("desc").collect();
+    let rides;
+    const validStatuses = ["pending", "confirmed", "in_progress", "completed", "cancelled"] as const;
+    const statusFilter = args.status && args.status !== "all" && validStatuses.includes(args.status as typeof validStatuses[number])
+      ? args.status as typeof validStatuses[number]
+      : null;
     
-    // Server-side filtering for optional advanced args
-    if (args.status && args.status !== "all") {
-      rides = rides.filter(r => r.status === args.status);
+    if (statusFilter) {
+      rides = await ctx.db
+        .query("rides")
+        .withIndex("by_status", (q) => q.eq("status", statusFilter))
+        .order("desc")
+        .take(500);
+    } else {
+      rides = await ctx.db.query("rides").order("desc").take(500);
     }
+    
     if (args.startDate) {
       rides = rides.filter(r => r.pickupDate >= args.startDate!);
     }
@@ -23,6 +34,32 @@ export const list = query({
     }
     
     return rides;
+  },
+});
+
+export const listPaginated = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    status: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const validStatuses = ["pending", "confirmed", "in_progress", "completed", "cancelled"] as const;
+    const statusFilter = args.status && args.status !== "all" && validStatuses.includes(args.status as typeof validStatuses[number])
+      ? args.status as typeof validStatuses[number]
+      : null;
+    
+    if (statusFilter) {
+      return await ctx.db
+        .query("rides")
+        .withIndex("by_status", (q) => q.eq("status", statusFilter))
+        .order("desc")
+        .paginate(args.paginationOpts);
+    }
+    
+    return await ctx.db
+      .query("rides")
+      .order("desc")
+      .paginate(args.paginationOpts);
   },
 });
 

@@ -114,7 +114,7 @@ export const listWithRides = query({
 export const getStats = query({
   args: {},
   handler: async (ctx) => {
-    const reviews = await ctx.db.query("reviews").collect();
+    const reviews = await ctx.db.query("reviews").order("desc").take(500);
     
     if (reviews.length === 0) {
       return { average: 0, total: 0, distribution: [0,0,0,0,0] };

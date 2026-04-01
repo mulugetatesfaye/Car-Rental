@@ -5,202 +5,274 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
-  Image,
 } from "@react-pdf/renderer";
 import { Doc } from "@/convex/_generated/dataModel";
 
-// For professional appearance, Roboto is used as it looks cleaner in PDFs
-// If custom fonts are needed, they can be registered here:
-// Font.register({ family: 'Inter', src: '...' });
-
 const styles = StyleSheet.create({
   page: {
-    padding: 35,
+    padding: 0,
     backgroundColor: "#ffffff",
     fontFamily: "Helvetica",
-    color: "#333",
+    color: "#1a1a1a",
+    fontSize: 9,
   },
-  header: {
+  // Header band with gold accent
+  headerBand: {
+    backgroundColor: "#1a1a1a",
+    paddingHorizontal: 40,
+    paddingVertical: 28,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    borderBottom: "1.5px solid #C6A87C",
-    paddingBottom: 15,
-    marginBottom: 20,
   },
-  logoSection: {
+  brandSection: {
     flexDirection: "column",
-    width: "50%",
   },
-  brandingTitle: {
-    fontSize: 18,
+  brandName: {
+    fontSize: 22,
     fontFamily: "Helvetica-Bold",
-    color: "#1a1a1a",
-    letterSpacing: 1.2,
-    textTransform: "uppercase",
-  },
-  brandingSubtitle: {
-    fontSize: 6.5,
     color: "#C6A87C",
-    marginTop: 3,
-    textTransform: "uppercase",
     letterSpacing: 3,
+    textTransform: "uppercase",
   },
-  invoiceMeta: {
+  brandTagline: {
+    fontSize: 7,
+    color: "#888",
+    letterSpacing: 2.5,
+    textTransform: "uppercase",
+    marginTop: 4,
+  },
+  invoiceTitleBlock: {
     textAlign: "right",
-    width: "40%",
+    flexDirection: "column",
+    alignItems: "flex-end",
   },
-  title: {
-    fontSize: 18,
+  invoiceTitle: {
+    fontSize: 26,
     fontFamily: "Helvetica-Bold",
-    color: "#1a1a1a",
-    marginBottom: 8,
+    color: "#ffffff",
+    letterSpacing: 4,
+    textTransform: "uppercase",
+  },
+  invoiceNumber: {
+    fontSize: 9,
+    color: "#C6A87C",
+    fontFamily: "Helvetica-Bold",
+    letterSpacing: 1,
+    marginTop: 4,
+  },
+  // Gold accent line
+  goldLine: {
+    height: 3,
+    backgroundColor: "#C6A87C",
+  },
+  // Meta info bar
+  metaBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 40,
+    paddingVertical: 14,
+    backgroundColor: "#faf9f7",
+    borderBottom: "0.5px solid #e8e0d5",
   },
   metaItem: {
-    fontSize: 7.5,
-    color: "#666",
-    marginBottom: 3,
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: "column",
   },
   metaLabel: {
+    fontSize: 6,
     color: "#999",
     textTransform: "uppercase",
-    marginRight: 6,
-    fontSize: 6,
+    letterSpacing: 1,
+    marginBottom: 3,
   },
   metaValue: {
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: "#1a1a1a",
   },
-  addressSection: {
+  // Main content
+  content: {
+    paddingHorizontal: 40,
+    paddingTop: 24,
+  },
+  // Two column layout
+  twoCol: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 24,
   },
-  addressBlock: {
-    width: "45%",
+  colLeft: {
+    width: "55%",
   },
-  sectionHeading: {
+  colRight: {
+    width: "40%",
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  // Section titles
+  sectionTitle: {
     fontSize: 7.5,
     fontFamily: "Helvetica-Bold",
     color: "#C6A87C",
     textTransform: "uppercase",
-    letterSpacing: 1,
+    letterSpacing: 1.5,
     marginBottom: 8,
-    borderBottom : "0.5px solid #eee",
     paddingBottom: 4,
+    borderBottom: "1px solid #e8e0d5",
   },
-  addressName: {
-    fontSize: 10,
+  // Company info
+  companyName: {
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
     color: "#1a1a1a",
-    marginBottom: 3,
+    marginBottom: 4,
   },
-  addressText: {
-    fontSize: 8.5,
+  companyDetail: {
+    fontSize: 8,
     color: "#666",
-    lineHeight: 1.4,
+    lineHeight: 1.5,
+    marginBottom: 2,
   },
-  journeyBox: {
-    backgroundColor: "#fcfaf7",
+  // Client info box
+  clientBox: {
+    backgroundColor: "#faf9f7",
     padding: 12,
-    borderRadius: 4,
-    marginBottom: 20,
-    border: "1px solid #f0e6d6",
+    borderLeft: "2px solid #C6A87C",
   },
-  journeyRow: {
+  clientName: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: "#1a1a1a",
+    marginBottom: 4,
+  },
+  clientDetail: {
+    fontSize: 8,
+    color: "#666",
+    lineHeight: 1.5,
+    marginBottom: 2,
+  },
+  // Service details box
+  serviceBox: {
+    backgroundColor: "#faf9f7",
+    border: "0.5px solid #e8e0d5",
+    padding: 14,
+    marginBottom: 24,
+  },
+  serviceGrid: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
+    flexWrap: "wrap",
   },
-  journeyItem: {
-    flex: 1,
+  serviceCell: {
+    width: "33.33%",
+    marginBottom: 12,
   },
-  journeyLabel: {
-    fontSize: 6.5,
+  serviceCellWide: {
+    width: "50%",
+    marginBottom: 12,
+  },
+  serviceLabel: {
+    fontSize: 6,
     color: "#999",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 2,
+    letterSpacing: 0.8,
+    marginBottom: 3,
   },
-  journeyValue: {
-    fontSize: 9.5,
+  serviceValue: {
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
-    color: "#222",
+    color: "#1a1a1a",
   },
+  serviceValueSmall: {
+    fontSize: 8,
+    color: "#444",
+  },
+  // Route section
   routeSection: {
-    marginTop: 8,
-    paddingTop: 10,
-    borderTop: "1px dashed #e0d0b0",
+    marginTop: 10,
+    paddingTop: 12,
+    borderTop: "1px dashed #d5c9b5",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  routeItem: {
-    marginBottom: 5,
+  routeBlock: {
+    width: "48%",
   },
   routeLabel: {
-    fontSize: 6.5,
+    fontSize: 6,
     color: "#C6A87C",
     textTransform: "uppercase",
-    marginBottom: 2,
+    letterSpacing: 0.5,
+    marginBottom: 3,
   },
-  routeText: {
-    fontSize: 8.5,
+  routeValue: {
+    fontSize: 8,
     color: "#333",
-    lineHeight: 1.2,
+    lineHeight: 1.3,
   },
+  // Table
   table: {
-    width: "100%",
-    marginBottom: 20,
+    marginBottom: 24,
   },
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#1a1a1a",
-    padding: 6,
-    borderRadius: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
-  headerCell: {
-    color: "#fff",
-    fontSize: 7.5,
+  tableHeaderCell: {
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
+    color: "#ffffff",
     textTransform: "uppercase",
     letterSpacing: 0.8,
   },
   tableRow: {
     flexDirection: "row",
-    padding: 10,
-    borderBottom: "1px solid #eee",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottom: "0.5px solid #eee",
   },
-  cellDescription: {
-    flex: 3,
+  tableRowAlt: {
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottom: "0.5px solid #eee",
+    backgroundColor: "#fafafa",
+  },
+  tableCell: {
     fontSize: 9,
-    color: "#222",
+    color: "#333",
   },
-  cellQty: {
-    flex: 0.5,
-    textAlign: "center",
-    fontSize: 9,
-    color: "#444",
-  },
-  cellPrice: {
-    flex: 1,
-    textAlign: "right",
+  tableCellBold: {
     fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: "#1a1a1a",
   },
-  summarySection: {
+  tableCellRight: {
+    textAlign: "right",
+  },
+  tableCellCenter: {
+    textAlign: "center",
+  },
+  tableCellSmall: {
+    fontSize: 7.5,
+    color: "#888",
+    marginTop: 2,
+  },
+  // Summary
+  summaryContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: 5,
+    marginBottom: 28,
   },
-  summaryBlock: {
-    width: "35%",
+  summaryBox: {
+    width: "40%",
   },
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 3,
+    paddingVertical: 5,
+    borderBottom: "0.5px solid #eee",
   },
   summaryLabel: {
     fontSize: 8.5,
@@ -208,95 +280,101 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     fontSize: 9,
-    color: "#222",
     fontFamily: "Helvetica-Bold",
+    color: "#1a1a1a",
   },
   totalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
-    marginTop: 8,
-    borderTop: "1.5px solid #C6A87C",
+    paddingVertical: 12,
+    marginTop: 6,
+    borderTop: "2px solid #C6A87C",
   },
   totalLabel: {
     fontSize: 11,
     fontFamily: "Helvetica-Bold",
     color: "#1a1a1a",
     textTransform: "uppercase",
+    letterSpacing: 1,
   },
   totalValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "Helvetica-Bold",
     color: "#C6A87C",
   },
-  statusStamp: {
+  // Status badge
+  statusBadge: {
     position: "absolute",
-    top: 110,
-    right: 50,
-    border: "2px solid #C6A87C",
-    borderRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    opacity: 0.15,
-    transform: "rotate(-15deg)",
+    top: 95,
+    right: 45,
+    paddingHorizontal: 14,
+    paddingVertical: 5,
+    borderRadius: 3,
+    opacity: 0.9,
   },
   statusText: {
-    fontSize: 14,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
-    color: "#C6A87C",
     textTransform: "uppercase",
     letterSpacing: 2,
   },
-  legalSection: {
+  // Terms section
+  termsSection: {
     marginTop: 10,
-    padding: 8,
-    backgroundColor: "#fafafa",
-    borderRadius: 2,
-    border: "0.5px solid #eee",
+    paddingHorizontal: 40,
   },
-  legalTitle: {
+  termsBox: {
+    backgroundColor: "#faf9f7",
+    padding: 12,
+    border: "0.5px solid #e8e0d5",
+  },
+  termsTitle: {
     fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: "#999",
-    marginBottom: 3,
+    marginBottom: 4,
     textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
-  legalText: {
-    fontSize: 6,
-    color: "#aaa",
-    lineHeight: 1.3,
+  termsText: {
+    fontSize: 6.5,
+    color: "#888",
+    lineHeight: 1.4,
   },
+  // Footer
   footer: {
     position: "absolute",
-    bottom: 25,
-    left: 35,
-    right: 35,
-    textAlign: "center",
-    borderTop: "1px solid #f0f0f0",
-    paddingTop: 10,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  footerBand: {
+    backgroundColor: "#1a1a1a",
+    paddingHorizontal: 40,
+    paddingVertical: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   footerText: {
     fontSize: 7,
-    color: "#999",
-    marginBottom: 2,
+    color: "#888",
   },
-  footerBranding: {
+  footerBrand: {
     fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: "#C6A87C",
-    marginTop: 4,
-    letterSpacing: 1.5,
+    letterSpacing: 2,
     textTransform: "uppercase",
   },
-  signatureContainer: {
-    marginTop: 8,
+  footerNote: {
     fontSize: 6,
-    color: "#bbb",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    opacity: 0.6,
-  }
+    color: "#666",
+    textAlign: "center",
+    paddingHorizontal: 40,
+    paddingVertical: 6,
+    backgroundColor: "#faf9f7",
+  },
 });
 
 interface InvoicePDFProps {
@@ -311,7 +389,7 @@ interface InvoicePDFProps {
 }
 
 export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
-  const formattedDate = new Date(ride.createdAt).toLocaleDateString("en-US", {
+  const issueDate = new Date(ride.createdAt).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -319,177 +397,313 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
 
   const invoiceNumber = `INV-${ride._id.slice(-8).toUpperCase()}`;
 
-  // Using a full URL for the logo if possible, otherwise it might not render in some environments
-  const logoUrl = typeof window !== "undefined" 
-    ? `${window.location.origin}/luna-logo.png` 
-    : "/luna-logo.png";
+  const isHourly = ride.serviceType === "hourly";
+  const hourlyDuration = ride.hourlyDuration || 0;
+
+  const statusColor =
+    ride.status === "confirmed"
+      ? "#059669"
+      : ride.status === "cancelled"
+        ? "#dc2626"
+        : "#d97706";
+
+  const statusBg =
+    ride.status === "confirmed"
+      ? "#ecfdf5"
+      : ride.status === "cancelled"
+        ? "#fef2f2"
+        : "#fffbeb";
 
   return (
     <Document title={`Invoice ${invoiceNumber} - Luna Limo`}>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.logoSection}>
-            {/* Logo could go here if we were certain of the path/origin */}
-            <Text style={styles.brandingTitle}>Luna Limo</Text>
-            <Text style={styles.brandingSubtitle}>Premier Executive Travel</Text>
+        {/* Dark header band */}
+        <View style={styles.headerBand}>
+          <View style={styles.brandSection}>
+            <Text style={styles.brandName}>Luna Limo</Text>
+            <Text style={styles.brandTagline}>Executive Chauffeur Service</Text>
           </View>
-          <View style={styles.invoiceMeta}>
-            <Text style={styles.title}>INVOICE</Text>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Invoice Number:</Text>
-              <Text style={styles.metaValue}>{invoiceNumber}</Text>
-            </View>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Issue Date:</Text>
-              <Text style={styles.metaValue}>{formattedDate}</Text>
-            </View>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Fulfillment Status:</Text>
-              <Text style={[styles.metaValue, { color: ride.status === "confirmed" ? "#10B981" : "#F59E0B" }]}>
-                {ride.status.toUpperCase()}
-              </Text>
-            </View>
+          <View style={styles.invoiceTitleBlock}>
+            <Text style={styles.invoiceTitle}>Invoice</Text>
+            <Text style={styles.invoiceNumber}>{invoiceNumber}</Text>
           </View>
         </View>
 
-        {/* Address Section */}
-        <View style={styles.addressSection}>
-          <View style={styles.addressBlock}>
-            <Text style={styles.sectionHeading}>Issued By Information</Text>
-            <Text style={styles.addressName}>{settings?.companyName || "Luna Limo"}</Text>
-            <Text style={styles.addressText}>
-              {settings?.address || "1902 E Yesler way\nSeattle, WA 98122"}
+        {/* Gold accent line */}
+        <View style={styles.goldLine} />
+
+        {/* Meta info bar */}
+        <View style={styles.metaBar}>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>Issue Date</Text>
+            <Text style={styles.metaValue}>{issueDate}</Text>
+          </View>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>Service Date</Text>
+            <Text style={styles.metaValue}>{ride.pickupDate}</Text>
+          </View>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>Status</Text>
+            <Text style={[styles.metaValue, { color: statusColor }]}>
+              {ride.status.charAt(0).toUpperCase() + ride.status.slice(1)}
             </Text>
-            <View style={{ marginTop: 8 }}>
-              <Text style={styles.addressText}>{settings?.email || "concierge@lunalimo.com"}</Text>
-              <Text style={styles.addressText}>{settings?.phone || "(206) 327-4411"}</Text>
-            </View>
-          </View>
-          <View style={styles.addressBlock}>
-            <Text style={styles.sectionHeading}>Bill To Client</Text>
-            <Text style={styles.addressName}>{ride.customerName || "Valued Private Guest"}</Text>
-            <Text style={styles.addressText}>{ride.customerEmail}</Text>
-            {ride.customerPhone && <Text style={styles.addressText}>{ride.customerPhone}</Text>}
           </View>
         </View>
 
-        {/* Paid Stamp */}
-        {ride.status === "confirmed" && (
-          <View style={styles.statusStamp}>
-            <Text style={styles.statusText}>PAID</Text>
-          </View>
-        )}
-
-        {/* Journey Breakdown */}
-        <View style={styles.journeyBox}>
-          <Text style={styles.sectionHeading}>Chauffeur Service Summary</Text>
-          <View style={styles.journeyRow}>
-            <View style={styles.journeyItem}>
-              <Text style={styles.journeyLabel}>Service Date</Text>
-              <Text style={styles.journeyValue}>{ride.pickupDate}</Text>
-            </View>
-            <View style={styles.journeyItem}>
-              <Text style={styles.journeyLabel}>Scheduled Pickup</Text>
-              <Text style={styles.journeyValue}>{ride.pickupTime || "TBD"}</Text>
-            </View>
-            <View style={styles.journeyItem}>
-              <Text style={styles.journeyLabel}>Selected Fleet</Text>
-              <Text style={styles.journeyValue}>{ride.carTypeName}</Text>
-            </View>
-          </View>
-          <View style={styles.journeyRow}>
-            <View style={styles.journeyItem}>
-              <Text style={styles.journeyLabel}>Total Distance</Text>
-              <Text style={styles.journeyValue}>{ride.distance.toFixed(2)} km</Text>
-            </View>
-            <View style={styles.journeyItem}>
-              <Text style={styles.journeyLabel}>Passengers / Luggage</Text>
-              <Text style={styles.journeyValue}>{ride.passengers} Pax / {ride.luggage} Bags</Text>
-            </View>
-          </View>
-
-          <View style={styles.routeSection}>
-            <View style={styles.routeItem}>
-              <Text style={styles.routeLabel}>Pick-up Location</Text>
-              <Text style={styles.routeText}>{ride.pickupAddress}</Text>
-            </View>
-            <View style={styles.routeItem}>
-              <Text style={styles.routeLabel}>Drop-off Destination</Text>
-              <Text style={styles.routeText}>{ride.destinationAddress}</Text>
-            </View>
-          </View>
+        {/* Status badge */}
+        <View
+          style={[
+            styles.statusBadge,
+            {
+              backgroundColor: statusBg,
+              border: `1px solid ${statusColor}`,
+            },
+          ]}
+        >
+          <Text style={[styles.statusText, { color: statusColor }]}>
+            {ride.status === "confirmed"
+              ? "PAID"
+              : ride.status === "cancelled"
+                ? "CANCELLED"
+                : "PENDING"}
+          </Text>
         </View>
 
-        {/* Services Table */}
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.headerCell, { flex: 3 }]}>Service Description</Text>
-            <Text style={[styles.headerCell, { flex: 0.5, textAlign: "center" }]}>Qty</Text>
-            <Text style={[styles.headerCell, { flex: 1, textAlign: "right" }]}>Amount</Text>
-          </View>
-          <View style={styles.tableRow}>
-            <View style={{ flex: 3 }}>
-              <Text style={styles.cellDescription}>Executive {ride.carTypeName} Reservation</Text>
-              <Text style={{ fontSize: 7, color: "#999", marginTop: 4 }}>
-                Private transportation services calculated by per-km executive rates plus base fare.
+        {/* Main content */}
+        <View style={styles.content}>
+          {/* Two column: Company info + Client info */}
+          <View style={styles.twoCol}>
+            <View style={styles.colLeft}>
+              <Text style={styles.sectionTitle}>Issued By</Text>
+              <Text style={styles.companyName}>
+                {settings?.companyName || "Luna Limo"}
+              </Text>
+              <Text style={styles.companyDetail}>
+                {settings?.address || "1902 E Yesler way, Seattle, WA 98122"}
+              </Text>
+              <Text style={styles.companyDetail}>
+                {settings?.phone || "(206) 327-4411"}
+              </Text>
+              <Text style={styles.companyDetail}>
+                {settings?.email || "concierge@lunalimo.com"}
               </Text>
             </View>
-            <Text style={styles.cellQty}>1</Text>
-            <Text style={styles.cellPrice}>${ride.price.toFixed(2)}</Text>
-          </View>
-          
-          {ride.notes && (
-            <View style={styles.tableRow}>
-              <View style={{ flex: 3 }}>
-                <Text style={[styles.cellDescription, { fontFamily: "Helvetica-Bold" }]}>Special Client Instructions:</Text>
-                <Text style={{ fontSize: 8, color: "#666", marginTop: 2 }}>{ride.notes}</Text>
+            <View style={styles.colRight}>
+              <View style={{ width: "100%" }}>
+                <Text style={styles.sectionTitle}>Bill To</Text>
+                <View style={styles.clientBox}>
+                  <Text style={styles.clientName}>
+                    {ride.customerName || "Valued Guest"}
+                  </Text>
+                  <Text style={styles.clientDetail}>{ride.customerEmail}</Text>
+                  {ride.customerPhone && (
+                    <Text style={styles.clientDetail}>{ride.customerPhone}</Text>
+                  )}
+                </View>
               </View>
-              <Text style={styles.cellQty}>-</Text>
-              <Text style={styles.cellPrice}>$0.00</Text>
             </View>
-          )}
-        </View>
+          </View>
 
-        {/* Financial Summary */}
-        <View style={styles.summarySection}>
-          <View style={styles.summaryBlock}>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Subtotal</Text>
-              <Text style={styles.summaryValue}>${ride.price.toFixed(2)}</Text>
+          {/* Service details box */}
+          <View style={styles.serviceBox}>
+            <Text style={styles.sectionTitle}>Service Details</Text>
+            <View style={styles.serviceGrid}>
+              <View style={styles.serviceCell}>
+                <Text style={styles.serviceLabel}>Service Type</Text>
+                <Text style={styles.serviceValue}>
+                  {isHourly ? "Hourly Charter" : "Point-to-Point"}
+                </Text>
+              </View>
+              <View style={styles.serviceCell}>
+                <Text style={styles.serviceLabel}>Vehicle Class</Text>
+                <Text style={styles.serviceValue}>{ride.carTypeName}</Text>
+              </View>
+              <View style={styles.serviceCell}>
+                <Text style={styles.serviceLabel}>Scheduled Time</Text>
+                <Text style={styles.serviceValue}>
+                  {ride.pickupTime || "TBD"}
+                </Text>
+              </View>
+              <View style={styles.serviceCell}>
+                <Text style={styles.serviceLabel}>Passengers</Text>
+                <Text style={styles.serviceValue}>{ride.passengers}</Text>
+              </View>
+              <View style={styles.serviceCell}>
+                <Text style={styles.serviceLabel}>Luggage</Text>
+                <Text style={styles.serviceValue}>{ride.luggage}</Text>
+              </View>
+              {isHourly && hourlyDuration > 0 && (
+                <View style={styles.serviceCell}>
+                  <Text style={styles.serviceLabel}>Duration</Text>
+                  <Text style={styles.serviceValue}>
+                    {hourlyDuration} Hour{hourlyDuration > 1 ? "s" : ""}
+                  </Text>
+                </View>
+              )}
             </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Executive Fees & Taxes</Text>
-              <Text style={styles.summaryValue}>$0.00</Text>
+
+            {/* Route info for point-to-point */}
+            {!isHourly && (
+              <View style={styles.routeSection}>
+                <View style={styles.routeBlock}>
+                  <Text style={styles.routeLabel}>Pickup</Text>
+                  <Text style={styles.routeValue}>{ride.pickupAddress}</Text>
+                </View>
+                <View style={styles.routeBlock}>
+                  <Text style={styles.routeLabel}>Destination</Text>
+                  <Text style={styles.routeValue}>
+                    {ride.destinationAddress}
+                  </Text>
+                </View>
+              </View>
+            )}
+            {isHourly && (
+              <View style={styles.routeSection}>
+                <View style={styles.routeBlock}>
+                  <Text style={styles.routeLabel}>Service Notes</Text>
+                  <Text style={styles.routeValue}>
+                    Hourly charter — route to be determined by client during
+                    service period.
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
+
+          {/* Line items table */}
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderCell, { flex: 3 }]}>
+                Description
+              </Text>
+              <Text style={[styles.tableHeaderCell, { flex: 0.6, textAlign: "center" }]}>
+                Qty
+              </Text>
+              <Text style={[styles.tableHeaderCell, { flex: 0.8, textAlign: "center" }]}>
+                Rate
+              </Text>
+              <Text style={[styles.tableHeaderCell, { flex: 1, textAlign: "right" }]}>
+                Amount
+              </Text>
             </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Gratuity</Text>
-              <Text style={styles.summaryValue}>Client-Discretionary</Text>
-            </View>
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Grand Total</Text>
-              <Text style={styles.totalValue}>${ride.price.toFixed(2)}</Text>
+
+            {isHourly ? (
+              <View style={styles.tableRow}>
+                <View style={{ flex: 3 }}>
+                  <Text style={styles.tableCellBold}>
+                    {ride.carTypeName} — Hourly Charter
+                  </Text>
+                  <Text style={styles.tableCellSmall}>
+                    Professional chauffeur service with executive vehicle
+                  </Text>
+                </View>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.6 }]}>
+                  {hourlyDuration}
+                </Text>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.8 }]}>
+                  ${(ride.price / hourlyDuration).toFixed(2)}/hr
+                </Text>
+                <Text style={[styles.tableCellBold, styles.tableCellRight, { flex: 1 }]}>
+                  ${ride.price.toFixed(2)}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.tableRow}>
+                <View style={{ flex: 3 }}>
+                  <Text style={styles.tableCellBold}>
+                    {ride.carTypeName} — Point-to-Point Transfer
+                  </Text>
+                  <Text style={styles.tableCellSmall}>
+                    {ride.distance.toFixed(1)} km • {ride.duration.toFixed(0)}{" "}
+                    min estimated
+                  </Text>
+                </View>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.6 }]}>
+                  1
+                </Text>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.8 }]}>
+                  —
+                </Text>
+                <Text style={[styles.tableCellBold, styles.tableCellRight, { flex: 1 }]}>
+                  ${ride.price.toFixed(2)}
+                </Text>
+              </View>
+            )}
+
+            {ride.notes && (
+              <View style={styles.tableRowAlt}>
+                <View style={{ flex: 3 }}>
+                  <Text style={[styles.tableCellBold, { color: "#666" }]}>
+                    Special Instructions
+                  </Text>
+                  <Text style={styles.tableCellSmall}>{ride.notes}</Text>
+                </View>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.6 }]}>
+                  —
+                </Text>
+                <Text style={[styles.tableCell, styles.tableCellCenter, { flex: 0.8 }]}>
+                  —
+                </Text>
+                <Text style={[styles.tableCellBold, styles.tableCellRight, { flex: 1 }]}>
+                  $0.00
+                </Text>
+              </View>
+            )}
+          </View>
+
+          {/* Financial summary */}
+          <View style={styles.summaryContainer}>
+            <View style={styles.summaryBox}>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Subtotal</Text>
+                <Text style={styles.summaryValue}>${ride.price.toFixed(2)}</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Taxes & Fees</Text>
+                <Text style={styles.summaryValue}>$0.00</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Gratuity</Text>
+                <Text style={styles.summaryValue}>Discretionary</Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>Total Due</Text>
+                <Text style={styles.totalValue}>${ride.price.toFixed(2)}</Text>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* Legal Small Print */}
-        <View style={styles.legalSection}>
-          <Text style={styles.legalTitle}>Conditions of Carriage</Text>
-          <Text style={styles.legalText}>
-            Luna Limo operates as a luxury private hire service. All bookings are subject to our standard terms of service. 
-            Cancellations made within 24 hours of scheduled pickup may be subject to full fare charges. Total fare includes all tolls and standard executive fees.
-          </Text>
+        {/* Terms section */}
+        <View style={styles.termsSection}>
+          <View style={styles.termsBox}>
+            <Text style={styles.termsTitle}>Terms & Conditions</Text>
+            <Text style={styles.termsText}>
+              Payment is due upon booking confirmation. All reservations are
+              subject to Luna Limo's standard terms of service. Cancellations
+              made within 24 hours of scheduled pickup may incur a fee. This
+              invoice serves as an official receipt upon payment. For inquiries,
+              contact concierge@lunalimo.com or (206) 327-4411.
+            </Text>
+          </View>
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Thank you for choosing the gold standard in executive transportation.
-          </Text>
-          <Text style={styles.footerBranding}>LUNA LIMO WORLDWIDE</Text>
-          <View style={styles.signatureContainer}>
-             <Text>Electronically Processed and Authenticated</Text>
+          <View style={styles.footerNote}>
+            <Text>
+              Thank you for choosing Luna Limo. We look forward to serving you
+              again.
+            </Text>
+          </View>
+          <View style={styles.footerBand}>
+            <Text style={styles.footerText}>
+              {settings?.address || "1902 E Yesler way, Seattle, WA 98122"}
+            </Text>
+            <Text style={styles.footerBrand}>Luna Limo</Text>
+            <Text style={styles.footerText}>
+              {settings?.phone || "(206) 327-4411"}
+            </Text>
           </View>
         </View>
       </Page>

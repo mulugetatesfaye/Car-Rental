@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { GenerateInvoiceButton } from "@/components/admin/GenerateInvoiceButton";
 import Link from "next/link";
+import { formatTime } from "@/lib/utils";
 
 export default function AdminBookingsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -67,7 +68,7 @@ export default function AdminBookingsPage() {
       ride.customerEmail,
       ride.customerPhone,
       ride.pickupDate,
-      ride.pickupTime || "TBD",
+      formatTime(ride.pickupTime || ""),
       `"${(ride.pickupAddress || "").replace(/"/g, '""')}"`,
       `"${(ride.destinationAddress || "").replace(/"/g, '""')}"`,
       ride.carTypeName,
@@ -178,7 +179,7 @@ export default function AdminBookingsPage() {
                       }`}>
                        {ride.status.replace("_", " ")}
                      </span>
-                     <p className="text-white font-bold text-xs md:text-sm whitespace-nowrap">{ride.pickupDate} at {ride.pickupTime || "TBD"}</p>
+                      <p className="text-white font-bold text-xs md:text-sm whitespace-nowrap">{ride.pickupDate} at {formatTime(ride.pickupTime || "")}</p>
                      <div className="hidden md:block h-4 w-px bg-neutral-800" />
                      <Link href={`/admin/bookings/${ride._id}`} className="text-gold font-serif text-lg md:text-xl font-black italic uppercase tracking-tighter truncate hover:underline flex items-center gap-1">
                        {ride.customerName}

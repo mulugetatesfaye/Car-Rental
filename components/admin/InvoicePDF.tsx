@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { Doc } from "@/convex/_generated/dataModel";
+import { formatTime } from "@/lib/utils";
 
 const styles = StyleSheet.create({
   page: {
@@ -521,7 +522,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
               <View style={styles.serviceCell}>
                 <Text style={styles.serviceLabel}>Scheduled Time</Text>
                 <Text style={styles.serviceValue}>
-                  {ride.pickupTime || "TBD"}
+                  {ride.pickupTime ? formatTime(ride.pickupTime) : "TBD"}
                 </Text>
               </View>
               <View style={styles.serviceCell}>

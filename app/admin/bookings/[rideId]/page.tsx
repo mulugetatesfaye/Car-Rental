@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { GenerateInvoiceButton } from "@/components/admin/GenerateInvoiceButton";
 import { RideMap } from "@/components/admin/ride-map";
+import { formatTime } from "@/lib/utils";
 
 export default function RideDetailPage() {
   const params = useParams();
@@ -129,7 +130,7 @@ export default function RideDetailPage() {
               </div>
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">TIME</p>
-                <p className="text-white font-bold text-sm">{ride.pickupTime || "TBD"}</p>
+                <p className="text-white font-bold text-sm">{formatTime(ride.pickupTime || "")}</p>
               </div>
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">VEHICLE</p>

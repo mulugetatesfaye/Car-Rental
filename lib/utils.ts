@@ -46,3 +46,12 @@ export function formatDistance(km: number): string {
   }
   return `${miles.toFixed(1)} miles`;
 }
+
+export function formatTime(time: string): string {
+  if (!time) return "TBD";
+  const [hours, minutes] = time.split(":").map(Number);
+  if (isNaN(hours) || isNaN(minutes)) return time;
+  const period = hours >= 12 ? "PM" : "AM";
+  const displayHours = hours % 12 || 12;
+  return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+}

@@ -109,17 +109,24 @@ export const sendBookingEmail = internalAction({
       </div>
     `;
 
-    try {
-      const resp = await resend.emails.send({
-        from: fromAddress,
-        to: toAddresses,
-        subject,
-        html: htmlContent,
-      });
-      console.log("Email dispatch success:", resp);
-    } catch (error) {
-      console.error("Failed to send email via Resend:", error);
+    const { data, error } = await resend.emails.send({
+      from: fromAddress,
+      to: toAddresses,
+      subject,
+      html: htmlContent,
+      idempotencyKey: `booking-${args.type}/${args.rideId}-${Date.now()}`,
+      tags: [
+        { name: "type", value: args.type },
+        { name: "ride_id", value: args.rideId },
+      ],
+    });
+
+    if (error) {
+      console.error("Failed to send booking email via Resend:", error);
+      throw new Error(`Failed to send booking email: ${error.message}`);
     }
+
+    console.log("Booking email sent successfully:", data);
   },
 });
 

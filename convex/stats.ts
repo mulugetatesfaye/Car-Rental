@@ -10,8 +10,6 @@ export const getDashboardSummary = query({
     const statusCounts = {
       pending: 0,
       confirmed: 0,
-      in_progress: 0,
-      completed: 0,
       cancelled: 0,
     };
     

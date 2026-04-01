@@ -1,5 +1,4 @@
-import { mutation, internalMutation } from "./_generated/server";
-import { v } from "convex/values";
+import { mutation } from "./_generated/server";
 
 export const backfillReviewTokens = mutation({
   args: {},
@@ -15,37 +14,5 @@ export const backfillReviewTokens = mutation({
     }
 
     return ridesWithNoToken.length;
-  },
-});
-
-export const migrateLegacyStatuses = internalMutation({
-  args: {
-    cursor: v.optional(v.string()),
-    batchSize: v.optional(v.number()),
-  },
-  handler: async (ctx, args) => {
-    const size = args.batchSize ?? 100;
-    const page = await ctx.db
-      .query("rides")
-      .withIndex("by_status", (q) => q.eq("status", "in_progress"))
-      .take(size);
-
-    let migrated = 0;
-    for (const ride of page) {
-      await ctx.db.patch(ride._id, { status: "confirmed" });
-      migrated++;
-    }
-
-    const completedPage = await ctx.db
-      .query("rides")
-      .withIndex("by_status", (q) => q.eq("status", "completed"))
-      .take(size);
-
-    for (const ride of completedPage) {
-      await ctx.db.patch(ride._id, { status: "confirmed" });
-      migrated++;
-    }
-
-    return migrated;
   },
 });

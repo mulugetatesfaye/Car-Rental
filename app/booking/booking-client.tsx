@@ -97,6 +97,7 @@ export default function BookingClient() {
   });
 
   const [bookingStep, setBookingStep] = React.useState<BookingStep>("trip");
+  const [emailError, setEmailError] = React.useState("");
 
   const fetchRoute = async (pickupLoc: SearchResult, destLoc: SearchResult) => {
     setLoadingRoute(true);
@@ -197,8 +198,22 @@ export default function BookingClient() {
     return selectedCar;
   };
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address");
+      return false;
+    }
+    setEmailError("");
+    return true;
+  };
+
   const isReviewStepValid = () => {
-    return options.customerName.trim() && options.customerEmail.trim() && options.customerPhone.trim();
+    return options.customerName.trim() && validateEmail(options.customerEmail) && options.customerPhone.trim();
   };
 
   const goToNextStep = () => {
@@ -700,18 +715,20 @@ export default function BookingClient() {
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
-                          <Mail className="h-3 w-3" /> Email Address
-                        </label>
-                        <input 
-                          type="email"
-                          value={options.customerEmail} 
-                          onChange={(e) => updateOption("customerEmail", e.target.value)}
-                          placeholder="email@example.com" 
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
-                        />
-                      </div>
+                       <div className="space-y-2">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                           <Mail className="h-3 w-3" /> Email Address
+                         </label>
+                         <input 
+                           type="email"
+                           value={options.customerEmail} 
+                           onChange={(e) => { setEmailError(""); updateOption("customerEmail", e.target.value); }}
+                           onBlur={() => validateEmail(options.customerEmail)}
+                           placeholder="email@example.com" 
+                           className={`w-full bg-neutral-900 border px-4 py-4 rounded-none text-sm font-bold text-white outline-none transition-colors placeholder:text-neutral-700 font-sans ${emailError ? "border-red-500 focus:border-red-500" : "border-neutral-800 focus:border-gold"}`}
+                         />
+                         {emailError && <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">{emailError}</p>}
+                       </div>
                       <div className="space-y-2">
                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                           <Phone className="h-3 w-3" /> Phone Number

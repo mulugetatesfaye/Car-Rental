@@ -9,8 +9,6 @@ const requiredPublicEnv = {
 } as const;
 
 function validateEnv() {
-  if (process.env.NEXT_PHASE === "phase-production-build") return;
-
   const missing: string[] = [];
 
   for (const [key, name] of Object.entries(requiredServerEnv)) {
@@ -33,7 +31,9 @@ function validateEnv() {
   }
 }
 
-validateEnv();
+if (process.env.NODE_ENV === "development") {
+  validateEnv();
+}
 
 export const env = {
   TOMTOM_API_KEY: process.env.NEXT_PUBLIC_TOMTOM_API_KEY!,

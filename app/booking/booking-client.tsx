@@ -408,7 +408,7 @@ export default function BookingClient() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
+      <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 w-full max-w-full">
           <div className="lg:col-span-7 order-first min-w-0">
             <div className="flex items-center gap-4 mb-8">
@@ -685,6 +685,49 @@ export default function BookingClient() {
 
             {bookingStep === "review" && (
               <div className="space-y-10 animate-fade-in">
+                <div className="space-y-6">
+                  <h3 className="font-serif text-lg font-black italic uppercase text-white border-b border-neutral-800 pb-2">Passenger Details</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                        <User className="h-3 w-3" /> Full Name
+                      </label>
+                      <input 
+                        value={options.customerName} 
+                        onChange={(e) => updateOption("customerName", e.target.value)}
+                        placeholder="Enter your full name" 
+                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
+                      />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                          <Mail className="h-3 w-3" /> Email Address
+                        </label>
+                        <input 
+                          type="email"
+                          value={options.customerEmail} 
+                          onChange={(e) => updateOption("customerEmail", e.target.value)}
+                          placeholder="email@example.com" 
+                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                          <Phone className="h-3 w-3" /> Phone Number
+                        </label>
+                        <input 
+                          type="tel"
+                          value={options.customerPhone} 
+                          onChange={(e) => updateOption("customerPhone", e.target.value)}
+                          placeholder="(555) 000-0000" 
+                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="bg-neutral-900/50 border border-neutral-800 p-6 space-y-5">
                   <h3 className="font-serif text-lg font-black italic uppercase text-gold flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
@@ -738,49 +781,6 @@ export default function BookingClient() {
                   </div>
                 </div>
 
-                <div className="space-y-6">
-                  <h3 className="font-serif text-lg font-black italic uppercase text-white border-b border-neutral-800 pb-2">Passenger Details</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
-                        <User className="h-3 w-3" /> Full Name
-                      </label>
-                      <input 
-                        value={options.customerName} 
-                        onChange={(e) => updateOption("customerName", e.target.value)}
-                        placeholder="Enter your full name" 
-                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
-                      />
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
-                          <Mail className="h-3 w-3" /> Email Address
-                        </label>
-                        <input 
-                          type="email"
-                          value={options.customerEmail} 
-                          onChange={(e) => updateOption("customerEmail", e.target.value)}
-                          placeholder="email@example.com" 
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
-                          <Phone className="h-3 w-3" /> Phone Number
-                        </label>
-                        <input 
-                          type="tel"
-                          value={options.customerPhone} 
-                          onChange={(e) => updateOption("customerPhone", e.target.value)}
-                          placeholder="(555) 000-0000" 
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="flex justify-between pt-4">
                   <Button 
                     onClick={goToPreviousStep}
@@ -796,7 +796,7 @@ export default function BookingClient() {
           </div>
 
           <div className="lg:col-span-5 order-last lg:order-last min-w-0">
-            <div className="lg:sticky lg:top-28 max-w-full">
+            <div className="lg:sticky lg:top-28 self-start max-w-full">
               <Card className="rounded-none shadow-2xl border border-neutral-800 overflow-hidden bg-neutral-900 max-w-full">
                 <div className="bg-black py-4 px-6 border-b border-neutral-800">
                   <h3 className="text-white font-black uppercase tracking-[0.3em] text-[12px] text-center">Trip Summary</h3>

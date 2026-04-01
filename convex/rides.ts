@@ -2,6 +2,7 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { paginationOptsValidator } from "convex/server";
+import { sanitizeInput, validateEmail, validatePhone, truncate, validateCoordinate, validatePositiveNumber, sanitizeName, sanitizeAddress } from "./sanitize";
 
 export const list = query({
   args: {
@@ -109,22 +110,51 @@ export const create = mutation({
     pickupTime: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const reviewToken = Math.random().toString(36).substring(2, 14).toUpperCase();
+    if (!validateEmail(args.customerEmail)) {
+      throw new Error("Invalid email address");
+    }
+    if (!validatePhone(args.customerPhone)) {
+      throw new Error("Invalid phone number");
+    }
+    if (!validateCoordinate(args.pickupLat, "lat") || !validateCoordinate(args.pickupLng, "lng")) {
+      throw new Error("Invalid pickup coordinates");
+    }
+    if (!validateCoordinate(args.destLat, "lat") || !validateCoordinate(args.destLng, "lng")) {
+      throw new Error("Invalid destination coordinates");
+    }
+    if (!validatePositiveNumber(args.price)) {
+      throw new Error("Price must be a positive number");
+    }
+    if (args.distance < 0 || !isFinite(args.distance)) {
+      throw new Error("Invalid distance");
+    }
+    if (args.duration < 0 || !isFinite(args.duration)) {
+      throw new Error("Invalid duration");
+    }
+    if (args.passengers < 1 || args.passengers > 20) {
+      throw new Error("Invalid number of passengers");
+    }
+    if (args.luggage < 0 || args.luggage > 20) {
+      throw new Error("Invalid number of luggage");
+    }
+
+    const tokenBytes = crypto.getRandomValues(new Uint8Array(12));
+    const reviewToken = Array.from(tokenBytes, (b) => b.toString(36).toUpperCase()).join("").slice(0, 12);
 
     const ride = {
       userId: args.userId,
-      customerName: args.customerName,
-      customerEmail: args.customerEmail,
-      customerPhone: args.customerPhone,
-      pickupAddress: args.pickupAddress,
-      destinationAddress: args.destinationAddress,
+      customerName: sanitizeName(args.customerName),
+      customerEmail: args.customerEmail.toLowerCase().trim(),
+      customerPhone: sanitizeInput(args.customerPhone),
+      pickupAddress: sanitizeAddress(args.pickupAddress),
+      destinationAddress: sanitizeAddress(args.destinationAddress),
       pickupLat: args.pickupLat,
       pickupLng: args.pickupLng,
       destLat: args.destLat,
       destLng: args.destLng,
       distance: args.distance,
       duration: args.duration,
-      carTypeName: args.carTypeName,
+      carTypeName: sanitizeInput(truncate(args.carTypeName, 50)),
       carTypeMultiplier: args.carTypeMultiplier,
       price: args.price,
       passengers: args.passengers,
@@ -211,10 +241,10 @@ export const addNote = mutation({
     const ride = await ctx.db.get(args.id);
     if (!ride) throw new Error("Ride not found");
     
-    // Append to existing notes with timestamp
     const dateStr = new Date().toISOString().split("T")[0];
     const prefix = ride.notes ? ride.notes + "\n" : "";
-    const newNotes = `${prefix}[${dateStr}] ${args.note}`;
+    const sanitizedNote = truncate(sanitizeInput(args.note), 1000);
+    const newNotes = `${prefix}[${dateStr}] ${sanitizedNote}`;
     
     await ctx.db.patch(args.id, {
       notes: newNotes,
@@ -222,7 +252,6 @@ export const addNote = mutation({
     });
   },
 });
-
 export const search = query({
   args: { query: v.string() },
   handler: async (ctx, args) => {

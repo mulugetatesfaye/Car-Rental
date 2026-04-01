@@ -29,7 +29,7 @@ export default function AdminDashboardPage() {
 
   const stats = [
     { label: "Total Revenue", value: `$${totalRevenue.toLocaleString()}`, sub: `Avg. Ride: $${avgRideValue.toFixed(0)}`, icon: DollarSign },
-    { label: "Active Bookings", value: statusCounts.confirmed + statusCounts.in_progress, sub: `${statusCounts.pending} Pending`, icon: CalendarDays },
+    { label: "Active Bookings", value: statusCounts.confirmed, sub: `${statusCounts.pending} Pending`, icon: CalendarDays },
     { label: "Completion Rate", value: `${(100 - cancellationRate).toFixed(1)}%`, sub: `${cancellationRate.toFixed(1)}% Cancelled`, icon: TrendingUp },
     { label: "Active Fleet", value: activeFleet, sub: "System Operational", icon: Car },
   ];
@@ -99,7 +99,6 @@ export default function AdminDashboardPage() {
           <div className="flex-1 flex flex-col justify-center">
             <div className="space-y-6">
               {[
-                { label: "Completed", val: statusCounts.completed, color: "bg-emerald-500" },
                 { label: "Confirmed", val: statusCounts.confirmed, color: "bg-blue-500" },
                 { label: "Pending", val: statusCounts.pending, color: "bg-amber-500" },
                 { label: "Cancelled", val: statusCounts.cancelled, color: "bg-red-500" },
@@ -143,12 +142,11 @@ export default function AdminDashboardPage() {
                    <div className="text-right">
                      <p className="text-gold font-serif text-lg font-black italic">${ride.price.toFixed(2)}</p>
                    </div>
-                   <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-widest inline-block whitespace-nowrap ${
-                     ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
-                     : ride.status === "confirmed" ? "bg-blue-950 text-blue-500 border border-blue-900"
-                     : ride.status === "completed" ? "bg-emerald-950 text-emerald-500 border border-emerald-900"
-                     : "bg-neutral-800 text-neutral-400 border border-neutral-700"
-                   }`}>
+                    <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-widest inline-block whitespace-nowrap ${
+                      ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
+                      : ride.status === "confirmed" ? "bg-blue-950 text-blue-500 border border-blue-900"
+                      : "bg-red-950 text-red-500 border border-red-900"
+                    }`}>
                      {ride.status.replace("_", " ")}
                    </span>
                 </div>

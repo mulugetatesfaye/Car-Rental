@@ -16,8 +16,8 @@ export const getRevenueReport = query({
 
     const dailyData: Record<string, { date: string; revenue: number; bookings: number }> = {};
     let totalRevenue = 0;
-    let totalBookings = filtered.length;
-    let completedCount = 0;
+    const totalBookings = filtered.length;
+    let confirmedCount = 0;
 
     for (const ride of filtered) {
       const dateKey = new Date(ride.createdAt).toISOString().split("T")[0];
@@ -28,10 +28,10 @@ export const getRevenueReport = query({
       
       dailyData[dateKey].bookings++;
       
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         totalRevenue += ride.price;
         dailyData[dateKey].revenue += ride.price;
-        completedCount++;
+        confirmedCount++;
       }
     }
 
@@ -46,9 +46,9 @@ export const getRevenueReport = query({
       chartData,
       totalRevenue,
       totalBookings,
-      completedCount,
-      avgOrderValue: completedCount > 0 ? totalRevenue / completedCount : 0,
-      completionRate: totalBookings > 0 ? (completedCount / totalBookings) * 100 : 0,
+      confirmedCount,
+      avgOrderValue: confirmedCount > 0 ? totalRevenue / confirmedCount : 0,
+      completionRate: totalBookings > 0 ? (confirmedCount / totalBookings) * 100 : 0,
     };
   },
 });
@@ -63,7 +63,7 @@ export const getRevenueByCarType = query({
     
     const filtered = rides.filter(r => {
       const rideDate = new Date(r.createdAt).toISOString().split("T")[0];
-      return rideDate >= args.startDate && rideDate <= args.endDate && r.status === "completed";
+      return rideDate >= args.startDate && rideDate <= args.endDate && r.status === "confirmed";
     });
 
     const byCarType: Record<string, { carType: string; revenue: number; count: number }> = {};
@@ -103,14 +103,12 @@ export const getRevenueByStatus = query({
     const byStatus: Record<string, { status: string; count: number; revenue: number }> = {
       pending: { status: "Pending", count: 0, revenue: 0 },
       confirmed: { status: "Confirmed", count: 0, revenue: 0 },
-      in_progress: { status: "In Progress", count: 0, revenue: 0 },
-      completed: { status: "Completed", count: 0, revenue: 0 },
       cancelled: { status: "Cancelled", count: 0, revenue: 0 },
     };
 
     for (const ride of filtered) {
       byStatus[ride.status].count++;
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         byStatus[ride.status].revenue += ride.price;
       }
     }
@@ -158,7 +156,7 @@ export const getTopCustomers = query({
       
       const cust = customerMap.get(ride.customerEmail)!;
       cust.totalRides++;
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         cust.totalSpend += ride.price;
       }
     }
@@ -190,7 +188,7 @@ export const getMonthlyComparison = query({
       }
       
       monthlyData[monthKey].bookings++;
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         monthlyData[monthKey].revenue += ride.price;
       }
     }

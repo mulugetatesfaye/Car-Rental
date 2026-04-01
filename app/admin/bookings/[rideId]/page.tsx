@@ -28,7 +28,7 @@ export default function RideDetailPage() {
     );
   }
 
-  const handleStatusChange = async (status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled") => {
+  const handleStatusChange = async (status: "pending" | "confirmed" | "cancelled") => {
     await updateStatus({ id: rideId, status });
   };
 
@@ -62,8 +62,6 @@ export default function RideDetailPage() {
         <span className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] ${
           ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
           : ride.status === "confirmed" ? "bg-blue-950 text-blue-500 border border-blue-900"
-          : ride.status === "in_progress" ? "bg-indigo-950 text-indigo-500 border border-indigo-900"
-          : ride.status === "completed" ? "bg-emerald-950 text-emerald-500 border border-emerald-900"
           : "bg-red-950 text-red-500 border border-red-900"
         }`}>
           {ride.status.replace("_", " ")}
@@ -199,18 +197,8 @@ export default function RideDetailPage() {
                 </>
               )}
               {ride.status === "confirmed" && (
-                <Button onClick={() => handleStatusChange("in_progress")} className="w-full bg-indigo-950/20 text-indigo-500 border border-indigo-900/50 hover:bg-indigo-900 hover:text-white rounded-none py-4 text-[9px] font-black uppercase tracking-widest">
-                  Start Ride
-                </Button>
-              )}
-              {ride.status === "in_progress" && (
-                <Button onClick={() => handleStatusChange("completed")} className="w-full bg-emerald-950/20 text-emerald-500 border border-emerald-900/50 hover:bg-emerald-900 hover:text-white rounded-none py-4 text-[9px] font-black uppercase tracking-widest">
-                  Complete Ride
-                </Button>
-              )}
-              {ride.status !== "completed" && ride.status !== "cancelled" && (
-                <Button onClick={() => handleStatusChange("cancelled")} variant="outline" className="w-full bg-transparent border-neutral-800 text-neutral-500 hover:bg-red-900/20 hover:text-red-500 rounded-none py-4 text-[9px] font-black uppercase tracking-widest">
-                  Cancel Ride
+                <Button onClick={() => handleStatusChange("cancelled")} className="w-full bg-red-950/20 text-red-500 border border-red-900/50 hover:bg-red-900 hover:text-white rounded-none py-4 text-[9px] font-black uppercase tracking-widest">
+                  Cancel Booking
                 </Button>
               )}
             </div>

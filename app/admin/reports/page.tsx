@@ -162,7 +162,7 @@ export default function AdminReportsPage() {
             ${revenueReport?.avgOrderValue.toFixed(2) || "0.00"}
           </p>
           <p className="text-neutral-600 text-[9px] font-bold uppercase tracking-widest mt-2">
-            Per completed ride
+            Per confirmed booking
           </p>
         </div>
 
@@ -175,7 +175,7 @@ export default function AdminReportsPage() {
             {revenueReport?.totalBookings || 0}
           </p>
           <p className="text-neutral-600 text-[9px] font-bold uppercase tracking-widest mt-2">
-            {revenueReport?.completedCount || 0} completed
+            {revenueReport?.confirmedCount || 0} confirmed
           </p>
         </div>
 

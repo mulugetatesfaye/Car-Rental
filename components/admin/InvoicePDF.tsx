@@ -346,7 +346,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
             </View>
             <View style={styles.metaItem}>
               <Text style={styles.metaLabel}>Fulfillment Status:</Text>
-              <Text style={[styles.metaValue, { color: ride.status === "completed" ? "#10B981" : "#F59E0B" }]}>
+              <Text style={[styles.metaValue, { color: ride.status === "confirmed" ? "#10B981" : "#F59E0B" }]}>
                 {ride.status.toUpperCase()}
               </Text>
             </View>
@@ -375,7 +375,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ ride, settings }) => {
         </View>
 
         {/* Paid Stamp */}
-        {ride.status === "completed" && (
+        {ride.status === "confirmed" && (
           <View style={styles.statusStamp}>
             <Text style={styles.statusText}>PAID</Text>
           </View>

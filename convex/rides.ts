@@ -11,7 +11,7 @@ export const list = query({
   },
   handler: async (ctx, args) => {
     let rides;
-    const validStatuses = ["pending", "confirmed", "in_progress", "completed", "cancelled"] as const;
+    const validStatuses = ["pending", "confirmed", "cancelled"] as const;
     const statusFilter = args.status && args.status !== "all" && validStatuses.includes(args.status as typeof validStatuses[number])
       ? args.status as typeof validStatuses[number]
       : null;
@@ -43,7 +43,7 @@ export const listPaginated = query({
     status: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const validStatuses = ["pending", "confirmed", "in_progress", "completed", "cancelled"] as const;
+    const validStatuses = ["pending", "confirmed", "cancelled"] as const;
     const statusFilter = args.status && args.status !== "all" && validStatuses.includes(args.status as typeof validStatuses[number])
       ? args.status as typeof validStatuses[number]
       : null;
@@ -167,8 +167,6 @@ export const updateStatus = mutation({
     status: v.union(
       v.literal("pending"),
       v.literal("confirmed"),
-      v.literal("in_progress"),
-      v.literal("completed"),
       v.literal("cancelled")
     ),
   },
@@ -192,7 +190,7 @@ export const updateStatus = mutation({
     await ctx.scheduler.runAfter(0, internal.notifications.create, {
       type: notifType,
       title: args.status === "cancelled" ? "Booking Cancelled" : "Status Updated",
-      message: `${customerName}'s booking has been ${args.status.replace("_", " ")}.`,
+      message: `${customerName}'s booking has been ${args.status}.`,
       link: "/admin/bookings",
     });
   },

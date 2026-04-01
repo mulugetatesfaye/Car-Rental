@@ -20,9 +20,9 @@ export const submit = mutation({
       throw new Error("Invalid review token");
     }
 
-    // Logic Check: Ride must be completed
-    if (ride.status !== "completed") {
-      throw new Error("Only completed rides can be reviewed");
+    // Logic Check: Ride must be confirmed
+    if (ride.status !== "confirmed") {
+      throw new Error("Only confirmed rides can be reviewed");
     }
 
     // Duplication Check: Only one review per ride

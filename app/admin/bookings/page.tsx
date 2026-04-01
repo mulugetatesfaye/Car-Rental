@@ -36,7 +36,7 @@ export default function AdminBookingsPage() {
   const hasDateFilter = dateRange.start || dateRange.end;
   const displayedRides = searchQuery ? searchResults : hasDateFilter ? ridesWithDateFilter : paginatedRides;
 
-  const handleStatusChange = async (id: Id<"rides">, status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled") => {
+  const handleStatusChange = async (id: Id<"rides">, status: "pending" | "confirmed" | "cancelled") => {
     try {
       await updateStatus({ id, status });
     } catch (error) {
@@ -120,8 +120,6 @@ export default function AdminBookingsPage() {
               <option value="all">ALL STATUS</option>
               <option value="pending">PENDING</option>
               <option value="confirmed">CONFIRMED</option>
-              <option value="in_progress">IN PROGRESS</option>
-              <option value="completed">COMPLETED</option>
               <option value="cancelled">CANCELLED</option>
             </select>
           </div>
@@ -171,13 +169,11 @@ export default function AdminBookingsPage() {
                 {/* Info */}
                 <div className="space-y-4 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-3">
-                     <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-[0.2em] whitespace-nowrap ${
-                       ride.status === "pending" ? "bg-amber-950 text-amber-500" 
-                       : ride.status === "confirmed" ? "bg-blue-950 text-blue-500" 
-                       : ride.status === "in_progress" ? "bg-indigo-950 text-indigo-500"
-                       : ride.status === "completed" ? "bg-emerald-950 text-emerald-500"
-                       : "bg-red-950 text-red-500"
-                     }`}>
+                      <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-[0.2em] whitespace-nowrap ${
+                        ride.status === "pending" ? "bg-amber-950 text-amber-500" 
+                        : ride.status === "confirmed" ? "bg-blue-950 text-blue-500" 
+                        : "bg-red-950 text-red-500"
+                      }`}>
                        {ride.status.replace("_", " ")}
                      </span>
                      <p className="text-white font-bold text-xs md:text-sm whitespace-nowrap">{ride.pickupDate} at {ride.pickupTime || "TBD"}</p>
@@ -259,57 +255,39 @@ export default function AdminBookingsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap lg:flex-col gap-2 lg:items-end lg:w-32 shrink-0">
-                   {ride.status === "pending" && (
-                      <>
-                        <Button 
-                          onClick={() => handleStatusChange(ride._id, "confirmed")}
-                          variant="outline" 
-                          size="sm" 
-                          className="flex-1 lg:flex-none w-full bg-emerald-950/20 text-emerald-500 border-emerald-900/50 hover:bg-emerald-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
-                        >
-                          Confirm
-                        </Button>
-                        <Button 
-                          onClick={() => handleStatusChange(ride._id, "cancelled")}
-                          variant="outline" 
-                          size="sm" 
-                          className="flex-1 lg:flex-none w-full bg-red-950/20 text-red-500 border-red-900/50 hover:bg-red-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
-                        >
-                          Decline
-                        </Button>
-                      </>
-                   )}
-                   {ride.status === "confirmed" && (
-                      <Button 
-                        onClick={() => handleStatusChange(ride._id, "in_progress")}
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full bg-indigo-950/20 text-indigo-500 border-indigo-900/50 hover:bg-indigo-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
-                      >
-                        Start Ride
-                      </Button>
-                   )}
-                   {ride.status === "in_progress" && (
-                      <Button 
-                        onClick={() => handleStatusChange(ride._id, "completed")}
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full bg-emerald-950/20 text-emerald-500 border-emerald-900/50 hover:bg-emerald-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
-                      >
-                        Complete
-                      </Button>
-                   )}
-                    <GenerateInvoiceButton ride={ride} />
-                    <Button 
-                       onClick={() => handleStatusChange(ride._id, "cancelled")}
-                       variant="outline" 
-                       size="sm" 
-                       className={`w-full bg-transparent border-neutral-800 text-neutral-500 hover:bg-red-900/20 hover:text-red-500 rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8 mt-auto ${ride.status === "completed" || ride.status === "cancelled" ? "hidden" : ""}`}
-                     >
-                       Cancel Ride
-                     </Button>
-                </div>
+                 <div className="flex flex-wrap lg:flex-col gap-2 lg:items-end lg:w-32 shrink-0">
+                    {ride.status === "pending" && (
+                       <>
+                         <Button 
+                           onClick={() => handleStatusChange(ride._id, "confirmed")}
+                           variant="outline" 
+                           size="sm" 
+                           className="flex-1 lg:flex-none w-full bg-emerald-950/20 text-emerald-500 border-emerald-900/50 hover:bg-emerald-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
+                         >
+                           Confirm
+                         </Button>
+                         <Button 
+                           onClick={() => handleStatusChange(ride._id, "cancelled")}
+                           variant="outline" 
+                           size="sm" 
+                           className="flex-1 lg:flex-none w-full bg-red-950/20 text-red-500 border-red-900/50 hover:bg-red-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
+                         >
+                           Decline
+                         </Button>
+                       </>
+                    )}
+                    {ride.status === "confirmed" && (
+                       <Button 
+                         onClick={() => handleStatusChange(ride._id, "cancelled")}
+                         variant="outline" 
+                         size="sm" 
+                         className="w-full bg-red-950/20 text-red-500 border-red-900/50 hover:bg-red-900 hover:text-white rounded-none text-[9px] font-black uppercase tracking-widest h-10 lg:h-8"
+                       >
+                         Cancel
+                       </Button>
+                    )}
+                     <GenerateInvoiceButton ride={ride} />
+                 </div>
               </div>
             ))
           )}

@@ -54,6 +54,7 @@ export default defineSchema({
     accessible: v.boolean(),
     pickupDate: v.string(),
     pickupTime: v.optional(v.string()),
+    // Widened to allow migration of legacy statuses (in_progress, completed)
     status: v.union(
       v.literal("pending"),
       v.literal("confirmed"),

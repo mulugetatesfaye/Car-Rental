@@ -29,7 +29,7 @@ export const getDashboardSummary = query({
       }
       bookingsByDate[dateKey]++;
 
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         totalRevenue += ride.price;
         if (!revenueByDate[dateKey]) {
           revenueByDate[dateKey] = 0;
@@ -49,7 +49,7 @@ export const getDashboardSummary = query({
     const carTypes = await ctx.db.query("carTypes").take(50);
     const activeFleet = carTypes.filter(c => c.isActive).length;
 
-    const avgRideValue = statusCounts.completed > 0 ? totalRevenue / statusCounts.completed : 0;
+    const avgRideValue = statusCounts.confirmed > 0 ? totalRevenue / statusCounts.confirmed : 0;
     const cancellationRate = rides.length > 0 ? (statusCounts.cancelled / rides.length) * 100 : 0;
 
     return {
@@ -95,7 +95,7 @@ export const getCustomerList = query({
       
       const cust = customersMap.get(ride.customerEmail)!;
       cust.totalRides++;
-      if (ride.status === "completed") {
+      if (ride.status === "confirmed") {
         cust.totalSpend += ride.price;
       }
     }

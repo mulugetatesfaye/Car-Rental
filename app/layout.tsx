@@ -12,12 +12,13 @@ const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans", weight: ["
 const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-serif", weight: "400", display: "swap" });
 
 export const metadata: Metadata = {
+  applicationName: "Luna Limo",
   title: {
     default: "Luna Limo | Luxury Chauffeur & Executive Car Service Seattle",
     template: "%s | Luna Limo"
   },
   description: "Experience the pinnacle of luxury travel with Luna Limo. Seattle's premier chauffeur service for executive airport transfers, corporate events, and bespoke private journeys. 24/7 reliability and professional service.",
-  keywords: ["Luna Limoz", "Luna Limo", "Seattle Limo", "Chauffeur Service Seattle", "Airport Transfer Seattle", "Luxury Car Service", "Executive Transportation", "Black Car Service", "Sea-Tac Limo"],
+  keywords: ["Luna Limo", "Seattle Limo", "Chauffeur Service Seattle", "Airport Transfer Seattle", "Luxury Car Service", "Executive Transportation", "Black Car Service", "Sea-Tac Limo"],
   authors: [{ name: "Luna Limo" }],
   creator: "Luna Limo",
   publisher: "Luna Limo",

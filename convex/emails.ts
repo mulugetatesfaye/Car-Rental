@@ -43,10 +43,7 @@ export const sendBookingEmail = internalAction({
       return;
     }
     
-    // As requested, using the testing domain provided by Resend
-    const fromAddress = "Luna Limo <onboarding@resend.dev>";
-    // Sending to both customer and admin. Note: Under Resend's free tier with onboarding@resend.dev, 
-    // it may only actually deliver to the verified Resend account owner's email address.
+    const fromAddress = `Luna Limo <${process.env.RESEND_FROM_EMAIL || "noreply@lunalimoz.com"}>`;
     const rawToAddresses = [ride.customerEmail, settings.email].filter(Boolean) as string[];
     const toAddresses = Array.from(new Set(rawToAddresses));
 
@@ -140,7 +137,7 @@ export const sendInvoiceEmail = internalAction({
 
     const { ride, settings } = data;
     
-    const fromAddress = "Luna Limo <onboarding@resend.dev>";
+    const fromAddress = `Luna Limo <${process.env.RESEND_FROM_EMAIL || "noreply@lunalimoz.com"}>`;
     const toAddress = ride.customerEmail as string;
     
     const dateStr = new Date(ride.createdAt).toLocaleDateString().replace(/\//g, "-");
@@ -240,7 +237,7 @@ export const sendContactInquiryEmail = internalAction({
 
     const { inquiry, settings } = data;
     
-    const fromAddress = "Luna Limo <onboarding@resend.dev>";
+    const fromAddress = `Luna Limo <${process.env.RESEND_FROM_EMAIL || "noreply@lunalimoz.com"}>`;
 
     try {
       const resp = await resend.emails.send({

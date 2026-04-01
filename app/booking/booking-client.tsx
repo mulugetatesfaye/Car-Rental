@@ -18,6 +18,12 @@ import {
   ChevronRight,
   Info,
   Loader2,
+  ArrowLeft,
+  ArrowRight,
+  User,
+  Mail,
+  Phone,
+  ShieldCheck,
 } from "lucide-react";
 import { LocationInput } from "@/components/booking/location-input";
 import { Card } from "@/components/ui/card";
@@ -49,6 +55,7 @@ interface BookingOptions {
 }
 
 type ServiceType = "point_to_point" | "hourly";
+type BookingStep = "trip" | "vehicle" | "review";
 
 export default function BookingClient() {
   const searchParams = useSearchParams();
@@ -89,7 +96,7 @@ export default function BookingClient() {
     hourlyDuration: 2,
   });
 
-  const [bookingStep, setBookingStep] = React.useState<"trip" | "vehicle" | "payment">("trip");
+  const [bookingStep, setBookingStep] = React.useState<BookingStep>("trip");
 
   const fetchRoute = async (pickupLoc: SearchResult, destLoc: SearchResult) => {
     setLoadingRoute(true);
@@ -179,8 +186,39 @@ export default function BookingClient() {
     }
   };
 
+  const isTripStepValid = () => {
+    if (serviceType === "hourly") {
+      return options.pickupDate && options.pickupTime;
+    }
+    return pickup && destination && route && options.pickupDate && options.pickupTime;
+  };
+
+  const isVehicleStepValid = () => {
+    return selectedCar;
+  };
+
+  const isReviewStepValid = () => {
+    return options.customerName.trim() && options.customerEmail.trim() && options.customerPhone.trim();
+  };
+
+  const goToNextStep = () => {
+    if (bookingStep === "trip" && isTripStepValid()) {
+      setBookingStep("vehicle");
+    } else if (bookingStep === "vehicle" && isVehicleStepValid()) {
+      setBookingStep("review");
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (bookingStep === "vehicle") {
+      setBookingStep("trip");
+    } else if (bookingStep === "review") {
+      setBookingStep("vehicle");
+    }
+  };
+
   const handleConfirm = async () => {
-    if (!selectedCar || !pricing) return;
+    if (!selectedCar || !pricing || !isReviewStepValid()) return;
     if (serviceType === "point_to_point" && (!pickup || !destination || !route)) return;
 
     setBooking(true);
@@ -334,6 +372,12 @@ export default function BookingClient() {
     );
   }
 
+  const stepTitles: Record<BookingStep, string> = {
+    trip: "Trip Details",
+    vehicle: "Select Vehicle",
+    review: "Review & Confirm",
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
 
@@ -344,20 +388,20 @@ export default function BookingClient() {
               num="1" 
               title="Trip" 
               active={bookingStep === "trip"} 
-              complete={bookingStep === "vehicle" || bookingStep === "payment"} 
+              complete={bookingStep === "vehicle" || bookingStep === "review"} 
             />
             <div className="flex-1 h-px bg-white/5 md:mx-4" />
             <Step 
               num="2" 
               title="Vehicle" 
               active={bookingStep === "vehicle"} 
-              complete={bookingStep === "payment"} 
+              complete={bookingStep === "review"} 
             />
             <div className="flex-1 h-px bg-white/5 md:mx-4" />
             <Step 
               num="3" 
-              title="Payment" 
-              active={bookingStep === "payment"} 
+              title="Review" 
+              active={bookingStep === "review"} 
               complete={false} 
             />
           </div>
@@ -367,117 +411,190 @@ export default function BookingClient() {
       <main className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 overflow-hidden">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 w-full max-w-full">
           <div className="lg:col-span-7 order-first min-w-0">
-            <div className="space-y-12">
-              <section>
-                <div className="flex items-center gap-4 mb-8">
-                  <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
-                    Trip Details
-                  </h2>
+            <div className="flex items-center gap-4 mb-8">
+              {bookingStep !== "trip" && (
+                <button
+                  onClick={goToPreviousStep}
+                  className="w-10 h-10 flex items-center justify-center border border-neutral-700 hover:border-gold transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4 text-neutral-400" />
+                </button>
+              )}
+              <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase text-white border-b-2 border-gold inline-block pb-1">
+                {stepTitles[bookingStep]}
+              </h2>
+            </div>
+
+            {bookingStep === "trip" && (
+              <div className="space-y-10 animate-fade-in">
+                {serviceType === "point_to_point" && (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Pickup Location</label>
+                      <LocationInput
+                        placeholder="Enter pickup location (e.g. SEA Airport)"
+                        value={pickup}
+                        onChange={handlePickupSelect}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Drop-off Location</label>
+                      <LocationInput
+                        placeholder="Enter destination (e.g. Hotel or Address)"
+                        value={destination}
+                        onChange={handleDestinationSelect}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {serviceType === "hourly" && (
+                  <div className="bg-neutral-900/50 border border-neutral-800 p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Clock className="h-5 w-5 text-gold" />
+                      <h3 className="font-serif text-lg font-black italic uppercase text-white">Hourly Service</h3>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">
+                      Reserve a vehicle and chauffeur by the hour. Perfect for events, meetings, or flexible itineraries.
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Duration</label>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => updateOption("hourlyDuration", Math.max(1, options.hourlyDuration - 1))}
+                          className="w-10 h-10 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white hover:border-gold transition-colors"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <div className="w-16 h-10 bg-black border border-neutral-800 flex items-center justify-center">
+                          <span className="text-sm font-bold text-white">{options.hourlyDuration}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => updateOption("hourlyDuration", Math.min(12, options.hourlyDuration + 1))}
+                          className="w-10 h-10 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white hover:border-gold transition-colors"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                        <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest ml-2">HOURS</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Date</label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        value={options.pickupDate}
+                        onChange={(e) => updateOption("pickupDate", e.target.value)}
+                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors appearance-none"
+                      />
+                      <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Time</label>
+                    <div className="relative">
+                      <input
+                        type="time"
+                        value={options.pickupTime}
+                        onChange={(e) => updateOption("pickupTime", e.target.value)}
+                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors"
+                      />
+                      <Clock className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 pointer-events-none" />
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="space-y-6">
-                  {serviceType === "point_to_point" && (
-                    <>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Pickup Location</label>
-                        <LocationInput
-                          placeholder="Enter pickup location (e.g. SEA Airport)"
-                          value={pickup}
-                          onChange={handlePickupSelect}
-                        />
-                      </div>
 
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Drop-off Location</label>
-                        <LocationInput
-                          placeholder="Enter destination (e.g. Hotel or Address)"
-                          value={destination}
-                          onChange={handleDestinationSelect}
-                        />
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Service Type</label>
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                    <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setServiceType("point_to_point")}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${serviceType === "point_to_point" ? "border-gold bg-gold/10" : "border-neutral-800 bg-neutral-900"}`}>
+                        {serviceType === "point_to_point" && <div className="w-2.5 h-2.5 rounded-full bg-gold" />}
                       </div>
-                    </>
-                  )}
+                      <span className={`text-sm font-bold uppercase tracking-tight ${serviceType === "point_to_point" ? "text-gold" : "text-neutral-400"}`}>Point-to-Point</span>
+                    </div>
+                    <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setServiceType("hourly")}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${serviceType === "hourly" ? "border-gold bg-gold/10" : "border-neutral-800 bg-neutral-900"}`}>
+                        {serviceType === "hourly" && <div className="w-2.5 h-2.5 rounded-full bg-gold" />}
+                      </div>
+                      <span className={`text-sm font-bold uppercase tracking-tight ${serviceType === "hourly" ? "text-gold" : "text-neutral-400"}`}>Hourly Service</span>
+                    </div>
+                  </div>
+                </div>
 
-                  {serviceType === "hourly" && (
-                    <div className="bg-neutral-900/50 border border-neutral-800 p-6 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <Clock className="h-5 w-5 text-gold" />
-                        <h3 className="font-serif text-lg font-black italic uppercase text-white">Hourly Service</h3>
-                      </div>
-                      <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">
-                        Reserve a vehicle and chauffeur by the hour. Perfect for events, meetings, or flexible itineraries.
-                      </p>
-                      <div className="flex items-center gap-4">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Duration</label>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => updateOption("hourlyDuration", Math.max(1, options.hourlyDuration - 1))}
-                            className="w-10 h-10 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white hover:border-gold transition-colors"
-                          >
-                            <Minus className="h-4 w-4" />
-                          </button>
-                          <div className="w-16 h-10 bg-black border border-neutral-800 flex items-center justify-center">
-                            <span className="text-sm font-bold text-white">{options.hourlyDuration}</span>
+                <div className="flex justify-end pt-4">
+                  <Button 
+                    onClick={goToNextStep}
+                    disabled={!isTripStepValid()}
+                    className="font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                  >
+                    Continue to Vehicle Selection
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {bookingStep === "vehicle" && (
+              <div className="space-y-10 animate-fade-in">
+                <div className="space-y-2 sm:space-y-4">
+                  {activeCarTypes.length === 0 ? (
+                    <div className="py-20 text-center border border-neutral-800 bg-neutral-900/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-gold mx-auto mb-4" />
+                      <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Retrieving Elite Fleet...</p>
+                    </div>
+                  ) : (
+                    activeCarTypes.map((car) => (
+                      <button
+                        key={car.name}
+                        onClick={() => handleCarSelect(car)}
+                        className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
+                          selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
+                        }`}
+                      >
+                        <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
+                          <Image 
+                            src={car.image || "/fleet_black_bg.png"}
+                            alt={car.name}
+                            fill
+                            className="object-cover opacity-50 group-hover:scale-110 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                          <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
+                        </div>
+                        <div className="flex sm:hidden w-10 h-10 bg-neutral-800/60 items-center justify-center flex-shrink-0 border border-neutral-800">
+                          <Car className="h-5 w-5 text-gold" />
+                        </div>
+
+                        <div className="flex-1 text-left min-w-0">
+                          <h4 className="font-serif text-sm sm:text-lg text-white truncate">{car.name}</h4>
+                          <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-[0.15em] text-neutral-500 mt-0.5 whitespace-normal line-clamp-1">{car.description}</p>
+                          <div className="flex items-center gap-3 sm:gap-6 mt-1 sm:mt-2">
+                            <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                              <Users className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                            </span>
+                            <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                              <Luggage className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
+                            </span>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => updateOption("hourlyDuration", Math.min(12, options.hourlyDuration + 1))}
-                            className="w-10 h-10 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white hover:border-gold transition-colors"
-                          >
-                            <Plus className="h-4 w-4" />
-                          </button>
-                          <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest ml-2">HOURS</span>
                         </div>
-                      </div>
-                    </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-widest text-neutral-500 mb-1">From</p>
+                          <p className="font-serif text-lg sm:text-2xl text-gold">{formatPrice(serviceType === "hourly" ? (car.hourlyRate || car.baseFare * 4) : car.baseFare)}</p>
+                        </div>
+                      </button>
+                    ))
                   )}
+                </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Date</label>
-                      <div className="relative">
-                        <input
-                          type="date"
-                          value={options.pickupDate}
-                          onChange={(e) => updateOption("pickupDate", e.target.value)}
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors appearance-none"
-                        />
-                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 pointer-events-none" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Time</label>
-                      <div className="relative">
-                        <input
-                          type="time"
-                          value={options.pickupTime}
-                          onChange={(e) => updateOption("pickupTime", e.target.value)}
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors"
-                        />
-                        <Clock className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 pointer-events-none" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Service Type</label>
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-                      <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setServiceType("point_to_point")}>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${serviceType === "point_to_point" ? "border-gold bg-gold/10" : "border-neutral-800 bg-neutral-900"}`}>
-                          {serviceType === "point_to_point" && <div className="w-2.5 h-2.5 rounded-full bg-gold" />}
-                        </div>
-                        <span className={`text-sm font-bold uppercase tracking-tight ${serviceType === "point_to_point" ? "text-gold" : "text-neutral-400"}`}>Point-to-Point</span>
-                      </div>
-                      <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setServiceType("hourly")}>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${serviceType === "hourly" ? "border-gold bg-gold/10" : "border-neutral-800 bg-neutral-900"}`}>
-                          {serviceType === "hourly" && <div className="w-2.5 h-2.5 rounded-full bg-gold" />}
-                        </div>
-                        <span className={`text-sm font-bold uppercase tracking-tight ${serviceType === "hourly" ? "text-gold" : "text-neutral-400"}`}>Hourly Service</span>
-                      </div>
-                    </div>
-                  </div>
-
+                {selectedCar && (
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Passengers & Luggage</label>
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
@@ -486,7 +603,7 @@ export default function BookingClient() {
                           <Users className="h-5 w-5 text-gold" />
                           <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Passengers</p>
-                            <p className="text-xs text-neutral-400">Max {selectedCar?.capacity || "—"}</p>
+                            <p className="text-xs text-neutral-400">Max {selectedCar.capacity}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -504,7 +621,7 @@ export default function BookingClient() {
                           <button
                             type="button"
                             onClick={() => adjustPassengers(1)}
-                            disabled={options.passengers >= (selectedCar?.capacity || 10)}
+                            disabled={options.passengers >= selectedCar.capacity}
                             className="w-8 h-8 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white hover:border-gold transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                           >
                             <Plus className="h-3 w-3" />
@@ -543,110 +660,139 @@ export default function BookingClient() {
                       </div>
                     </div>
                   </div>
+                )}
+
+                <div className="flex justify-between pt-4">
+                  <Button 
+                    onClick={goToPreviousStep}
+                    variant="outline"
+                    className="font-sans border-neutral-700 hover:border-gold text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] transition-all"
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Trip
+                  </Button>
+                  <Button 
+                    onClick={goToNextStep}
+                    disabled={!isVehicleStepValid()}
+                    className="font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                  >
+                    Continue to Review
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </div>
-              </section>
+              </div>
+            )}
 
-              {(serviceType === "point_to_point" ? (pickup && destination && route) : true) && (
-                <section className="animate-fade-in">
-                  <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
-                    Select Vehicle
-                  </h2>
-                  <div className="space-y-2 sm:space-y-4">
-                    {activeCarTypes.length === 0 ? (
-                      <div className="py-20 text-center border border-neutral-800 bg-neutral-900/30">
-                        <Loader2 className="h-8 w-8 animate-spin text-gold mx-auto mb-4" />
-                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Retrieving Elite Fleet...</p>
+            {bookingStep === "review" && (
+              <div className="space-y-10 animate-fade-in">
+                <div className="bg-neutral-900/50 border border-neutral-800 p-6 space-y-5">
+                  <h3 className="font-serif text-lg font-black italic uppercase text-gold flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Trip Information
+                  </h3>
+                  {serviceType === "point_to_point" ? (
+                    <>
+                      <div className="flex justify-between gap-4">
+                        <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Pickup</span>
+                        <span className="text-sm font-bold text-right">{pickup?.address.freeformAddress}</span>
                       </div>
-                    ) : (
-                      activeCarTypes.map((car) => (
-                        <button
-                          key={car.name}
-                          onClick={() => handleCarSelect(car)}
-                          className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
-                            selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
-                          }`}
-                        >
-                          <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
-                            <Image 
-                              src={car.image || "/fleet_black_bg.png"}
-                              alt={car.name}
-                              fill
-                              className="object-cover opacity-50 group-hover:scale-110 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-                            <Car className="h-8 w-8 text-white relative z-10 opacity-80" />
-                          </div>
-                          <div className="flex sm:hidden w-10 h-10 bg-neutral-800/60 items-center justify-center flex-shrink-0 border border-neutral-800">
-                            <Car className="h-5 w-5 text-gold" />
-                          </div>
-
-                          <div className="flex-1 text-left min-w-0">
-                            <h4 className="font-serif text-sm sm:text-lg text-white truncate">{car.name}</h4>
-                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-[0.15em] text-neutral-500 mt-0.5 whitespace-normal line-clamp-1">{car.description}</p>
-                            <div className="flex items-center gap-3 sm:gap-6 mt-1 sm:mt-2">
-                              <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                                <Users className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
-                              </span>
-                              <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                                <Luggage className="h-3 w-3 text-gold inline mr-1" />{car.capacity}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="text-right flex-shrink-0">
-                            <p className="hidden sm:block text-[9px] font-semibold uppercase tracking-widest text-neutral-500 mb-1">From</p>
-                            <p className="font-serif text-lg sm:text-2xl text-gold">{formatPrice(serviceType === "hourly" ? (car.hourlyRate || car.baseFare * 4) : car.baseFare)}</p>
-                          </div>
-                        </button>
-                      ))
-                    )}
+                      <div className="flex justify-between gap-4">
+                        <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Destination</span>
+                        <span className="text-sm font-bold text-right">{destination?.address.freeformAddress}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Service</span>
+                      <span className="text-sm font-bold text-right">{options.hourlyDuration} Hours Charter</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-4">
+                    <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Date & Time</span>
+                    <span className="text-sm font-bold text-right">{options.pickupDate} at {options.pickupTime || "TBD"}</span>
                   </div>
-                </section>
-              )}
+                  {route && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Est. Duration</span>
+                      <span className="text-sm font-bold text-right">{formatDuration(route.durationInMinutes)}</span>
+                    </div>
+                  )}
+                </div>
 
-              {((serviceType === "point_to_point" ? (pickup && destination && route) : true) && selectedCar) && (
-                <section className="animate-fade-in py-12">
-                  <h2 className="text-2xl sm:text-3xl font-serif font-black italic uppercase mb-8 pb-1 border-b-2 border-gold inline-block">
-                    Passenger Details
-                  </h2>
-                  <div className="space-y-6">
+                <div className="bg-neutral-900/50 border border-neutral-800 p-6 space-y-5">
+                  <h3 className="font-serif text-lg font-black italic uppercase text-gold flex items-center gap-2">
+                    <Car className="h-4 w-4" />
+                    Vehicle
+                  </h3>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Class</span>
+                    <span className="text-sm font-bold italic text-right">{selectedCar?.name}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Passengers</span>
+                    <span className="text-sm font-bold text-right">{options.passengers}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Luggage</span>
+                    <span className="text-sm font-bold text-right">{options.luggage}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <h3 className="font-serif text-lg font-black italic uppercase text-white border-b border-neutral-800 pb-2">Passenger Details</h3>
+                  <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                        <User className="h-3 w-3" /> Full Name
+                      </label>
                       <input 
                         value={options.customerName} 
                         onChange={(e) => updateOption("customerName", e.target.value)}
                         placeholder="Enter your full name" 
-                        required 
                         className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                          <Mail className="h-3 w-3" /> Email Address
+                        </label>
                         <input 
                           type="email"
                           value={options.customerEmail} 
                           onChange={(e) => updateOption("customerEmail", e.target.value)}
                           placeholder="email@example.com" 
-                          required 
                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Phone Number</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                          <Phone className="h-3 w-3" /> Phone Number
+                        </label>
                         <input 
                           type="tel"
                           value={options.customerPhone} 
                           onChange={(e) => updateOption("customerPhone", e.target.value)}
                           placeholder="(555) 000-0000" 
-                          required 
                           className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
                         />
                       </div>
                     </div>
                   </div>
-                </section>
-              )}
-            </div>
+                </div>
+
+                <div className="flex justify-between pt-4">
+                  <Button 
+                    onClick={goToPreviousStep}
+                    variant="outline"
+                    className="font-sans border-neutral-700 hover:border-gold text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] transition-all"
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Vehicle
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="lg:col-span-5 order-last lg:order-last min-w-0">
@@ -657,7 +803,7 @@ export default function BookingClient() {
                 </div>
                 
                 <div className="p-0 overflow-hidden">
-                  {serviceType === "point_to_point" && (
+                  {serviceType === "point_to_point" && bookingStep !== "review" && (
                     <div className="w-full h-[200px] sm:h-[300px] border-b border-neutral-800 grayscale hover:grayscale-0 transition-all duration-700 relative overflow-hidden">
                       <MapComponent
                         pickup={pickup ? { lat: pickup.position.lat, lng: pickup.position.lon } : null}
@@ -672,7 +818,7 @@ export default function BookingClient() {
                     </div>
                   )}
 
-                  {serviceType === "hourly" && (
+                  {serviceType === "hourly" && bookingStep !== "review" && (
                     <div className="h-[200px] sm:h-[300px] border-b border-neutral-800 flex items-center justify-center bg-neutral-900">
                       <div className="text-center space-y-4">
                         <Clock className="h-12 w-12 text-gold/40 mx-auto" />
@@ -683,7 +829,53 @@ export default function BookingClient() {
                   )}
                   
                   <div className="p-6 sm:p-8 space-y-6 sm:space-y-8">
-                    {serviceType === "point_to_point" && route && (
+                    {bookingStep === "review" && (
+                      <div className="space-y-4 border-b border-neutral-800 pb-6">
+                        {serviceType === "point_to_point" && pickup && (
+                          <div className="flex items-start gap-3">
+                            <MapPin className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">Pickup</p>
+                              <p className="text-sm font-bold">{pickup.address.freeformAddress}</p>
+                            </div>
+                          </div>
+                        )}
+                        {serviceType === "point_to_point" && destination && (
+                          <div className="flex items-start gap-3">
+                            <MapPin className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">Destination</p>
+                              <p className="text-sm font-bold">{destination.address.freeformAddress}</p>
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex items-start gap-3">
+                          <Calendar className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">Date & Time</p>
+                            <p className="text-sm font-bold">{options.pickupDate} at {options.pickupTime || "TBD"}</p>
+                          </div>
+                        </div>
+                        {selectedCar && (
+                          <div className="flex items-start gap-3">
+                            <Car className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">Vehicle</p>
+                              <p className="text-sm font-bold italic">{selectedCar.name}</p>
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex items-start gap-3">
+                          <Users className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">Passengers / Luggage</p>
+                            <p className="text-sm font-bold">{options.passengers} / {options.luggage}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {serviceType === "point_to_point" && route && bookingStep !== "review" && (
                       <div className="flex justify-between items-center bg-black p-4 border-l-2 border-gold outline outline-1 outline-neutral-800">
                         <div className="space-y-1">
                           <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Distance</p>
@@ -696,18 +888,20 @@ export default function BookingClient() {
                       </div>
                     )}
 
-                    <div className="bg-black p-4 border-l-2 border-gold outline outline-1 outline-neutral-800">
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Passengers</p>
-                          <p className="text-sm font-black italic">{options.passengers}</p>
-                        </div>
-                        <div className="text-right space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Luggage</p>
-                          <p className="text-sm font-black italic">{options.luggage}</p>
+                    {bookingStep !== "review" && (
+                      <div className="bg-black p-4 border-l-2 border-gold outline outline-1 outline-neutral-800">
+                        <div className="flex justify-between items-center">
+                          <div className="space-y-1">
+                            <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Passengers</p>
+                            <p className="text-sm font-black italic">{options.passengers}</p>
+                          </div>
+                          <div className="text-right space-y-1">
+                            <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Luggage</p>
+                            <p className="text-sm font-black italic">{options.luggage}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {pricing ? (
                       <div className="text-center space-y-2">
@@ -726,25 +920,44 @@ export default function BookingClient() {
                         </p>
                       </div>
                     )}
-                    <div className="space-y-4">
-                      <Button 
-                        onClick={handleConfirm}
-                        disabled={!selectedCar || !options.customerName || !options.customerEmail || !options.customerPhone || isBooking || (serviceType === "point_to_point" && (!pickup || !destination))}
-                        className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
-                      >
-                        {isBooking ? (
-                          <>
-                            <Loader2 className="mr-3 h-4 w-4 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          "Confirm Reservation"
-                        )}
-                      </Button>
-                      <p className="text-[9px] font-bold text-neutral-500 text-center uppercase tracking-widest leading-relaxed">
-                        By confirming, you agree to our <Link href="#" className="text-gold underline decoration-gold/30">Terms</Link> and <Link href="#" className="text-gold underline decoration-gold/30">Policy</Link>.
-                      </p>
-                    </div>
+
+                    {bookingStep === "review" && (
+                      <div className="space-y-4">
+                        <Button 
+                          onClick={handleConfirm}
+                          disabled={!isReviewStepValid() || isBooking}
+                          className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                        >
+                          {isBooking ? (
+                            <>
+                              <Loader2 className="mr-3 h-4 w-4 animate-spin" />
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              <ShieldCheck className="mr-2 h-4 w-4" />
+                              Confirm Reservation
+                            </>
+                          )}
+                        </Button>
+                        <p className="text-[9px] font-bold text-neutral-500 text-center uppercase tracking-widest leading-relaxed">
+                          By confirming, you agree to our <Link href="#" className="text-gold underline decoration-gold/30">Terms</Link> and <Link href="#" className="text-gold underline decoration-gold/30">Policy</Link>.
+                        </p>
+                      </div>
+                    )}
+
+                    {bookingStep !== "review" && (
+                      <div className="space-y-4">
+                        <Button 
+                          onClick={goToNextStep}
+                          disabled={bookingStep === "trip" ? !isTripStepValid() : !isVehicleStepValid()}
+                          className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                        >
+                          {bookingStep === "trip" ? "Select Vehicle" : "Review Booking"}
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Card>

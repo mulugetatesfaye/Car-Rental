@@ -4,10 +4,11 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, MapPin, Calendar, DollarSign, Users, MessageSquare, Phone, Mail } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, DollarSign, Users, MessageSquare, Phone, Mail, Navigation, Clock, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { GenerateInvoiceButton } from "@/components/admin/GenerateInvoiceButton";
+import { RideMap } from "@/components/admin/ride-map";
 
 export default function RideDetailPage() {
   const params = useParams();
@@ -38,6 +39,8 @@ export default function RideDetailPage() {
     setNoteText("");
   };
 
+  const isHourly = ride.serviceType === "hourly";
+
   return (
     <div className="p-4 sm:p-8 md:p-12 space-y-8 pb-24">
       {/* Back Button */}
@@ -48,42 +51,49 @@ export default function RideDetailPage() {
         <ArrowLeft className="h-4 w-4" /> Back to Bookings
       </button>
 
-      <header className="space-y-4">
-        <h1 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white tracking-tight">
-          Ride <span className="text-gold">Details</span>
-        </h1>
-        <p className="text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em]">
-          {ride.customerName} &middot; {ride.pickupDate}
-        </p>
+      {/* Header */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-2">
+          <h1 className="font-serif text-3xl md:text-5xl font-black italic uppercase text-white tracking-tight">
+            Ride <span className="text-gold">Details</span>
+          </h1>
+          <p className="text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em]">
+            {ride.customerName} &middot; {ride.pickupDate}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] ${
+            ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
+            : ride.status === "confirmed" ? "bg-blue-950 text-blue-500 border border-blue-900"
+            : "bg-red-950 text-red-500 border border-red-900"
+          }`}>
+            {ride.status.replace("_", " ")}
+          </span>
+          <GenerateInvoiceButton ride={ride} />
+        </div>
       </header>
 
-      {/* Status Badge */}
-      <div className="flex items-center gap-4">
-        <span className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] ${
-          ride.status === "pending" ? "bg-amber-950 text-amber-500 border border-amber-900" 
-          : ride.status === "confirmed" ? "bg-blue-950 text-blue-500 border border-blue-900"
-          : "bg-red-950 text-red-500 border border-red-900"
-        }`}>
-          {ride.status.replace("_", " ")}
-        </span>
-        <GenerateInvoiceButton ride={ride} />
-      </div>
-
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main Info */}
+        {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Route */}
-          <section className="bg-neutral-900 border border-neutral-800 p-6">
-            <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> Route Details
-            </h2>
-            <div className="space-y-4">
+          {/* Interactive Map */}
+          <RideMap
+            pickup={{ lat: ride.pickupLat, lng: ride.pickupLng, address: ride.pickupAddress }}
+            destination={isHourly ? null : { lat: ride.destLat, lng: ride.destLng, address: ride.destinationAddress }}
+            isHourly={isHourly}
+          />
+
+          {/* Route Summary */}
+          <section className="bg-neutral-900 border border-neutral-800">
+            <div className="p-6 border-b border-neutral-800">
+              <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                <Navigation className="h-4 w-4" /> Route Details
+              </h2>
+            </div>
+            <div className="p-6 space-y-4">
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">PICKUP</p>
                 <p className="text-white font-bold text-sm">{ride.pickupAddress}</p>
-                <p className="text-neutral-600 text-[10px] mt-1">
-                  {ride.pickupLat.toFixed(4)}, {ride.pickupLng.toFixed(4)}
-                </p>
               </div>
               <div className="flex justify-center">
                 <div className="w-px h-8 bg-gold/30" />
@@ -91,19 +101,28 @@ export default function RideDetailPage() {
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">DESTINATION</p>
                 <p className="text-white font-bold text-sm">{ride.destinationAddress}</p>
-                <p className="text-neutral-600 text-[10px] mt-1">
-                  {ride.destLat.toFixed(4)}, {ride.destLng.toFixed(4)}
-                </p>
+              </div>
+              <div className="flex gap-4 pt-2">
+                <div className="flex items-center gap-2 bg-black px-4 py-2 border border-neutral-800">
+                  <Gauge className="h-4 w-4 text-gold" />
+                  <span className="text-white text-xs font-bold">{ride.distance.toFixed(1)} km</span>
+                </div>
+                <div className="flex items-center gap-2 bg-black px-4 py-2 border border-neutral-800">
+                  <Clock className="h-4 w-4 text-gold" />
+                  <span className="text-white text-xs font-bold">{ride.duration.toFixed(0)} min</span>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Ride Details */}
-          <section className="bg-neutral-900 border border-neutral-800 p-6">
-            <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
-              <Calendar className="h-4 w-4" /> Ride Information
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Ride Information */}
+          <section className="bg-neutral-900 border border-neutral-800">
+            <div className="p-6 border-b border-neutral-800">
+              <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                <Calendar className="h-4 w-4" /> Ride Information
+              </h2>
+            </div>
+            <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">DATE</p>
                 <p className="text-white font-bold text-sm">{ride.pickupDate}</p>
@@ -113,22 +132,14 @@ export default function RideDetailPage() {
                 <p className="text-white font-bold text-sm">{ride.pickupTime || "TBD"}</p>
               </div>
               <div className="bg-black p-4 border border-neutral-800">
-                <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">DISTANCE</p>
-                <p className="text-white font-bold text-sm">{ride.distance.toFixed(1)} km</p>
-              </div>
-              <div className="bg-black p-4 border border-neutral-800">
-                <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">DURATION</p>
-                <p className="text-white font-bold text-sm">{ride.duration.toFixed(0)} min</p>
-              </div>
-              <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">VEHICLE</p>
                 <p className="text-white font-bold text-sm">{ride.carTypeName}</p>
               </div>
               <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">SERVICE</p>
-                <p className="text-white font-bold text-sm">{ride.serviceType === "hourly" ? "Hourly" : "Point-to-Point"}</p>
+                <p className="text-white font-bold text-sm">{isHourly ? "Hourly" : "Point-to-Point"}</p>
               </div>
-              {ride.serviceType === "hourly" && ride.hourlyDuration && (
+              {isHourly && ride.hourlyDuration && (
                 <div className="bg-black p-4 border border-neutral-800">
                   <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">HOURS</p>
                   <p className="text-gold font-bold text-sm">{ride.hourlyDuration}h</p>
@@ -181,7 +192,7 @@ export default function RideDetailPage() {
             <h2 className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-6">Customer</h2>
             <div className="space-y-4">
               <p className="text-white font-serif text-lg font-black italic">{ride.customerName}</p>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p className="flex items-center gap-2 text-neutral-400 text-xs">
                   <Mail className="h-3 w-3 text-neutral-600" /> {ride.customerEmail}
                 </p>

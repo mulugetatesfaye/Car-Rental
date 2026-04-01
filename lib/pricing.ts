@@ -6,6 +6,7 @@ export interface CarType {
   baseFare: number;
   perKmRate: number;
   perMinuteRate: number;
+  hourlyRate?: number;
   multiplier: number;
   capacity: number;
   isActive: boolean;
@@ -40,6 +41,23 @@ export function calculatePrice(
     distanceCharge: Math.round(distanceCharge * 100) / 100,
     timeCharge: Math.round(timeCharge * 100) / 100,
     multiplier,
+    totalPrice,
+  };
+}
+
+export function calculateHourlyPrice(
+  carType: CarType,
+  hours: number,
+  dynamicMultiplier: number = 1.0
+): PricingResult {
+  const hourlyCharge = hours * (carType.hourlyRate || 0) * carType.multiplier * dynamicMultiplier;
+  const totalPrice = Math.round(hourlyCharge * 100) / 100;
+
+  return {
+    baseFare: 0,
+    distanceCharge: 0,
+    timeCharge: Math.round(hourlyCharge * 100) / 100,
+    multiplier: carType.multiplier * dynamicMultiplier,
     totalPrice,
   };
 }

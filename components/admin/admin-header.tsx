@@ -167,6 +167,7 @@ export default function AdminHeader() {
     if (pathname === "/admin/customers") return "Client Roster";
     if (pathname === "/admin/vehicles") return "Fleet Config";
     if (pathname === "/admin/reviews") return "Feedback";
+    if (pathname === "/admin/contact") return "Contact Inquiries";
     if (pathname === "/admin/settings") return "Settings";
     return "Admin";
   };

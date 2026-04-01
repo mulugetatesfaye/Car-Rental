@@ -26,6 +26,7 @@ export default defineSchema({
     baseFare: v.number(),
     perKmRate: v.number(),
     perMinuteRate: v.number(),
+    hourlyRate: v.optional(v.number()),
     multiplier: v.number(),
     capacity: v.number(),
     isActive: v.boolean(),
@@ -52,6 +53,11 @@ export default defineSchema({
     passengers: v.number(),
     luggage: v.number(),
     accessible: v.boolean(),
+    serviceType: v.optional(v.union(
+      v.literal("point_to_point"),
+      v.literal("hourly")
+    )),
+    hourlyDuration: v.optional(v.number()),
     pickupDate: v.string(),
     pickupTime: v.optional(v.string()),
     status: v.union(
@@ -67,6 +73,17 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_created", ["createdAt"])
     .searchIndex("search_customer", { searchField: "customerName" }),
+
+  contactInquiries: defineTable({
+    name: v.string(),
+    email: v.string(),
+    subject: v.string(),
+    message: v.string(),
+    isRead: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_isRead", ["isRead"])
+    .index("by_createdAt", ["createdAt"]),
 
   reviews: defineTable({
     rideId: v.id("rides"),

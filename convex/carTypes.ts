@@ -29,6 +29,7 @@ export const seedCarTypes = internalMutation({
         baseFare: 25,
         perKmRate: 2.5,
         perMinuteRate: 0.5,
+        hourlyRate: 120,
         multiplier: 1.0,
         capacity: 3,
         isActive: true,
@@ -41,6 +42,7 @@ export const seedCarTypes = internalMutation({
         baseFare: 40,
         perKmRate: 4.5,
         perMinuteRate: 0.8,
+        hourlyRate: 180,
         multiplier: 1.4,
         capacity: 6,
         isActive: true,
@@ -53,6 +55,7 @@ export const seedCarTypes = internalMutation({
         baseFare: 35,
         perKmRate: 3.5,
         perMinuteRate: 0.7,
+        hourlyRate: 150,
         multiplier: 1.2,
         capacity: 4,
         isActive: true,
@@ -65,6 +68,7 @@ export const seedCarTypes = internalMutation({
         baseFare: 65,
         perKmRate: 5.5,
         perMinuteRate: 1.2,
+        hourlyRate: 250,
         multiplier: 1.8,
         capacity: 14,
         isActive: true,
@@ -75,28 +79,6 @@ export const seedCarTypes = internalMutation({
     for (const carType of carTypes) {
       await ctx.db.insert("carTypes", carType);
     }
-  },
-});
-
-export const update = mutation({
-  args: {
-    id: v.id("carTypes"),
-    name: v.optional(v.string()),
-    description: v.optional(v.string()),
-    image: v.optional(v.string()),
-    baseFare: v.optional(v.number()),
-    perKmRate: v.optional(v.number()),
-    perMinuteRate: v.optional(v.number()),
-    multiplier: v.optional(v.number()),
-    capacity: v.optional(v.number()),
-    isActive: v.optional(v.boolean()),
-  },
-  handler: async (ctx, args) => {
-    const { id, ...updates } = args;
-    await ctx.db.patch(id, {
-      ...updates,
-      updatedAt: Date.now(),
-    });
   },
 });
 
@@ -115,6 +97,7 @@ export const create = mutation({
     baseFare: v.number(),
     perKmRate: v.number(),
     perMinuteRate: v.number(),
+    hourlyRate: v.optional(v.number()),
     multiplier: v.number(),
     capacity: v.number(),
     isActive: v.boolean(),
@@ -123,6 +106,29 @@ export const create = mutation({
     return await ctx.db.insert("carTypes", {
       ...args,
       createdAt: Date.now(),
+    });
+  },
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("carTypes"),
+    name: v.optional(v.string()),
+    description: v.optional(v.string()),
+    image: v.optional(v.string()),
+    baseFare: v.optional(v.number()),
+    perKmRate: v.optional(v.number()),
+    perMinuteRate: v.optional(v.number()),
+    hourlyRate: v.optional(v.number()),
+    multiplier: v.optional(v.number()),
+    capacity: v.optional(v.number()),
+    isActive: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updates } = args;
+    await ctx.db.patch(id, {
+      ...updates,
+      updatedAt: Date.now(),
     });
   },
 });

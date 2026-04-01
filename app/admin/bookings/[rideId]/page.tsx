@@ -125,6 +125,16 @@ export default function RideDetailPage() {
                 <p className="text-white font-bold text-sm">{ride.carTypeName}</p>
               </div>
               <div className="bg-black p-4 border border-neutral-800">
+                <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">SERVICE</p>
+                <p className="text-white font-bold text-sm">{ride.serviceType === "hourly" ? "Hourly" : "Point-to-Point"}</p>
+              </div>
+              {ride.serviceType === "hourly" && ride.hourlyDuration && (
+                <div className="bg-black p-4 border border-neutral-800">
+                  <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">HOURS</p>
+                  <p className="text-gold font-bold text-sm">{ride.hourlyDuration}h</p>
+                </div>
+              )}
+              <div className="bg-black p-4 border border-neutral-800">
                 <p className="text-neutral-500 text-[8px] font-black uppercase tracking-widest mb-1">PASSENGERS</p>
                 <p className="text-white font-bold text-sm">{ride.passengers}</p>
               </div>

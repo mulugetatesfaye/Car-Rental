@@ -100,11 +100,15 @@ export const create = mutation({
     passengers: v.number(),
     luggage: v.number(),
     accessible: v.boolean(),
+    serviceType: v.union(
+      v.literal("point_to_point"),
+      v.literal("hourly")
+    ),
+    hourlyDuration: v.optional(v.number()),
     pickupDate: v.string(),
     pickupTime: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    // Generate a secure 12-character random token for reviews
     const reviewToken = Math.random().toString(36).substring(2, 14).toUpperCase();
 
     const ride = {
@@ -126,6 +130,8 @@ export const create = mutation({
       passengers: args.passengers,
       luggage: args.luggage,
       accessible: args.accessible,
+      serviceType: args.serviceType,
+      hourlyDuration: args.hourlyDuration,
       pickupDate: args.pickupDate,
       pickupTime: args.pickupTime,
       status: "pending" as const,

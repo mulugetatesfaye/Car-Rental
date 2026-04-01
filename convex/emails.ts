@@ -126,7 +126,7 @@ export const sendBookingEmail = internalAction({
 export const sendInvoiceEmail = internalAction({
   args: {
     rideId: v.id("rides"),
-    pdfBase64: v.string(), // The PDF generated on the client
+    pdfBase64: v.string(),
   },
   handler: async (ctx, args) => {
     const data = await ctx.runQuery(internal.emails.getEmailData, { rideId: args.rideId });
@@ -207,6 +207,78 @@ export const sendInvoiceEmail = internalAction({
     } catch (error) {
       console.error("Failed to send invoice email:", error);
       return { success: false, error: String(error) };
+    }
+  },
+});
+
+export const getContactInquiryData = internalQuery({
+  args: { inquiryId: v.id("contactInquiries") },
+  handler: async (ctx, args) => {
+    const inquiry = await ctx.db.get(args.inquiryId);
+    const settings = (await ctx.db.query("settings").first()) || {
+      companyName: "Luna Limo",
+      email: "concierge@lunalimo.com",
+    };
+    return { inquiry, settings };
+  },
+});
+
+export const sendContactInquiryEmail = internalAction({
+  args: {
+    inquiryId: v.id("contactInquiries"),
+    adminEmail: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const data = await ctx.runQuery(internal.emails.getContactInquiryData, { inquiryId: args.inquiryId });
+    if (!data.inquiry || !data.settings) throw new Error("Data not found for contact inquiry email");
+
+    const { inquiry, settings } = data;
+    
+    const fromAddress = "Luna Limo <onboarding@resend.dev>";
+
+    try {
+      const resp = await resend.emails.send({
+        from: fromAddress,
+        to: [args.adminEmail],
+        subject: `New Contact Inquiry: ${inquiry.subject}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #000; color: #fff; padding: 40px; border: 1px solid #333;">
+            <div style="text-align: center; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 20px;">
+              <h1 style="color: #C6A87C; font-size: 24px; margin: 0; text-transform: uppercase; letter-spacing: 4px; font-style: italic;">Luna Limo</h1>
+              <p style="color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;">New Contact Inquiry</p>
+            </div>
+
+            <div style="background-color: #111; border-left: 3px solid #C6A87C; padding: 20px; margin: 30px 0;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <tr>
+                  <td style="color: #888; padding: 8px 0; width: 30%; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Name</td>
+                  <td style="color: #fff; padding: 8px 0;">${inquiry.name}</td>
+                </tr>
+                <tr>
+                  <td style="color: #888; padding: 8px 0; border-top: 1px solid #222; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Email</td>
+                  <td style="color: #fff; padding: 8px 0; border-top: 1px solid #222;">${inquiry.email}</td>
+                </tr>
+                <tr>
+                  <td style="color: #888; padding: 8px 0; border-top: 1px solid #222; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Subject</td>
+                  <td style="color: #fff; padding: 8px 0; border-top: 1px solid #222;">${inquiry.subject}</td>
+                </tr>
+                <tr>
+                  <td style="color: #888; padding: 8px 0; border-top: 1px solid #222; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Message</td>
+                  <td style="color: #fff; padding: 8px 0; border-top: 1px solid #222;">${inquiry.message}</td>
+                </tr>
+              </table>
+            </div>
+
+            <p style="color: #888; font-size: 12px; margin-top: 40px; text-align: center;">
+              This inquiry was submitted via the Luna Limo website.<br>
+              Log in to the admin panel to manage inquiries.
+            </p>
+          </div>
+        `,
+      });
+      console.log("Contact inquiry email dispatched:", resp);
+    } catch (error) {
+      console.error("Failed to send contact inquiry email:", error);
     }
   },
 });

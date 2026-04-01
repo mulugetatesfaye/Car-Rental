@@ -58,9 +58,11 @@ export default function AdminBookingsPage() {
   const handleExportCSV = () => {
     if (!displayedRides || displayedRides.length === 0) return;
     
-    const headers = ["Status", "Customer", "Email", "Phone", "Pickup Date", "Pickup Time", "Pickup Address", "Destination", "Vehicle", "Price", "Distance (km)", "Passengers", "Luggage", "Notes"];
+    const headers = ["Status", "Service Type", "Hours", "Customer", "Email", "Phone", "Pickup Date", "Pickup Time", "Pickup Address", "Destination", "Vehicle", "Price", "Distance (km)", "Passengers", "Luggage", "Notes"];
     const rows = displayedRides.map((ride) => [
       ride.status,
+      ride.serviceType || "point_to_point",
+      ride.hourlyDuration?.toString() || "",
       `"${(ride.customerName || "").replace(/"/g, '""')}"`,
       ride.customerEmail,
       ride.customerPhone,
@@ -182,7 +184,12 @@ export default function AdminBookingsPage() {
                        {ride.customerName}
                        <ChevronRight className="h-4 w-4" />
                      </Link>
-                     <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest ml-auto md:ml-0 bg-neutral-900 border border-neutral-800 px-2 py-1">{ride.carTypeName}</p>
+                      <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest ml-auto md:ml-0 bg-neutral-900 border border-neutral-800 px-2 py-1">{ride.carTypeName}</p>
+                      {ride.serviceType === "hourly" && (
+                        <span className="px-2 py-1 text-[8px] font-black uppercase tracking-[0.2em] bg-purple-950 text-purple-500 border border-purple-900 whitespace-nowrap">
+                          {ride.hourlyDuration}h Hourly
+                        </span>
+                      )}
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[9px] font-bold text-neutral-400">

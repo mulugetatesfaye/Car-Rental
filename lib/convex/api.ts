@@ -17,6 +17,8 @@ export async function createRide(rideData: {
   passengers: number;
   luggage: number;
   accessible: boolean;
+  serviceType: "point_to_point" | "hourly";
+  hourlyDuration?: number;
   pickupDate: string;
   pickupTime?: string;
   customerName: string;

@@ -3,7 +3,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings, BarChart3, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PushAlertManager } from "@/components/global/push-alert-manager";
 import { useState } from "react";
@@ -39,6 +39,7 @@ export default function AdminLayout({
     { href: "/admin/reports", label: "Revenue Reports", icon: BarChart3 },
     { href: "/admin/vehicles", label: "Our Fleet", icon: Car },
     { href: "/admin/reviews", label: "Client Feedback", icon: Star },
+    { href: "/admin/contact", label: "Contact Inquiries", icon: Mail },
     { href: "/admin/settings", label: "System Config", icon: Settings },
   ];
 

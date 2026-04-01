@@ -23,6 +23,7 @@ export default function AdminVehiclesPage() {
     baseFare: 0,
     perKmRate: 0,
     perMinuteRate: 0,
+    hourlyRate: 0,
     multiplier: 1.0,
     capacity: 1,
     isActive: true,
@@ -37,6 +38,7 @@ export default function AdminVehiclesPage() {
       baseFare: vehicle.baseFare,
       perKmRate: vehicle.perKmRate,
       perMinuteRate: vehicle.perMinuteRate,
+      hourlyRate: vehicle.hourlyRate || 0,
       multiplier: vehicle.multiplier,
       capacity: vehicle.capacity,
       isActive: vehicle.isActive,
@@ -53,6 +55,7 @@ export default function AdminVehiclesPage() {
       baseFare: 0,
       perKmRate: 0,
       perMinuteRate: 0,
+      hourlyRate: 0,
       multiplier: 1.0,
       capacity: 1,
       isActive: true,
@@ -123,16 +126,24 @@ export default function AdminVehiclesPage() {
               </div>
               
               <div className="space-y-4 flex-1">
-                 <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-black/40 border border-neutral-800 p-3">
-                       <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Base Fare</p>
-                       <p className="text-white font-serif font-black italic text-lg tracking-tight">${car.baseFare}</p>
-                    </div>
-                    <div className="bg-black/40 border border-neutral-800 p-3">
-                       <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Per KM</p>
-                       <p className="text-white font-serif font-black italic text-lg tracking-tight">${car.perKmRate}</p>
-                    </div>
-                 </div>
+                  <div className="grid grid-cols-2 gap-3">
+                     <div className="bg-black/40 border border-neutral-800 p-3">
+                        <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Base Fare</p>
+                        <p className="text-white font-serif font-black italic text-lg tracking-tight">${car.baseFare}</p>
+                     </div>
+                     <div className="bg-black/40 border border-neutral-800 p-3">
+                        <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Per KM</p>
+                        <p className="text-white font-serif font-black italic text-lg tracking-tight">${car.perKmRate}</p>
+                     </div>
+                     <div className="bg-black/40 border border-neutral-800 p-3">
+                        <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Per Min</p>
+                        <p className="text-white font-serif font-black italic text-lg tracking-tight">${car.perMinuteRate}</p>
+                     </div>
+                      <div className="bg-black/40 border border-neutral-800 p-3">
+                        <p className="text-neutral-500 text-[8px] font-black uppercase tracking-[0.2em] mb-1">Hourly</p>
+                        <p className="text-gold font-serif font-black italic text-lg tracking-tight">${car.hourlyRate || "—"}</p>
+                      </div>
+                  </div>
                  <div className="bg-black/40 border border-neutral-800 p-3 flex justify-between items-center group/item hover:border-gold/20 transition-colors">
                     <span className="text-neutral-500 text-[9px] font-black uppercase tracking-widest">Passenger Capacity</span>
                     <span className="text-white font-bold text-xs uppercase tracking-widest">{car.capacity} Seats</span>
@@ -241,6 +252,17 @@ export default function AdminVehiclesPage() {
                         className="w-full bg-black border border-neutral-800 text-white p-4 text-xs font-bold focus:border-gold outline-none transition-colors"
                         value={formData.perMinuteRate}
                         onChange={(e) => setFormData({...formData, perMinuteRate: parseFloat(e.target.value)})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-neutral-500 text-[10px] font-black uppercase tracking-widest">Hourly Rate ($)</label>
+                      <input 
+                        type="number"
+                        step="1"
+                        required
+                        className="w-full bg-black border border-neutral-800 text-white p-4 text-xs font-bold focus:border-gold outline-none transition-colors"
+                        value={formData.hourlyRate}
+                        onChange={(e) => setFormData({...formData, hourlyRate: parseFloat(e.target.value)})}
                       />
                     </div>
                   </div>

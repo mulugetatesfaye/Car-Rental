@@ -9,6 +9,8 @@ const requiredPublicEnv = {
 } as const;
 
 function validateEnv() {
+  if (process.env.NEXT_PHASE === "phase-production-build") return;
+
   const missing: string[] = [];
 
   for (const [key, name] of Object.entries(requiredServerEnv)) {

@@ -33,10 +33,10 @@ export const sendBookingEmail = internalAction({
     newStatus: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const data = await ctx.runQuery(internal.emails.getEmailData, { rideId: args.rideId });
-    if (!data.ride || !data.settings) throw new Error("Data not found for email");
+    const emailData = await ctx.runQuery(internal.emails.getEmailData, { rideId: args.rideId });
+    if (!emailData.ride || !emailData.settings) throw new Error("Data not found for email");
 
-    const { ride, settings } = data;
+    const { ride, settings } = emailData;
     
     if (!settings.notificationsEmail) {
       console.log("Email notifications disabled, skipping booking email");
@@ -109,24 +109,23 @@ export const sendBookingEmail = internalAction({
       </div>
     `;
 
-    const { data, error } = await resend.emails.send({
+    const emailResult = await resend.emails.send({
       from: fromAddress,
       to: toAddresses,
       subject,
       html: htmlContent,
-      idempotencyKey: `booking-${args.type}/${args.rideId}-${Date.now()}`,
       tags: [
         { name: "type", value: args.type },
         { name: "ride_id", value: args.rideId },
       ],
     });
 
-    if (error) {
-      console.error("Failed to send booking email via Resend:", error);
-      throw new Error(`Failed to send booking email: ${error.message}`);
+    if (emailResult.error) {
+      console.error("Failed to send booking email via Resend:", emailResult.error);
+      throw new Error(`Failed to send booking email: ${emailResult.error.message}`);
     }
 
-    console.log("Booking email sent successfully:", data);
+    console.log("Booking email sent successfully:", emailResult.data);
   },
 });
 

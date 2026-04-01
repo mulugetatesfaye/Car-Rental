@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { LayoutDashboard, Car, CalendarDays, LogOut, ShieldCheck, Menu, X, Star, Users, Settings, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PushAlertManager } from "@/components/global/push-alert-manager";
 import { useState } from "react";
 import AdminHeader, { NotificationBell } from "@/components/admin/admin-header";
 
@@ -142,6 +143,7 @@ export default function AdminLayout({
         <main className="flex-1 bg-black overflow-y-auto relative">
           <div className="absolute top-0 left-0 w-1 h-full bg-neutral-900/50 hidden md:block" />
           {children}
+          <PushAlertManager />
         </main>
       </div>
     </div>

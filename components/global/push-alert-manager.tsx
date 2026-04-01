@@ -1,26 +1,35 @@
 "use client";
 
 import * as React from "react";
-import Script from "next/script";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useConvexAuth } from "convex/react";
 
 declare global {
   interface Window {
-    PushAlertCo?: any;
-    pushalertbyid?: any;
-    _pa?: any;
+    PushAlertCo?: {
+      subs_id?: string;
+      subscriber_id?: string;
+      push_id?: string;
+      sub_id?: string;
+    };
+    pushalertbyid?: (callback: (result: { subscriber_id?: string }) => void) => void;
+    _pa?: {
+      subscriber_id?: string;
+    };
   }
 }
 
 export function PushAlertManager() {
-  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { isAuthenticated } = useConvexAuth();
   const updatePushId = useMutation(api.users.updatePushId);
   const updatePushIdByEmail = useMutation(api.users.updatePushIdByEmail);
 
+  const fallbackEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@lunalimoz.com";
+
   React.useEffect(() => {
-    // Check every 5 seconds until we find a registration
+    if (!isAuthenticated) return;
+
     const interval = setInterval(() => {
         if (window.PushAlertCo) {
             const paSubId = window.PushAlertCo.subs_id || window.PushAlertCo.subscriber_id || window.PushAlertCo.push_id || window.PushAlertCo.sub_id;
@@ -35,15 +44,13 @@ export function PushAlertManager() {
             return;
         }
 
-        // @ts-ignore
-        if (window.PushAlert && window.PushAlert.subscriber_id) {
-            // @ts-ignore
-            syncId(window.PushAlert.subscriber_id);
+        if (window.PushAlertCo && window.PushAlertCo.subscriber_id) {
+            syncId(window.PushAlertCo.subscriber_id);
             return;
         }
 
         if (typeof window.pushalertbyid === "function") {
-            window.pushalertbyid(function(result: any) {
+            window.pushalertbyid(function(result) {
                 if (result && result.subscriber_id) {
                     syncId(result.subscriber_id);
                 }
@@ -52,34 +59,56 @@ export function PushAlertManager() {
     }, 5000);
 
     const syncId = (subId: string) => {
-        if (isAuthenticated) {
-            updatePushId({ pushId: subId })
-              .then(() => {
-                clearInterval(interval);
-              })
-              .catch(err => console.error("PushAlertManager: Auth sync failed:", err));
-        } else {
-            updatePushIdByEmail({ 
-                pushId: subId, 
-                email: "admin@lunalimoz.com" 
-            })
-            .then(() => {
-                clearInterval(interval);
-            })
-            .catch(e => console.error("PushAlertManager: Fallback sync failed:", e));
-        }
+        updatePushId({ pushId: subId })
+          .then(() => {
+            clearInterval(interval);
+          })
+          .catch(err => console.error("PushAlertManager: Auth sync failed:", err));
     };
 
     return () => clearInterval(interval);
-  }, [updatePushId, updatePushIdByEmail, isAuthenticated, isLoading]);
+  }, [updatePushId, isAuthenticated]);
+
+  React.useEffect(() => {
+    if (isAuthenticated) return;
+
+    const interval = setInterval(() => {
+        if (window.PushAlertCo) {
+            const paSubId = window.PushAlertCo.subs_id || window.PushAlertCo.subscriber_id || window.PushAlertCo.push_id || window.PushAlertCo.sub_id;
+            if (paSubId) {
+                updatePushIdByEmail({ pushId: paSubId, email: fallbackEmail })
+                  .then(() => clearInterval(interval))
+                  .catch(e => console.error("PushAlertManager: Fallback sync failed:", e));
+                return;
+            }
+        }
+
+        if (window._pa && window._pa.subscriber_id) {
+            updatePushIdByEmail({ pushId: window._pa.subscriber_id, email: fallbackEmail })
+              .then(() => clearInterval(interval))
+              .catch(e => console.error("PushAlertManager: Fallback sync failed:", e));
+            return;
+        }
+
+        if (typeof window.pushalertbyid === "function") {
+            window.pushalertbyid(function(result) {
+                if (result && result.subscriber_id) {
+                    updatePushIdByEmail({ pushId: result.subscriber_id, email: fallbackEmail })
+                      .then(() => clearInterval(interval))
+                      .catch(e => console.error("PushAlertManager: Fallback sync failed:", e));
+                }
+            });
+        }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [updatePushIdByEmail, isAuthenticated, fallbackEmail]);
 
   return (
-    <>
-      <script
-        async
-        src="https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js"
-        type="text/javascript"
-      />
-    </>
+    <script
+      async
+      src="https://cdn.pushalert.co/unified_618b54c7a30d19a39ece4ecd62b85733.js"
+      type="text/javascript"
+    />
   );
 }

@@ -51,7 +51,7 @@ export const sendBookingEmail = internalAction({
     const toAddresses = Array.from(new Set(rawToAddresses));
 
     const isNew = args.type === "new_booking";
-    const statusText = isNew ? "RECEIVED" : (args.newStatus || ride.status).toUpperCase().replace("_", " ");
+    const statusText = isNew ? "RECEIVED" : (args.newStatus || ride.status).toUpperCase();
     const subject = isNew 
       ? `Reservation Received: Luna Limo Executive Service`
       : `Reservation Update [${statusText}]: Luna Limo`;

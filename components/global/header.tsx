@@ -54,10 +54,10 @@ export function Header() {
             <Image 
               src="/luna-logo.png" 
               alt="Luna Limo" 
-              width={160}
-              height={56}
+              width={200}
+              height={70}
               priority
-              className="h-14 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+              className="h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
             />
           </Link>
           

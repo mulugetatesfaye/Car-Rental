@@ -212,8 +212,13 @@ export default function BookingClient() {
     return true;
   };
 
+  const isEmailValid = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const isReviewStepValid = () => {
-    return options.customerName.trim() && validateEmail(options.customerEmail) && options.customerPhone.trim();
+    return options.customerName.trim() && isEmailValid(options.customerEmail) && options.customerPhone.trim();
   };
 
   const goToNextStep = () => {

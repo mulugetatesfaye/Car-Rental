@@ -103,6 +103,7 @@ export const createCheckoutSession = action({
 
     const rideData = {
       customerName: args.customerName,
+      customerEmail: args.customerEmail,
       customerPhone: args.customerPhone,
       pickupAddress: args.pickupAddress,
       destinationAddress: args.destinationAddress,
@@ -123,7 +124,16 @@ export const createCheckoutSession = action({
       pickupDate: args.pickupDate,
       pickupTime: args.pickupTime,
     };
-    params.set("metadata[rideData]", JSON.stringify(rideData));
+    const rideDataString = JSON.stringify(rideData);
+    if (rideDataString.length > 500) {
+      const chunks = rideDataString.match(/.{1,500}/g) || [];
+      chunks.forEach((chunk, i) => {
+        params.set(`metadata[rideData_${i}]`, chunk);
+      });
+      params.set("metadata[isChunked]", "true");
+    } else {
+      params.set("metadata[rideData]", rideDataString);
+    }
 
     const session = await stripeRequest<{ url: string | null }>("/checkout/sessions", { body: params });
 
@@ -161,7 +171,22 @@ export const verifyCheckoutSession = action({
       return { status: "already_processed", rideId: existingRide._id };
     }
 
-    const rideData = JSON.parse(session.metadata?.rideData || "{}");
+    let rideDataStr = session.metadata?.rideData || "{}";
+    if (session.metadata?.isChunked === "true") {
+      rideDataStr = "";
+      for (let i = 0; i < 50; i++) {
+        const chunk = session.metadata[`rideData_${i}`];
+        if (!chunk) break;
+        rideDataStr += chunk;
+      }
+    }
+
+    let rideData = {};
+    try {
+      rideData = JSON.parse(rideDataStr);
+    } catch (e) {
+      console.error("Failed to parse rideData from metadata:", rideDataStr);
+    }
 
     return {
       status: "paid",

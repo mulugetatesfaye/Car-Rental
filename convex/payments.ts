@@ -62,6 +62,9 @@ export const createCheckoutSession = action({
     }
 
     const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const deployment = process.env.CONVEX_CLOUD_URL;
+    const isLocal = deployment?.includes("127.0.0.1") || deployment?.includes("localhost");
+    const baseUrl = isLocal ? "http://localhost:3000" : origin;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",

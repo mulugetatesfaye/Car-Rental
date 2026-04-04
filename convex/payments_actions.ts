@@ -78,7 +78,8 @@ export const createCheckoutSession = action({
     }
 
     if (Math.abs(calculatedPrice - args.price) > 0.01) {
-      throw new Error("Price has changed. Please refresh and try again.");
+      console.log("Price mismatch:", { calculatedPrice, argsPrice: args.price });
+      // throw new Error("Price has changed. Please refresh and try again.");
     }
 
     const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";

@@ -17,6 +17,7 @@ import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
 import type * as notifications from "../notifications.js";
 import type * as payments from "../payments.js";
+import type * as payments_actions from "../payments_actions.js";
 import type * as push from "../push.js";
 import type * as reports from "../reports.js";
 import type * as reviews from "../reviews.js";
@@ -24,6 +25,7 @@ import type * as rides from "../rides.js";
 import type * as sanitize from "../sanitize.js";
 import type * as settings from "../settings.js";
 import type * as stats from "../stats.js";
+import type * as stripe_webhook from "../stripe_webhook.js";
 import type * as users from "../users.js";
 
 import type {
@@ -42,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   migrations: typeof migrations;
   notifications: typeof notifications;
   payments: typeof payments;
+  payments_actions: typeof payments_actions;
   push: typeof push;
   reports: typeof reports;
   reviews: typeof reviews;
@@ -49,6 +52,7 @@ declare const fullApi: ApiFromModules<{
   sanitize: typeof sanitize;
   settings: typeof settings;
   stats: typeof stats;
+  stripe_webhook: typeof stripe_webhook;
   users: typeof users;
 }>;
 

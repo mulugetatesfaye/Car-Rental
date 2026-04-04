@@ -77,12 +77,12 @@ export async function createCheckoutSession(data: {
     throw new Error("Backend not configured");
   }
 
-  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions/createCheckoutSession`, {
+  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions:createCheckoutSession`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ args: data }),
   });
 
   if (!response.ok) {

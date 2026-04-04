@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery } from "./_generated/server";
 
 // Default settings if none exist
 const DEFAULT_SETTINGS = {
@@ -18,6 +18,13 @@ export const get = query({
   handler: async (ctx) => {
     const settings = await ctx.db.query("settings").first();
     return settings || DEFAULT_SETTINGS;
+  },
+});
+
+export const getInternal = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("settings").first();
   },
 });
 

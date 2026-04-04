@@ -65,6 +65,13 @@ export default defineSchema({
       v.literal("confirmed"),
       v.literal("cancelled")
     ),
+    paymentStatus: v.optional(v.union(
+      v.literal("unpaid"),
+      v.literal("paid"),
+      v.literal("refunded"),
+      v.literal("partially_refunded")
+    )),
+    stripeCheckoutSessionId: v.optional(v.string()),
     reviewToken: v.string(),
     notes: v.optional(v.string()),
     createdAt: v.number(),
@@ -72,7 +79,31 @@ export default defineSchema({
   })
     .index("by_status", ["status"])
     .index("by_created", ["createdAt"])
+    .index("by_stripe_session", ["stripeCheckoutSessionId"])
     .searchIndex("search_customer", { searchField: "customerName" }),
+
+  payments: defineTable({
+    rideId: v.id("rides"),
+    stripeCheckoutSessionId: v.string(),
+    stripePaymentIntentId: v.optional(v.string()),
+    amount: v.number(),
+    currency: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("succeeded"),
+      v.literal("failed"),
+      v.literal("refunded")
+    ),
+    paymentMethod: v.optional(v.string()),
+    refundAmount: v.optional(v.number()),
+    refundedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_ride", ["rideId"])
+    .index("by_stripe_session", ["stripeCheckoutSessionId"])
+    .index("by_stripe_payment_intent", ["stripePaymentIntentId"])
+    .index("by_status", ["status"]),
 
   contactInquiries: defineTable({
     name: v.string(),

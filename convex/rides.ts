@@ -1,4 +1,4 @@
-import { query, mutation } from "./_generated/server";
+import { query, mutation, internalQuery, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { paginationOptsValidator } from "convex/server";
@@ -108,6 +108,7 @@ export const create = mutation({
     hourlyDuration: v.optional(v.number()),
     pickupDate: v.string(),
     pickupTime: v.optional(v.string()),
+    stripeCheckoutSessionId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     if (!validateEmail(args.customerEmail)) {
@@ -141,6 +142,8 @@ export const create = mutation({
     const tokenBytes = crypto.getRandomValues(new Uint8Array(12));
     const reviewToken = Array.from(tokenBytes, (b) => b.toString(36).toUpperCase()).join("").slice(0, 12);
 
+    const hasPayment = !!args.stripeCheckoutSessionId;
+
     const ride = {
       userId: args.userId,
       customerName: sanitizeName(args.customerName),
@@ -164,7 +167,9 @@ export const create = mutation({
       hourlyDuration: args.hourlyDuration,
       pickupDate: args.pickupDate,
       pickupTime: args.pickupTime,
-      status: "pending" as const,
+      status: hasPayment ? ("confirmed" as const) : ("pending" as const),
+      paymentStatus: hasPayment ? ("paid" as const) : ("unpaid" as const),
+      stripeCheckoutSessionId: args.stripeCheckoutSessionId,
       reviewToken,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -172,20 +177,17 @@ export const create = mutation({
     
     const rideId = await ctx.db.insert("rides", ride);
     
-    // Trigger the email asynchronously
     await ctx.scheduler.runAfter(0, internal.emails.sendBookingEmail, { 
       rideId, 
-      type: "new_booking" 
+      type: hasPayment ? "new_booking" : "new_booking" 
     });
 
-    // Notify admins via push
     await ctx.scheduler.runAfter(0, internal.push.notifyAdmins, {
       title: "New Booking!",
       message: `A new ${args.carTypeName} booking was made by ${args.customerName}.`,
       url: `/admin/rides/${rideId}`
     });
 
-    // Create in-app notification
     await ctx.scheduler.runAfter(0, internal.notifications.create, {
       type: "new_booking",
       title: "New Booking Received",
@@ -208,21 +210,27 @@ export const updateStatus = mutation({
   },
   handler: async (ctx, args) => {
     const ride = await ctx.db.get(args.id);
-    await ctx.db.patch(args.id, {
+    if (!ride) throw new Error("Ride not found");
+
+    const patches: Record<string, unknown> = {
       status: args.status,
       updatedAt: Date.now(),
-    });
+    };
 
-    // Trigger status update email
+    if (args.status === "cancelled" && ride.paymentStatus === "paid") {
+      patches.paymentStatus = "paid";
+    }
+
+    await ctx.db.patch(args.id, patches);
+
     await ctx.scheduler.runAfter(0, internal.emails.sendBookingEmail, { 
       rideId: args.id, 
       type: "status_update",
       newStatus: args.status
     });
 
-    // Create in-app notification for status changes
     const notifType = args.status === "cancelled" ? "cancellation" as const : "status_update" as const;
-    const customerName = ride?.customerName || "A customer";
+    const customerName = ride.customerName || "A customer";
     await ctx.scheduler.runAfter(0, internal.notifications.create, {
       type: notifType,
       title: args.status === "cancelled" ? "Booking Cancelled" : "Status Updated",
@@ -259,5 +267,93 @@ export const search = query({
       .query("rides")
       .withSearchIndex("search_customer", (q) => q.search("customerName", args.query))
       .take(50);
+  },
+});
+
+export const getByStripeSessionId = internalQuery({
+  args: { stripeCheckoutSessionId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("rides")
+      .withIndex("by_stripe_session", (q) => q.eq("stripeCheckoutSessionId", args.stripeCheckoutSessionId))
+      .first();
+  },
+});
+
+export const createFromWebhook = internalMutation({
+  args: {
+    customerName: v.string(),
+    customerPhone: v.string(),
+    pickupAddress: v.string(),
+    destinationAddress: v.string(),
+    pickupLat: v.number(),
+    pickupLng: v.number(),
+    destLat: v.number(),
+    destLng: v.number(),
+    distance: v.number(),
+    duration: v.number(),
+    carTypeName: v.string(),
+    carTypeMultiplier: v.number(),
+    price: v.number(),
+    passengers: v.number(),
+    luggage: v.number(),
+    accessible: v.boolean(),
+    serviceType: v.union(
+      v.literal("point_to_point"),
+      v.literal("hourly")
+    ),
+    hourlyDuration: v.optional(v.number()),
+    pickupDate: v.string(),
+    pickupTime: v.optional(v.string()),
+    stripeCheckoutSessionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("rides")
+      .withIndex("by_stripe_session", (q) => q.eq("stripeCheckoutSessionId", args.stripeCheckoutSessionId))
+      .first();
+    if (existing) return existing._id;
+
+    const tokenBytes = crypto.getRandomValues(new Uint8Array(12));
+    const reviewToken = Array.from(tokenBytes, (b) => b.toString(36).toUpperCase()).join("").slice(0, 12);
+
+    const ride = {
+      customerName: sanitizeName(args.customerName),
+      customerEmail: "webhook@lunalimo.com",
+      customerPhone: sanitizeInput(args.customerPhone),
+      pickupAddress: sanitizeAddress(args.pickupAddress),
+      destinationAddress: sanitizeAddress(args.destinationAddress),
+      pickupLat: args.pickupLat,
+      pickupLng: args.pickupLng,
+      destLat: args.destLat,
+      destLng: args.destLng,
+      distance: args.distance,
+      duration: args.duration,
+      carTypeName: sanitizeInput(truncate(args.carTypeName, 50)),
+      carTypeMultiplier: args.carTypeMultiplier,
+      price: args.price,
+      passengers: args.passengers,
+      luggage: args.luggage,
+      accessible: args.accessible,
+      serviceType: args.serviceType,
+      hourlyDuration: args.hourlyDuration,
+      pickupDate: args.pickupDate,
+      pickupTime: args.pickupTime,
+      status: "confirmed" as const,
+      paymentStatus: "paid" as const,
+      stripeCheckoutSessionId: args.stripeCheckoutSessionId,
+      reviewToken,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    const rideId = await ctx.db.insert("rides", ride);
+
+    await ctx.scheduler.runAfter(0, internal.emails.sendBookingEmail, {
+      rideId,
+      type: "new_booking",
+    });
+
+    return rideId;
   },
 });

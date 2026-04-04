@@ -30,7 +30,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import MapComponent from "@/components/map/map-wrapper";
 import { useRideStore } from "@/lib/store/rideStore";
-import { createRide } from "@/lib/convex/api";
+import { createCheckoutSession } from "@/lib/convex/api";
 import { calculateRouteBetween } from "@/lib/tomtom/routing";
 import { formatDuration, formatDistance } from "@/lib/utils";
 import { formatPrice, calculatePrice, calculateHourlyPrice } from "@/lib/pricing";
@@ -239,7 +239,7 @@ export default function BookingClient() {
     setBooking(true);
 
     try {
-      await createRide({
+      const { url } = await createCheckoutSession({
         pickupAddress: pickup?.address.freeformAddress || "Hourly Service",
         destinationAddress: destination?.address.freeformAddress || "To Be Determined",
         pickupLat: pickup?.position.lat || 0,
@@ -263,9 +263,13 @@ export default function BookingClient() {
         customerPhone: options.customerPhone,
       });
 
-      setStep("complete");
+      if (url) {
+        window.location.href = url;
+      } else {
+        console.error("No checkout URL returned");
+      }
     } catch (error) {
-      console.error("Error creating ride:", error);
+      console.error("Error creating checkout session:", error);
     } finally {
       setBooking(false);
     }
@@ -953,7 +957,7 @@ export default function BookingClient() {
                           ) : (
                             <>
                               <ShieldCheck className="mr-2 h-4 w-4" />
-                              Confirm Reservation
+                              Confirm & Pay
                             </>
                           )}
                         </Button>

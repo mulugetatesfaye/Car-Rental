@@ -1,4 +1,4 @@
-import { query, mutation, internalMutation } from "./_generated/server";
+import { query, mutation, internalQuery, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const list = query({
@@ -12,6 +12,16 @@ export const getById = query({
   args: { id: v.id("carTypes") },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.id);
+  },
+});
+
+export const getByName = internalQuery({
+  args: { name: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("carTypes")
+      .withIndex("by_name", (q) => q.eq("name", args.name))
+      .first();
   },
 });
 

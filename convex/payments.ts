@@ -3,6 +3,8 @@ import { v } from "convex/values";
 import Stripe from "stripe";
 import { internal } from "./_generated/api";
 
+"use node";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const createCheckoutSession = action({

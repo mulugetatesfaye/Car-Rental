@@ -98,6 +98,7 @@ export default function BookingClient() {
 
   const [bookingStep, setBookingStep] = React.useState<BookingStep>("trip");
   const [emailError, setEmailError] = React.useState("");
+  const [confirmError, setConfirmError] = React.useState("");
 
   const fetchRoute = async (pickupLoc: SearchResult, destLoc: SearchResult) => {
     setLoadingRoute(true);
@@ -241,6 +242,7 @@ export default function BookingClient() {
     if (!selectedCar || !pricing || !isReviewStepValid()) return;
     if (serviceType === "point_to_point" && (!pickup || !destination || !route)) return;
 
+    setConfirmError("");
     setBooking(true);
 
     try {
@@ -271,10 +273,11 @@ export default function BookingClient() {
       if (url) {
         window.location.href = url;
       } else {
-        console.error("No checkout URL returned");
+        setConfirmError("Failed to create checkout session. Please try again.");
       }
     } catch (error) {
-      console.error("Error creating checkout session:", error);
+      const message = error instanceof Error ? error.message : "An unexpected error occurred";
+      setConfirmError(message);
     } finally {
       setBooking(false);
     }
@@ -949,6 +952,9 @@ export default function BookingClient() {
 
                     {bookingStep === "review" && (
                       <div className="space-y-4">
+                        {confirmError && (
+                          <p className="text-[10px] font-bold text-red-500 text-center uppercase tracking-wider">{confirmError}</p>
+                        )}
                         <Button 
                           onClick={handleConfirm}
                           disabled={!isReviewStepValid() || isBooking}

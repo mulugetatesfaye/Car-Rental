@@ -3,6 +3,8 @@ import { auth } from "./auth";
 import Stripe from "stripe";
 import { internal } from "./_generated/api";
 
+"use node";
+
 const http = httpRouter();
 
 auth.addHttpRoutes(http);

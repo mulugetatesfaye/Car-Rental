@@ -77,7 +77,7 @@ export async function createCheckoutSession(data: {
     throw new Error("Backend not configured");
   }
 
-  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions:createCheckoutSession`, {
+  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions/createCheckoutSession`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export async function verifyCheckoutSession(sessionId: string) {
     throw new Error("Backend not configured");
   }
 
-  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions:verifyCheckoutSession`, {
+  const response = await fetch(`${CONVEX_URL}/api/run/payments_actions/verifyCheckoutSession`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

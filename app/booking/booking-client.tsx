@@ -326,11 +326,14 @@ export default function BookingClient() {
     }));
   };
 
+  const dbSettings = useQuery(api.settings.get);
+  const minimumFare = dbSettings?.minimumFare || 0;
+
   const pricing = selectedCar
     ? serviceType === "hourly"
-      ? calculateHourlyPrice(selectedCar, options.hourlyDuration)
+      ? calculateHourlyPrice(selectedCar, options.hourlyDuration, 1.0, minimumFare)
       : route
-        ? calculatePrice(selectedCar, route.distanceInKm, route.durationInMinutes)
+        ? calculatePrice(selectedCar, route.distanceInKm, route.durationInMinutes, 1.0, minimumFare)
         : null
     : null;
 

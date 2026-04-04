@@ -26,7 +26,8 @@ export function calculatePrice(
   carType: CarType,
   distanceKm: number,
   durationMinutes: number,
-  dynamicMultiplier: number = 1.0
+  dynamicMultiplier: number = 1.0,
+  minimumFare: number = 0
 ): PricingResult {
   const baseFare = carType.baseFare;
   const distanceCharge = distanceKm * carType.perKmRate * carType.multiplier;
@@ -34,7 +35,10 @@ export function calculatePrice(
   const multiplier = carType.multiplier * dynamicMultiplier;
 
   const subtotal = baseFare + distanceCharge + timeCharge;
-  const totalPrice = Math.round(subtotal * 100) / 100;
+  let totalPrice = Math.round(subtotal * 100) / 100;
+  if (totalPrice < minimumFare) {
+    totalPrice = minimumFare;
+  }
 
   return {
     baseFare,
@@ -48,10 +52,15 @@ export function calculatePrice(
 export function calculateHourlyPrice(
   carType: CarType,
   hours: number,
-  dynamicMultiplier: number = 1.0
+  dynamicMultiplier: number = 1.0,
+  minimumFare: number = 0
 ): PricingResult {
   const hourlyCharge = hours * (carType.hourlyRate || 0) * carType.multiplier * dynamicMultiplier;
-  const totalPrice = Math.round(hourlyCharge * 100) / 100;
+  let totalPrice = Math.round(hourlyCharge * 100) / 100;
+  
+  if (totalPrice < minimumFare) {
+    totalPrice = minimumFare;
+  }
 
   return {
     baseFare: 0,

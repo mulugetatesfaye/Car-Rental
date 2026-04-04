@@ -8,6 +8,8 @@ import { formatPrice, calculatePrice } from "@/lib/pricing";
 import type { CarType } from "@/lib/pricing";
 import type { RouteResult } from "@/lib/tomtom/routing";
 import type { SearchResult } from "@/lib/tomtom/search";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 interface BookingSummaryProps {
   pickup: SearchResult | null;
@@ -26,8 +28,11 @@ export function BookingSummary({
   onConfirm,
   isBooking,
 }: BookingSummaryProps) {
+  const dbSettings = useQuery(api.settings.get);
+  const minimumFare = dbSettings?.minimumFare || 0;
+
   const pricing = selectedCar && route
-    ? calculatePrice(selectedCar, route.distanceInKm, route.durationInMinutes)
+    ? calculatePrice(selectedCar, route.distanceInKm, route.durationInMinutes, 1.0, minimumFare)
     : null;
 
   return (

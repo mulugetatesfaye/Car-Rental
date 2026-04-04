@@ -246,7 +246,7 @@ export default function BookingClient() {
     setBooking(true);
 
     try {
-      const { url } = await createCheckoutSession({
+      console.log("Calling createCheckoutSession with payload:", {
         pickupAddress: pickup?.address.freeformAddress || "Hourly Service",
         destinationAddress: destination?.address.freeformAddress || "To Be Determined",
         pickupLat: pickup?.position.lat || 0,
@@ -270,12 +270,41 @@ export default function BookingClient() {
         customerPhone: options.customerPhone,
       });
 
+      const response = await createCheckoutSession({
+        pickupAddress: pickup?.address.freeformAddress || "Hourly Service",
+        destinationAddress: destination?.address.freeformAddress || "To Be Determined",
+        pickupLat: pickup?.position.lat || 0,
+        pickupLng: pickup?.position.lon || 0,
+        destLat: destination?.position.lat || 0,
+        destLng: destination?.position.lon || 0,
+        distance: route?.distanceInKm || 0,
+        duration: route?.durationInMinutes || 0,
+        carTypeName: selectedCar.name,
+        carTypeMultiplier: selectedCar.multiplier,
+        price: pricing.totalPrice,
+        passengers: options.passengers,
+        luggage: options.luggage,
+        accessible: options.accessible,
+        serviceType,
+        hourlyDuration: serviceType === "hourly" ? options.hourlyDuration : undefined,
+        pickupDate: options.pickupDate,
+        pickupTime: options.pickupTime || undefined,
+        customerName: options.customerName,
+        customerEmail: options.customerEmail,
+        customerPhone: options.customerPhone,
+      });
+
+      console.log("createCheckoutSession response:", response);
+      const url = response.url;
+
       if (url) {
         window.location.href = url;
       } else {
-        setConfirmError("Failed to create checkout session. Please try again.");
+        console.error("Response received but URL is missing:", response);
+        setConfirmError("Failed to create checkout session. URL was not provided by the server.");
       }
     } catch (error) {
+      console.error("Catch block in handleConfirm:", error);
       const message = error instanceof Error ? error.message : "An unexpected error occurred";
       setConfirmError(message);
     } finally {

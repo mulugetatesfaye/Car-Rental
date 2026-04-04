@@ -11,18 +11,36 @@ async function stripeRequest<T>(path: string, options: { method?: string; body?:
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
+  if (body) {
+    console.log(`Stripe request [${method}] ${path} payload:`, body.toString());
+  }
+
   const response = await fetch(`${STRIPE_API}${path}`, {
     method,
     headers,
     body: body ? body.toString() : undefined,
   });
 
+  const responseText = await response.text();
+  console.log(`Stripe response [${response.status}] ${path}:`, responseText);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || `Stripe API error: ${response.status}`);
+    let errorInfo;
+    try {
+      errorInfo = JSON.parse(responseText);
+    } catch {
+      errorInfo = { error: { message: responseText } };
+    }
+    console.error("Stripe API error details:", errorInfo);
+    throw new Error(errorInfo.error?.message || `Stripe API error: ${response.status}`);
   }
 
-  return response.json() as Promise<T>;
+  try {
+    return JSON.parse(responseText) as T;
+  } catch (e) {
+    console.error("Failed to parse Stripe JSON response:", responseText);
+    throw new Error("Invalid response from Stripe API");
+  }
 }
 
 export const createCheckoutSession = action({
@@ -135,9 +153,21 @@ export const createCheckoutSession = action({
       params.set("metadata[rideData]", rideDataString);
     }
 
-    const session = await stripeRequest<{ url: string | null }>("/checkout/sessions", { body: params });
+    try {
+      const session = await stripeRequest<{ id: string; url: string | null }>("/checkout/sessions", { body: params });
+      console.log("Stripe session created:", { id: session.id, url: session.url });
+      
+      if (!session.url) {
+        console.error("Stripe session creation succeeded but URL is null:", session);
+        throw new Error("Stripe did not provide a checkout URL.");
+      }
 
-    return { url: session.url };
+      return { url: session.url };
+    } catch (err: any) {
+      console.error("createCheckoutSession error:", err);
+      // Re-throw so Convex returns status: error
+      throw new Error(err instanceof Error ? err.message : "Failed to create checkout session");
+    }
   },
 });
 

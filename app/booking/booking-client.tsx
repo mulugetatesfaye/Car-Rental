@@ -409,7 +409,7 @@ export default function BookingClient() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full">
+    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden w-full pb-28 lg:pb-0">
 
       <div className="bg-[#111111] py-4 border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -559,7 +559,7 @@ export default function BookingClient() {
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                <div className="hidden lg:flex justify-end pt-4">
                   <Button
                     onClick={goToNextStep}
                     disabled={!isTripStepValid()}
@@ -703,7 +703,7 @@ export default function BookingClient() {
                   <Button
                     onClick={goToNextStep}
                     disabled={!isVehicleStepValid()}
-                    className="font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+                    className="hidden lg:flex font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
                   >
                     Continue to Review
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -953,7 +953,7 @@ export default function BookingClient() {
                     )}
 
                     {bookingStep === "review" && (
-                      <div className="space-y-4">
+                      <div className="space-y-4 hidden lg:block">
                         {confirmError && (
                           <p className="text-[10px] font-bold text-red-500 text-center uppercase tracking-wider">{confirmError}</p>
                         )}
@@ -981,7 +981,7 @@ export default function BookingClient() {
                     )}
 
                     {bookingStep !== "review" && (
-                      <div className="space-y-4">
+                      <div className="space-y-4 hidden lg:block">
                         <Button
                           onClick={goToNextStep}
                           disabled={bookingStep === "trip" ? !isTripStepValid() : !isVehicleStepValid()}
@@ -999,6 +999,52 @@ export default function BookingClient() {
           </div>
         </div>
       </main>
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#0a0a0a] border-t border-neutral-800 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+        {confirmError && bookingStep === "review" && (
+          <div className="absolute bottom-full left-0 right-0 bg-red-950/90 border-t border-red-900 px-4 py-2 text-center backdrop-blur-md">
+            <p className="text-[10px] font-bold text-red-400 uppercase tracking-wider">{confirmError}</p>
+          </div>
+        )}
+        <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
+          <div className="min-w-0 flex-1">
+            <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500">
+              {bookingStep === "trip" ? "Est. Total" : "Total"}
+            </p>
+            <p className="font-serif font-black italic text-xl text-gold truncate leading-none mt-1">
+              {pricing ? formatPrice(pricing.totalPrice) : "---"}
+            </p>
+          </div>
+          <div className="flex-shrink-0 w-[60%] sm:w-[50%]">
+            {bookingStep === "review" ? (
+              <Button
+                onClick={handleConfirm}
+                disabled={!isReviewStepValid() || isBooking}
+                className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+              >
+                {isBooking ? (
+                  <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+                ) : (
+                  <>
+                    <ShieldCheck className="mr-1.5 sm:mr-2 h-4 w-4" />
+                    <span className="truncate">Confirm & Pay</span>
+                  </>
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={goToNextStep}
+                disabled={bookingStep === "trip" ? !isTripStepValid() : !isVehicleStepValid()}
+                className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 sm:py-7 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
+              >
+                <span className="truncate">{bookingStep === "trip" ? "Select Vehicle" : "Review"}</span>
+                <ArrowRight className="ml-1.5 sm:ml-2 h-4 w-4 flex-shrink-0" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

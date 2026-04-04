@@ -87,8 +87,8 @@ export async function createCheckoutSession(data: {
 
   if (!response.ok) {
     const error = await response.json();
-    console.error("Checkout session error:", error);
-    throw new Error(error.message || "Failed to create checkout session");
+    console.error("Checkout session error:", JSON.stringify(error, null, 2));
+    throw new Error(error.errorMessage || error.message || "Failed to create checkout session");
   }
 
   return response.json() as Promise<{ url: string | null }>;
@@ -110,8 +110,8 @@ export async function verifyCheckoutSession(sessionId: string) {
 
   if (!response.ok) {
     const error = await response.json();
-    console.error("Verification error:", error);
-    throw new Error(error.message || "Failed to verify checkout session");
+    console.error("Verification error:", JSON.stringify(error, null, 2));
+    throw new Error(error.errorMessage || error.message || "Failed to verify checkout session");
   }
 
   return response.json();

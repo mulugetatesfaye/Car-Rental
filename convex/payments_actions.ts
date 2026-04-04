@@ -86,7 +86,6 @@ export const createCheckoutSession = action({
     const params = new URLSearchParams();
     params.set("mode", "payment");
     params.set("payment_method_types[]", "card");
-    params.set("payment_method_types[]", "paypal");
     params.set("customer_email", args.customerEmail);
     params.set("line_items[0][price_data][currency]", "usd");
     params.set("line_items[0][price_data][unit_amount]", String(Math.round(calculatedPrice * 100)));

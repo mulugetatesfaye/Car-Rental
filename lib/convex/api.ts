@@ -40,20 +40,13 @@ export async function createRide(rideData: {
     }),
   });
 
-  const body = await response.json();
-
-  if (!response.ok || body.status === "error") {
-    console.error("Create ride error:", JSON.stringify(body, null, 2));
-    let errorMsg = "Failed to create ride";
-    if (body.errorMessage) {
-      errorMsg = body.errorMessage.replace(/^\[Request ID: .*\] /, '');
-    } else if (body.message) {
-      errorMsg = body.message;
-    }
-    throw new Error(errorMsg);
+  if (!response.ok) {
+    const error = await response.json();
+    console.error("Convex error:", error);
+    throw new Error(error.message || "Failed to create ride");
   }
 
-  return body.value !== undefined ? body.value : body;
+  return response.json();
 }
 
 export async function createCheckoutSession(data: {
@@ -93,19 +86,14 @@ export async function createCheckoutSession(data: {
   });
 
   const body = await response.json();
-  console.log("createCheckoutSession API raw body:", body);
 
   if (!response.ok || body.status === "error") {
-    console.error("Checkout session error details:", {
-      status: response.status,
-      ok: response.ok,
-      body
-    });
-    
+    console.error("Checkout session error full:", JSON.stringify(body, null, 2));
+
     let errorMsg = "Failed to create checkout session";
     if (body.errorMessage) {
-      // Strip Convex request ID formatting: [Request ID: ...] Error: ...
-      const cleanMsg = body.errorMessage.replace(/^\[Request ID: .*?\] /, '');
+      // Strip Convex request ID formatting
+      const cleanMsg = body.errorMessage.replace(/^\\[Request ID: .*\\] /, '');
       errorMsg = cleanMsg;
     } else if (body.message) {
       errorMsg = body.message;
@@ -113,9 +101,7 @@ export async function createCheckoutSession(data: {
     throw new Error(errorMsg);
   }
 
-  const result = body.value !== undefined ? body.value : body;
-  console.log("createCheckoutSession API result:", result);
-  return result as { url: string | null };
+  return (body.value || body) as { url: string | null };
 }
 
 export async function verifyCheckoutSession(sessionId: string) {
@@ -136,7 +122,7 @@ export async function verifyCheckoutSession(sessionId: string) {
 
   if (!response.ok || body.status === "error") {
     console.error("Verification error:", JSON.stringify(body, null, 2));
-    
+
     let errorMsg = "Failed to verify checkout session";
     if (body.errorMessage) {
       const cleanMsg = body.errorMessage.replace(/^\\[Request ID: .*\\] /, '');

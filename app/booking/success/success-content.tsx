@@ -26,28 +26,23 @@ export default function SuccessContent() {
     }
 
     const verifyAndCreate = async () => {
-      console.log("Starting verification for session:", sessionId);
       try {
         const result = await verifyCheckoutSession(sessionId);
-        console.log("Verification result:", result);
 
         if (result.status === "already_processed") {
-          console.log("Already processed, rideId:", result.rideId);
           setStatus("already_processed");
           setRideId(result.rideId);
           return;
         }
 
         if (result.status === "unpaid") {
-          console.warn("Session unpaid");
           setStatus("error");
           setErrorMessage("Payment was not completed. Please try booking again.");
           return;
         }
 
         if (result.status === "paid") {
-          console.log("Payment confirmed, creating ride with data:", result.rideData);
-          const rideData = result.rideData as any;
+          const rideData = result.rideData;
           const createdRideId = await createRide({
             pickupAddress: rideData.pickupAddress,
             destinationAddress: rideData.destinationAddress,
@@ -73,18 +68,14 @@ export default function SuccessContent() {
             stripeCheckoutSessionId: sessionId,
           });
 
-          console.log("Ride created successfully, rideId:", createdRideId);
           setRideId(createdRideId);
           setAmount(result.amount);
           setStatus("success");
-        } else {
-          console.error("Unknown verification status:", result.status);
-          throw new Error("Invalid session status received from server");
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("Error verifying checkout session:", error);
         setStatus("error");
-        setErrorMessage(error.message || "Failed to process your booking. Please contact support if your payment was successful.");
+        setErrorMessage("Failed to process your booking. Please contact support if your payment was successful.");
       }
     };
 

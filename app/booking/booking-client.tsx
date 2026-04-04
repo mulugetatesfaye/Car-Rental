@@ -60,7 +60,7 @@ type BookingStep = "trip" | "vehicle" | "review";
 export default function BookingClient() {
   const searchParams = useSearchParams();
   const dbCarTypes = useQuery(api.carTypes.list);
-  
+
   const activeCarTypes = React.useMemo(() => {
     return dbCarTypes?.filter((car: CarType) => car.isActive) || [];
   }, [dbCarTypes]);
@@ -115,7 +115,7 @@ export default function BookingClient() {
 
   React.useEffect(() => {
     if (hasInitializedFromParams.current) return;
-    
+
     const initFromParams = async () => {
       const pParam = searchParams.get("p");
       const dParam = searchParams.get("d");
@@ -123,7 +123,7 @@ export default function BookingClient() {
       const timeParam = searchParams.get("time");
 
       if (!pParam && !dParam && !dateParam && !timeParam) return;
-      
+
       hasInitializedFromParams.current = true;
 
       setOptions(prev => ({
@@ -246,7 +246,7 @@ export default function BookingClient() {
     setBooking(true);
 
     try {
-      console.log("Calling createCheckoutSession with payload:", {
+      const { url } = await createCheckoutSession({
         pickupAddress: pickup?.address.freeformAddress || "Hourly Service",
         destinationAddress: destination?.address.freeformAddress || "To Be Determined",
         pickupLat: pickup?.position.lat || 0,
@@ -269,42 +269,13 @@ export default function BookingClient() {
         customerEmail: options.customerEmail,
         customerPhone: options.customerPhone,
       });
-
-      const response = await createCheckoutSession({
-        pickupAddress: pickup?.address.freeformAddress || "Hourly Service",
-        destinationAddress: destination?.address.freeformAddress || "To Be Determined",
-        pickupLat: pickup?.position.lat || 0,
-        pickupLng: pickup?.position.lon || 0,
-        destLat: destination?.position.lat || 0,
-        destLng: destination?.position.lon || 0,
-        distance: route?.distanceInKm || 0,
-        duration: route?.durationInMinutes || 0,
-        carTypeName: selectedCar.name,
-        carTypeMultiplier: selectedCar.multiplier,
-        price: pricing.totalPrice,
-        passengers: options.passengers,
-        luggage: options.luggage,
-        accessible: options.accessible,
-        serviceType,
-        hourlyDuration: serviceType === "hourly" ? options.hourlyDuration : undefined,
-        pickupDate: options.pickupDate,
-        pickupTime: options.pickupTime || undefined,
-        customerName: options.customerName,
-        customerEmail: options.customerEmail,
-        customerPhone: options.customerPhone,
-      });
-
-      console.log("createCheckoutSession response:", response);
-      const url = response.url;
 
       if (url) {
         window.location.href = url;
       } else {
-        console.error("Response received but URL is missing:", response);
-        setConfirmError("Failed to create checkout session. URL was not provided by the server.");
+        setConfirmError("Failed to create checkout session. Please try again.");
       }
     } catch (error) {
-      console.error("Catch block in handleConfirm:", error);
       const message = error instanceof Error ? error.message : "An unexpected error occurred";
       setConfirmError(message);
     } finally {
@@ -440,25 +411,25 @@ export default function BookingClient() {
       <div className="bg-[#111111] py-4 border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between md:justify-center gap-2 md:gap-0">
-            <Step 
-              num="1" 
-              title="Trip" 
-              active={bookingStep === "trip"} 
-              complete={bookingStep === "vehicle" || bookingStep === "review"} 
+            <Step
+              num="1"
+              title="Trip"
+              active={bookingStep === "trip"}
+              complete={bookingStep === "vehicle" || bookingStep === "review"}
             />
             <div className="flex-1 h-px bg-white/5 md:mx-4" />
-            <Step 
-              num="2" 
-              title="Vehicle" 
-              active={bookingStep === "vehicle"} 
-              complete={bookingStep === "review"} 
+            <Step
+              num="2"
+              title="Vehicle"
+              active={bookingStep === "vehicle"}
+              complete={bookingStep === "review"}
             />
             <div className="flex-1 h-px bg-white/5 md:mx-4" />
-            <Step 
-              num="3" 
-              title="Review" 
-              active={bookingStep === "review"} 
-              complete={false} 
+            <Step
+              num="3"
+              title="Review"
+              active={bookingStep === "review"}
+              complete={false}
             />
           </div>
         </div>
@@ -586,7 +557,7 @@ export default function BookingClient() {
                 </div>
 
                 <div className="flex justify-end pt-4">
-                  <Button 
+                  <Button
                     onClick={goToNextStep}
                     disabled={!isTripStepValid()}
                     className="font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
@@ -611,12 +582,11 @@ export default function BookingClient() {
                       <button
                         key={car.name}
                         onClick={() => handleCarSelect(car)}
-                        className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${
-                          selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
-                        }`}
+                        className={`w-full flex items-center gap-3 sm:gap-6 p-3 sm:p-5 transition-all border border-neutral-800 hover:bg-neutral-900/50 ${selectedCar?.name === car.name ? "bg-neutral-900 border-l-4 border-l-gold border-neutral-700" : "opacity-60"
+                          }`}
                       >
                         <div className="hidden sm:flex w-28 h-20 bg-neutral-800/50 items-center justify-center flex-shrink-0 border border-neutral-800 relative overflow-hidden group">
-                          <Image 
+                          <Image
                             src={car.image || "/fleet_black_bg.png"}
                             alt={car.name}
                             fill
@@ -719,7 +689,7 @@ export default function BookingClient() {
                 )}
 
                 <div className="flex justify-between pt-4">
-                  <Button 
+                  <Button
                     onClick={goToPreviousStep}
                     variant="outline"
                     className="font-sans border-neutral-700 hover:border-gold text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] transition-all"
@@ -727,7 +697,7 @@ export default function BookingClient() {
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Trip
                   </Button>
-                  <Button 
+                  <Button
                     onClick={goToNextStep}
                     disabled={!isVehicleStepValid()}
                     className="font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
@@ -748,38 +718,38 @@ export default function BookingClient() {
                       <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                         <User className="h-3 w-3" /> Full Name
                       </label>
-                      <input 
-                        value={options.customerName} 
+                      <input
+                        value={options.customerName}
                         onChange={(e) => updateOption("customerName", e.target.value)}
-                        placeholder="Enter your full name" 
-                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
+                        placeholder="Enter your full name"
+                        className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans"
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                       <div className="space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
-                           <Mail className="h-3 w-3" /> Email Address
-                         </label>
-                         <input 
-                           type="email"
-                           value={options.customerEmail} 
-                           onChange={(e) => { setEmailError(""); updateOption("customerEmail", e.target.value); }}
-                           onBlur={() => validateEmail(options.customerEmail)}
-                           placeholder="email@example.com" 
-                           className={`w-full bg-neutral-900 border px-4 py-4 rounded-none text-sm font-bold text-white outline-none transition-colors placeholder:text-neutral-700 font-sans ${emailError ? "border-red-500 focus:border-red-500" : "border-neutral-800 focus:border-gold"}`}
-                         />
-                         {emailError && <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">{emailError}</p>}
-                       </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                          <Mail className="h-3 w-3" /> Email Address
+                        </label>
+                        <input
+                          type="email"
+                          value={options.customerEmail}
+                          onChange={(e) => { setEmailError(""); updateOption("customerEmail", e.target.value); }}
+                          onBlur={() => validateEmail(options.customerEmail)}
+                          placeholder="email@example.com"
+                          className={`w-full bg-neutral-900 border px-4 py-4 rounded-none text-sm font-bold text-white outline-none transition-colors placeholder:text-neutral-700 font-sans ${emailError ? "border-red-500 focus:border-red-500" : "border-neutral-800 focus:border-gold"}`}
+                        />
+                        {emailError && <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">{emailError}</p>}
+                      </div>
                       <div className="space-y-2">
                         <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                           <Phone className="h-3 w-3" /> Phone Number
                         </label>
-                        <input 
+                        <input
                           type="tel"
-                          value={options.customerPhone} 
+                          value={options.customerPhone}
                           onChange={(e) => updateOption("customerPhone", e.target.value)}
-                          placeholder="(555) 000-0000" 
-                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans" 
+                          placeholder="(555) 000-0000"
+                          className="w-full bg-neutral-900 border border-neutral-800 px-4 py-4 rounded-none text-sm font-bold text-white outline-none focus:border-gold transition-colors placeholder:text-neutral-700 font-sans"
                         />
                       </div>
                     </div>
@@ -840,7 +810,7 @@ export default function BookingClient() {
                 </div>
 
                 <div className="flex justify-between pt-4">
-                  <Button 
+                  <Button
                     onClick={goToPreviousStep}
                     variant="outline"
                     className="font-sans border-neutral-700 hover:border-gold text-white rounded-none py-6 px-8 text-xs font-black uppercase tracking-[0.2em] transition-all"
@@ -859,7 +829,7 @@ export default function BookingClient() {
                 <div className="bg-black py-4 px-6 border-b border-neutral-800">
                   <h3 className="text-white font-black uppercase tracking-[0.3em] text-[12px] text-center">Trip Summary</h3>
                 </div>
-                
+
                 <div className="p-0 overflow-hidden">
                   {serviceType === "point_to_point" && bookingStep !== "review" && (
                     <div className="w-full h-[200px] sm:h-[300px] border-b border-neutral-800 grayscale hover:grayscale-0 transition-all duration-700 relative overflow-hidden">
@@ -885,7 +855,7 @@ export default function BookingClient() {
                       </div>
                     </div>
                   )}
-                  
+
                   <div className="p-6 sm:p-8 space-y-6 sm:space-y-8">
                     {bookingStep === "review" && (
                       <div className="space-y-4 border-b border-neutral-800 pb-6">
@@ -984,7 +954,7 @@ export default function BookingClient() {
                         {confirmError && (
                           <p className="text-[10px] font-bold text-red-500 text-center uppercase tracking-wider">{confirmError}</p>
                         )}
-                        <Button 
+                        <Button
                           onClick={handleConfirm}
                           disabled={!isReviewStepValid() || isBooking}
                           className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"
@@ -1009,7 +979,7 @@ export default function BookingClient() {
 
                     {bookingStep !== "review" && (
                       <div className="space-y-4">
-                        <Button 
+                        <Button
                           onClick={goToNextStep}
                           disabled={bookingStep === "trip" ? !isTripStepValid() : !isVehicleStepValid()}
                           className="w-full font-sans bg-gold hover:bg-gold-dark text-white rounded-none py-8 text-xs font-black uppercase tracking-[0.3em] shadow-xl disabled:bg-neutral-800 disabled:text-neutral-500 transition-all active:translate-y-1"

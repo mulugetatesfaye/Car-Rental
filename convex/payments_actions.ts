@@ -103,6 +103,7 @@ export const createCheckoutSession = action({
 
     const rideData = {
       customerName: args.customerName,
+      customerEmail: args.customerEmail,
       customerPhone: args.customerPhone,
       pickupAddress: args.pickupAddress,
       destinationAddress: args.destinationAddress,

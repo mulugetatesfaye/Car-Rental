@@ -28,6 +28,7 @@ export default function SuccessContent() {
     const verifyAndCreate = async () => {
       try {
         const result = await verifyCheckoutSession(sessionId);
+        console.log("verifyCheckoutSession result:", result);
 
         if (result.status === "already_processed") {
           setStatus("already_processed");
@@ -42,40 +43,47 @@ export default function SuccessContent() {
         }
 
         if (result.status === "paid") {
-          const rideData = result.rideData;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const rideData = result.rideData as Record<string, any>;
+          console.log("Creating ride with rideData:", rideData);
+
+          const customerEmail = (rideData.customerEmail as string | undefined) || "noemail@lunalimo.com";
+
           const createdRideId = await createRide({
             pickupAddress: rideData.pickupAddress,
             destinationAddress: rideData.destinationAddress,
-            pickupLat: rideData.pickupLat,
-            pickupLng: rideData.pickupLng,
-            destLat: rideData.destLat,
-            destLng: rideData.destLng,
-            distance: rideData.distance,
-            duration: rideData.duration,
+            pickupLat: Number(rideData.pickupLat),
+            pickupLng: Number(rideData.pickupLng),
+            destLat: Number(rideData.destLat),
+            destLng: Number(rideData.destLng),
+            distance: Number(rideData.distance),
+            duration: Number(rideData.duration),
             carTypeName: rideData.carTypeName,
-            carTypeMultiplier: rideData.carTypeMultiplier,
-            price: rideData.price,
-            passengers: rideData.passengers,
-            luggage: rideData.luggage,
-            accessible: rideData.accessible,
-            serviceType: rideData.serviceType,
-            hourlyDuration: rideData.hourlyDuration,
+            carTypeMultiplier: Number(rideData.carTypeMultiplier),
+            price: Number(rideData.price),
+            passengers: Number(rideData.passengers),
+            luggage: Number(rideData.luggage),
+            accessible: rideData.accessible === true || rideData.accessible === "true",
+            serviceType: rideData.serviceType as "point_to_point" | "hourly",
+            hourlyDuration: rideData.hourlyDuration ? Number(rideData.hourlyDuration) : undefined,
             pickupDate: rideData.pickupDate,
             pickupTime: rideData.pickupTime,
             customerName: rideData.customerName,
-            customerEmail: rideData.customerEmail || "paid@stripe.com",
+            customerEmail: customerEmail,
             customerPhone: rideData.customerPhone,
             stripeCheckoutSessionId: sessionId,
           });
 
-          setRideId(createdRideId);
+          console.log("Ride created successfully, id:", createdRideId);
+          setRideId(String(createdRideId));
           setAmount(result.amount);
           setStatus("success");
         }
-      } catch (error) {
-        console.error("Error verifying checkout session:", error);
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : "Unknown error";
+        console.error("Error in verifyAndCreate:", msg, error);
         setStatus("error");
-        setErrorMessage("Failed to process your booking. Please contact support if your payment was successful.");
+        setErrorMessage(`Failed to process your booking: ${msg}. Contact support if your payment was successful.`);
       }
     };
 

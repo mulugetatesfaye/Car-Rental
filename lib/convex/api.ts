@@ -40,13 +40,18 @@ export async function createRide(rideData: {
     }),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    console.error("Convex error:", error);
-    throw new Error(error.message || "Failed to create ride");
+  const body = await response.json();
+
+  if (!response.ok || body.status === "error") {
+    console.error("Convex create ride error:", body);
+    const msg = body.errorMessage
+      ? body.errorMessage.replace(/^\[Request ID: [^\]]+\] /, "")
+      : body.message || "Failed to create ride";
+    throw new Error(msg);
   }
 
-  return response.json();
+  // Convex wraps the return value: { status: "success", value: <rideId> }
+  return body.value ?? body;
 }
 
 export async function createCheckoutSession(data: {
